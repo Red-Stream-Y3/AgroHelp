@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FaHome, FaBookOpen,  FaQuestion, FaPenNib  } from 'react-icons/fa';
+import { FaHome, FaBookOpen,  FaQuestion, FaPenNib, FaSearch, FaUser  } from 'react-icons/fa';
 import { ImLeaf } from 'react-icons/im';
 import { HiOutlineMenu, HiOutlineX } from 'react-icons/hi';
 
@@ -8,6 +8,7 @@ const Navbar = () => {
     const [isOpen, setIsOpen] = React.useState(false);
 
     const toggleMenu = () => setIsOpen(!isOpen);
+
 
     return (
         <nav className="bg-green-600">
@@ -19,7 +20,7 @@ const Navbar = () => {
                             <span className="text-white font-extrabold ml-2 text-2xl">AgroHelp</span>
                         </Link>
                     </div>
-                    <div className="hidden md:flex md:items-center">
+                    <div className="hidden md:flex md:items-center ml-auto">
                         <Link to="/" className="px-3 py-2 text-white hover:bg-green-700 rounded-md flex items-center">
                             <FaHome className="h-6 w-6" />
                             <span className="ml-2">Home</span>
@@ -37,7 +38,40 @@ const Navbar = () => {
                             <span className="ml-2">Blog</span>
                         </Link>
                     </div>
-                    <div className="flex md:hidden">
+
+                    <div className="hidden md:flex md:items-center">
+                        <div className="hidden md:flex md:ml-6">
+                            <div className="flex items-center">
+                                <div className="relative">
+                                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <FaSearch className="h-5 w-5 text-gray-100" aria-hidden="true" />
+                                    </div>
+                                    <input
+                                        type="text"
+                                        name="search"
+                                        id="search"
+                                        className="bg-green-700 text-white block w-96 pl-10 pr-3 py-2 border border-transparent rounded-md leading-5 placeholder-gray-100 focus:outline-none focus:placeholder-gray-100 focus:ring-1 focus:ring-green-600 focus:border-green-600 sm:text-sm"
+                                        placeholder="Search"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="hidden md:flex md:ml-6">
+                            <div className="flex items-center">
+                                <div className="relative">
+                                    <img
+                                        className="h-10 w-10 rounded-full bg-slate-500"
+                                        src=""
+                                        alt=""
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                                
+                    <div className="flex md:hidden ml-auto">
                         <button
                             onClick={toggleMenu}
                             type="button"
