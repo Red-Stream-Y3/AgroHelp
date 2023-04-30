@@ -7,8 +7,10 @@ import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 import { visit } from './middleware/visitMiddleware.js';
 import visitRoutes from './routes/visitRoutes.js';
 import userRoutes from './routes/userRoutes.js';
-import kbRoutes from './routes/kbRoutes.js';
+import forumRoutes from './routes/forumRoutes.js';
 import blogRoutes from './routes/blogRoutes.js';
+import cropRoutes from './routes/cropRoutes.js';
+import diseaseRoutes from './routes/diseaseRoutes.js';
 
 dotenv.config({ path: findConfig('.env.dev') });
 
@@ -23,8 +25,10 @@ app.use(visit);
 
 app.use('/api', visitRoutes);
 app.use('/api/users', userRoutes);
-app.use('/api/knowledgebase', kbRoutes);
+app.use('/api/forums', forumRoutes);
 app.use('/api/blog', blogRoutes);
+app.use('/api/crops', cropRoutes);
+app.use('/api/diseases', diseaseRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
