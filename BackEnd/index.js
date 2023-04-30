@@ -5,6 +5,7 @@ import findConfig from 'find-config';
 import connectDB from './config/db.js';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 import userRoutes from './routes/userRoutes.js';
+import forumRoutes from './routes/forumRoutes.js';
 
 dotenv.config({ path: findConfig('.env.dev') });
 
@@ -15,6 +16,7 @@ const app = express();
 app.use(express.json());
 
 app.use('/api/users', userRoutes);
+app.use('/api/forums', forumRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
