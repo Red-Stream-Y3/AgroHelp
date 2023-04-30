@@ -4,9 +4,10 @@ import colors from 'colors';
 import findConfig from 'find-config';
 import connectDB from './config/db.js';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
-import userRoutes from './routes/userRoutes.js';
 import { visit } from './middleware/visitMiddleware.js';
 import { getVisits } from './controllers/visitController.js';
+import userRoutes from './routes/userRoutes.js';
+import kbRoutes from './routes/kbRoutes.js';
 
 dotenv.config({ path: findConfig('.env.dev') });
 
@@ -21,6 +22,7 @@ app.use(visit);
 
 app.use('/api', getVisits);
 app.use('/api/users', userRoutes);
+app.use('/api/knowledgebase', kbRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
