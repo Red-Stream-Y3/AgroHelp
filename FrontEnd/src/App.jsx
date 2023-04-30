@@ -7,6 +7,7 @@ import {
   ManageArticles,
   ManageUsers,
   ManageComments,
+  ForumDashboard
 } from './pages';
 import { BlogDashboard } from './pages';
 import './App.css';
@@ -27,6 +28,8 @@ function App() {
         </Route>
 
         <Route path="/blogs" element={<BlogDashboard />} />
+
+        <Route path="/forums" element={<ForumDashboard />} />
 
       </Routes>
       <Footer />
