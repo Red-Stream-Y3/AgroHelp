@@ -5,7 +5,7 @@ import findConfig from 'find-config';
 import connectDB from './config/db.js';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 import { visit } from './middleware/visitMiddleware.js';
-import { getVisits } from './controllers/visitController.js';
+import visitRoutes from './routes/visitRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import kbRoutes from './routes/kbRoutes.js';
 
@@ -20,7 +20,7 @@ app.use(express.json());
 // Use middleware to increment visitor count
 app.use(visit);
 
-app.use('/api', getVisits);
+app.use('/api', visitRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/knowledgebase', kbRoutes);
 
