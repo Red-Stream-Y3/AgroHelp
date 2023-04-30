@@ -33,7 +33,7 @@ const Navbar = () => {
                             <FaQuestion className="h-6 w-6" />
                             <span className="ml-2">Forum</span>
                         </Link>
-                        <Link to="/blog" className="px-3 py-2 text-white hover:bg-green-700 rounded-md flex items-center">
+                        <Link to="/blogs" className="px-3 py-2 text-white hover:bg-green-700 rounded-md flex items-center">
                             <FaPenNib className="h-6 w-6" />
                             <span className="ml-2">Blog</span>
                         </Link>

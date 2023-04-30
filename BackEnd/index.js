@@ -4,8 +4,12 @@ import colors from 'colors';
 import findConfig from 'find-config';
 import connectDB from './config/db.js';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
+import { visit } from './middleware/visitMiddleware.js';
+import visitRoutes from './routes/visitRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import forumRoutes from './routes/forumRoutes.js';
+import kbRoutes from './routes/kbRoutes.js';
+import blogRoutes from './routes/blogRoutes.js';
 
 dotenv.config({ path: findConfig('.env.dev') });
 
@@ -15,8 +19,14 @@ const app = express();
 
 app.use(express.json());
 
+// Use middleware to increment visitor count
+app.use(visit);
+
+app.use('/api', visitRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/forums', forumRoutes);
+app.use('/api/knowledgebase', kbRoutes);
+app.use('/api/blog', blogRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
