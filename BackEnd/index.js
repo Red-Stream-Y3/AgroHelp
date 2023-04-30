@@ -5,8 +5,10 @@ import findConfig from 'find-config';
 import connectDB from './config/db.js';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 import { visit } from './middleware/visitMiddleware.js';
-import { getVisits } from './controllers/visitController.js';
+import visitRoutes from './routes/visitRoutes.js';
 import userRoutes from './routes/userRoutes.js';
+import forumRoutes from './routes/forumRoutes.js';
+import blogRoutes from './routes/blogRoutes.js';
 import cropRoutes from './routes/cropRoutes.js';
 import diseaseRoutes from './routes/diseaseRoutes.js';
 
@@ -21,8 +23,10 @@ app.use(express.json());
 // Use middleware to increment visitor count
 app.use(visit);
 
-app.use('/api', getVisits);
+app.use('/api', visitRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/forums', forumRoutes);
+app.use('/api/blog', blogRoutes);
 app.use('/api/crops', cropRoutes);
 app.use('/api/diseases', diseaseRoutes);
 
