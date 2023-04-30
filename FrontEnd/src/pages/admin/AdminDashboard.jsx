@@ -6,7 +6,7 @@ const AdminDashboard = () => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8 mt-8 px-4 md:px-10">
       <BoxWidget
-        heading={'Total'}
+        heading={'Traffic'}
         value={total}
         icon={'fa-solid fa-arrow-trend-up'}
       />
