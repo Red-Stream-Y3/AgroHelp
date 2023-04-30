@@ -29,7 +29,7 @@ const getArticleById = asyncHandler(async (req, res) => {
 const deleteArticle = asyncHandler(async (req, res) => {
     const article = await KnowledgeBase.findById(req.params.id);
     if (article) {
-        await article.remove();
+        await article.deleteOne();
         res.json({ message: "Article removed" });
     } else {
         res.status(404);
@@ -77,10 +77,22 @@ const updateArticle = asyncHandler(async (req, res) => {
     }
 });
 
+// @desc    Search knowledge base articles
+// @route   GET /api/kb/search
+// @access  Public
+const searchArticles = asyncHandler(async (req, res) => {
+    const { query } = req.query;
+    const articles = await KnowledgeBase.find({
+        $text: { $search: query },
+    });
+    res.json(articles);
+});
+
 export {
     getArticles,
     getArticleById,
     deleteArticle,
     createArticle,
     updateArticle,
+    searchArticles,
 };
