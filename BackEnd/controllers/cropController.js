@@ -66,6 +66,18 @@ const createCrop = asyncHandler(async (req, res) => {
             cropInfo,
             otherInfo,
         } = req.body;
+
+        // check scientific name
+        const cropExists = await Crop.findOne({ scientificName });
+        if (cropExists) {
+            res.status(400);
+            throw new Error("Crop already exists");
+        }
+        
+        let authorId = null;
+        if (req.user && req.user._id) {
+            authorId = req.user._id;
+        }
     
         const crop = new Crop({
             cropName,
@@ -76,7 +88,7 @@ const createCrop = asyncHandler(async (req, res) => {
             cropImage,
             cropInfo,
             otherInfo,
-            author: req.user._id,
+            author: authorId,
         });
 
         const createdCrop = await crop.save();
