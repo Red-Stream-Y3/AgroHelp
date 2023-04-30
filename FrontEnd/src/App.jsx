@@ -8,6 +8,7 @@ import {
   ManageUsers,
   ManageComments,
 } from './pages';
+import { BlogDashboard } from './pages';
 import './App.css';
 
 function App() {
@@ -24,6 +25,9 @@ function App() {
           <Route path="manage-users" element={<ManageUsers />} />
           <Route path="manage-comments" element={<ManageComments />} />
         </Route>
+
+        <Route path="/blogs" element={<BlogDashboard />} />
+
       </Routes>
       <Footer />
     </BrowserRouter>
