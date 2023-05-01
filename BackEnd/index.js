@@ -6,7 +6,10 @@ import colors from 'colors';
 import findConfig from 'find-config';
 import connectDB from './config/db.js';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
-import { visit } from './middleware/visitMiddleware.js';
+import {
+  visitMiddleware,
+  incrementCountMiddleware,
+} from './middleware/visitMiddleware.js';
 import visitRoutes from './routes/visitRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import forumRoutes from './routes/forumRoutes.js';
@@ -24,7 +27,8 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // Use middleware to increment visitor count
-app.use(visit);
+app.use(visitMiddleware);
+app.use(incrementCountMiddleware);
 
 app.use('/api', visitRoutes);
 app.use('/api/users', userRoutes);
