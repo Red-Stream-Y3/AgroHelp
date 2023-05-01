@@ -153,4 +153,17 @@ const searchCrops = asyncHandler(async (req, res) => {
     }
 });
 
-export { getCrops, getCropById, deleteCrop, createCrop, updateCrop, searchCrops };
+//@desc     Get random 4 crops with id, cropName, cropImage, scientificName, cropFamily, cropType
+//@route    GET /api/crops/short
+//@access   Public
+const getShortCrops = asyncHandler(async (req, res) => {
+    try {
+        const crops = await Crop.aggregate([{ $sample: { size: 4 } }]);
+        res.json(crops);
+    } catch (error) {
+        console.log(error);
+        res.status(400).json({ message: error.message });
+    }
+});
+
+export { getCrops, getCropById, deleteCrop, createCrop, updateCrop, searchCrops, getShortCrops };
