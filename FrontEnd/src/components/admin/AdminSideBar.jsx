@@ -33,16 +33,16 @@ const AdminSideBar = ({ isSidebarOpen }) => {
           </li>
           <li>
             <NavLink
-              to="/admin/manage-articles"
+              to="/admin/manage-blogs"
               className={`flex items-center py-5 px-4 text-lg text-gray-100 ${
-                activeLink === 'manage-articles'
+                activeLink === 'manage-blogs'
                   ? 'bg-primarydark'
                   : 'bg-darkbg hover:bg-secondary'
               } border-y-2 border-black`}
-              onClick={() => handleLinkClick('manage-articles')}
+              onClick={() => handleLinkClick('manage-blogs')}
             >
               <i className="fa-solid fa-newspaper pr-6"></i>
-              Articles
+              Blogs
             </NavLink>
           </li>
           <li>
