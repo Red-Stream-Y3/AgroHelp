@@ -4,157 +4,161 @@ import axios from 'axios';
 
 // get all crops
 export const getAllCrops = async () => {
-   await axios.get('http://localhost:9120/api/crops')
-    .then(res => {
-        console.log('crops', res.data);
-        return res.data;
+   try {
+        const response = await axios.get('http://localhost:9120/api/crops');
+        console.log('crop', response.data);
+        return response.data;
+    } catch(error) {
+        console.log(error);
+        return [];
     }
-    )
-    .catch(err => {
-        console.log(err);
-    }
-    )
+}
+
+// get all crops in short form
+export const getAllCropsShort = async () => {
+    try {
+        const response = await axios.get('http://localhost:9120/api/crops/short');
+        console.log('crop', response.data);
+        return response.data;
+    } catch(error) {
+        console.log(error);
+        return [];
+    } 
 }
 
 // get crop by id
 export const getCropById = async (id) => {
-    await axios.get(`http://localhost:9120/api/crops/${id}`)
-    .then(res => {
-        return res.data;
+    try {
+        const response = await axios.get(`http://localhost:9120/api/crops/${id}`);
+        console.log('crop', response.data);
+        return response.data;
+    } catch(error) {
+        console.log(error);
+        return [];
     }
-    )
-    .catch(err => {
-        console.log(err);
-    }
-    )
 }
 
 // create crop
 export const createCrop = async (crop) => {
-    await axios.post('http://localhost:9120/api/crops', crop)
-    .then(res => {
-        return res.data;
+    try {
+        const response = await axios.post('http://localhost:9120/api/crops', crop);
+        console.log('crop', response.data);
+        return response.data;
+    } catch(error) {
+        console.log(error);
+        return [];
     }
-    )
-    .catch(err => {
-        console.log(err);
-    }
-    )
+
 }
 
 // update crop
 export const updateCrop = async (id, crop) => {
-    await axios.put(`http://localhost:9120/api/crops/${id}`, crop)
-    .then(res => {
-        return res.data;
+    try {
+        const response = await axios.put(`http://localhost:9120/api/crops/${id}`, crop);
+        console.log('crop', response.data);
+        return response.data;
+    } catch(error) {
+        console.log(error);
+        return [];
     }
-    )
-    .catch(err => {
-        console.log(err);
-    }
-    )
 }
 
 // delete crop
 export const deleteCrop = async (id) => {
-    await axios.delete(`http://localhost:9120/api/crops/${id}`)
-    .then(res => {
-        return res.data;
+    try {
+        const response = await axios.delete(`http://localhost:9120/api/crops/${id}`);
+        console.log('crop', response.data);
+        return response.data;
+    } catch(error) {
+        console.log(error);
+        return [];
     }
-    )
-    .catch(err => {
-        console.log(err);
-    }
-    )
 }
 
 // search crop
 export const searchCrop = async (name) => {
-    await axios.get(`http://localhost:9120/api/crops/search/${name}`)
-    .then(res => {
-        return res.data;
+    try {
+        const response = await axios.get(`http://localhost:9120/api/crops/search/${name}`);
+        console.log('crop', response.data);
+        return response.data;
+    } catch(error) {
+        console.log(error);
+        return [];
     }
-    )
-    .catch(err => {
-        console.log(err);
-    }
-    )
 }
 
 // get all diseases
 export const getAllDiseases = async () => {
-    await axios.get('http://localhost:9120/api/diseases')
-    .then(res => {
-        return res.data;
+    try {
+        const response = await axios.get('http://localhost:9120/api/diseases');
+        console.log('disease', response.data);
+        return response.data;
+    } catch(error) {
+        console.log(error);
+        return [];
     }
-    )
-    .catch(err => {
-        console.log(err);
-    }
-    )
 }
 
 // get disease by id
 export const getDiseaseById = async (id) => {
-    await axios.get(`http://localhost:9120/api/diseases/${id}`)
-    .then(res => {
-        return res.data;
+    try {
+        const response = await axios.get(`http://localhost:9120/api/diseases/${id}`);
+        console.log('disease', response.data);
+        return response.data;
     }
-    )
-    .catch(err => {
-        console.log(err);
+    catch(error) {
+        console.log(error);
+        return [];
     }
-    )
 }
 
 // create disease
 export const createDisease = async (disease) => {
-    await axios.post('http://localhost:9120/api/diseases', disease)
-    .then(res => {
-        return res.data;
+    try {
+        const response = await axios.post('http://localhost:9120/api/diseases', disease);
+        console.log('disease', response.data);
+        return response.data;
     }
-    )
-    .catch(err => {
-        console.log(err);
+    catch(error) {
+        console.log(error);
+        return [];
     }
-    )
 }
 
 // update disease
 export const updateDisease = async (id, disease) => {
-    await axios.put(`http://localhost:9120/api/diseases/${id}`, disease)
-    .then(res => {
-        return res.data;
+    try {
+        const response = await axios.put(`http://localhost:9120/api/diseases/${id}`, disease);
+        console.log('disease', response.data);
+        return response.data;
     }
-    )
-    .catch(err => {
-        console.log(err);
+    catch(error) {
+        console.log(error);
+        return [];
     }
-    )
 }
 
 // delete disease
 export const deleteDisease = async (id) => {
-    await axios.delete(`http://localhost:9120/api/diseases/${id}`)
-    .then(res => {
-        return res.data;
+    try {
+        const response = await axios.delete(`http://localhost:9120/api/diseases/${id}`);
+        console.log('disease', response.data);
+        return response.data;
     }
-    )
-    .catch(err => {
-        console.log(err);
+    catch(error) {
+        console.log(error);
+        return [];
     }
-    )
 }
 
 // search disease
 export const searchDisease = async (name) => {
-    await axios.get(`http://localhost:9120/api/diseases/search/${name}`)
-    .then(res => {
-        return res.data;
+    try {
+        const response = await axios.get(`http://localhost:9120/api/diseases/search/${name}`);
+        console.log('disease', response.data);
+        return response.data;
+    } catch(error) {
+        console.log(error);
+        return [];
     }
-    )
-    .catch(err => {
-        console.log(err);
-    }
-    )
 }
