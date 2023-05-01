@@ -2,27 +2,24 @@ import express from 'express';
 import session from 'express-session';
 import Visitor from '../models/visitModel.js';
 
-const visit = express();
-
-// Use express-session middleware to track unique visitors
-visit.use(
-  session({
-    secret: 'redstream',
-    resave: false,
-    saveUninitialized: true,
-  })
-);
-
-// Middleware function to increment visitor count
-visit.use((req, res, next) => {
-  if (!req.session.visitor) {
-    req.session.visitor = true;
-    Visitor.findOneAndUpdate({}, { $inc: { count: 1 } }, { upsert: true })
-      .then(() => next())
-      .catch((err) => console.error(err));
-  } else {
-    next();
-  }
+const visitMiddleware = session({
+  secret: 'secret-key',
+  resave: false,
+  saveUninitialized: true,
 });
 
-export { visit };
+const incrementCountMiddleware = async (req, res, next) => {
+  const date = new Date().setHours(0, 0, 0, 0);
+  const visit = await Visitor.findOne({ date });
+
+  if (!visit) {
+    await Visitor.create({ date, count: 1 });
+  } else {
+    visit.count++;
+    await visit.save();
+  }
+
+  next();
+};
+
+export { visitMiddleware, incrementCountMiddleware };
