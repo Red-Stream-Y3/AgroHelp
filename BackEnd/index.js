@@ -1,5 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
+import cors from 'cors';
+import bodyParser from 'body-parser';
 import colors from 'colors';
 import findConfig from 'find-config';
 import connectDB from './config/db.js';
@@ -18,7 +20,8 @@ connectDB();
 
 const app = express();
 
-app.use(express.json());
+app.use(cors());
+app.use(bodyParser.json());
 
 // Use middleware to increment visitor count
 app.use(visit);
