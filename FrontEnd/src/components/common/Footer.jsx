@@ -13,19 +13,18 @@ const Footer = () => {
                 <span className="text-white font-extrabold ml-2 text-3xl">AgroHelp</span>
             </Link>
         </div>
-        <div className="flex flex-wrap justify-center py-2">
-          <Link to="/about" className="mx-3 my-2 md:my-0 hover:text-white">About</Link>
-          <Link to="/contact" className="mx-3 my-2 md:my-0 hover:text-white">Contact</Link>
-          <Link to="/admin" className="mx-3 my-2 md:my-0 hover:text-white">Admin Login</Link>
-        </div>
-        <div className="flex items-center py-2">
+        <div className="flex flex-wrap justify-center pt-5 md:pt-0">
           <a href="https://facebook.com" className="mx-2 hover:text-white"><FaFacebookF className="text-2xl" /></a>
           <a href="https://instagram.com" className="mx-2 hover:text-white"><FaInstagram className="text-2xl" /></a>
           <a href="https://twitter.com" className="mx-2 hover:text-white"><FaTwitter className="text-2xl" /></a>
           <a href="https://youtube.com" className="mx-2 hover:text-white"><FaYoutube className="text-2xl" /></a>
         </div>
-
-        <div className="flex flex-col md:flex-row items-center py-2">
+        <div className="flex items-center pt-5 md:pt-0">
+          <Link to="/about" className="mx-3  md:my-0 hover:text-white">About</Link>
+          <Link to="/contact" className="mx-3  md:my-0 hover:text-white">Contact</Link>
+          <Link to="/admin" className="mx-3  md:my-0 hover:text-white">Admin Login</Link>
+        </div>
+        <div className="flex flex-col md:flex-row items-center pt-5 md:pt-0">
           <div className="flex items-center">
             <span className="text-white font-light">© 2023 AgroHelp</span>
           </div>
