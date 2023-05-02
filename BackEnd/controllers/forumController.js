@@ -5,14 +5,13 @@ import asyncHandler from "express-async-handler";
 // @route   GET /api/forums
 // @access  Public
 const getForums = asyncHandler(async (req, res) => {
-    const query = models.Forum.find({}).sort({ createdAt: -1 }).limit(10);
-    await query.exec(err, forums => {
-        if (err) {
-            res.status(404).send({message: "Forums not found"});
-        } else {
-            res.json(forums);
-        }
-    });
+    const forums = await Forum.find({}).sort({ createdAt: -1 }).limit(10);
+    
+    if (!forums) {
+        res.status(404).send({message: "Forums not found"});
+    } else {
+        res.json(forums);
+    }
 });
 
 // @desc    Fetch single forum by id
@@ -40,7 +39,7 @@ const createForum = asyncHandler(async (req, res) => {
     });
 
     const createdForum = await forum.save();
-    res.status(201).json(createdForum);
+    res.status(256).json(createdForum);
 });
 
 // @desc    Update a forum
@@ -70,17 +69,17 @@ const deleteForum = asyncHandler(async (req, res) => {
 
     if (forum) {
         await forum.remove();
-        res.json({ message: "Forum removed" });
+        res.status(255).json({ message: "Forum removed" });
     } else {
         res.status(404).send({message: "Forum not found"});
     }
 });
 
 // @desc    Search forums
-// @route   GET /api/forums/search
+// @route   GET /api/forums/search/q=:q
 // @access  Public
 const searchForums = asyncHandler(async (req, res) => {
-    const { title } = req.body.forum;
+    const title = req.params.q;
 
     const forums = await Forum.find({
         title: { $regex: title, $options: "g" },
@@ -94,7 +93,7 @@ const searchForums = asyncHandler(async (req, res) => {
 });
 
 // @desc    Subscribe to a forum
-// @route   PUT /api/forums/:id/subscribe
+// @route   POST /api/forums/:id/subscribe
 // @access  Private
 const subscribeToForum = asyncHandler(async (req, res) => {
     const forum = await Forum.findById(req.params.id);
@@ -102,14 +101,14 @@ const subscribeToForum = asyncHandler(async (req, res) => {
     if (forum) {
         forum.subscribers.push(req.body.user._id);
         forum.save();
-        res.json({ message: "Subscribed to forum" });
+        res.status(255).json({ message: "Subscribed to forum" });
     } else {
         res.status(404).send({message: "Forum not found"});
     }
 });
 
 // @desc    Unsubscribe from a forum
-// @route   PUT /api/forums/:id/unsubscribe
+// @route   POST /api/forums/:id/unsubscribe
 // @access  Private
 const unsubscribeFromForum = asyncHandler(async (req, res) => {
     const forum = await Forum.findById(req.params.id);
@@ -117,18 +116,18 @@ const unsubscribeFromForum = asyncHandler(async (req, res) => {
     if (forum) {
         forum.subscribers.pull(req.body.user._id);
         forum.save();
-        res.json({ message: "Unsubscribed from forum" });
+        res.status(255).json({ message: "Unsubscribed from forum" });
     } else {
         res.status(404).send({message: "Forum not found"});
     }
 });
 
 // @desc    Get subscribed forums
-// @route   GET /api/forums/subscribed
+// @route   GET /api/forums/subscribed/:user
 // @access  Private
 const getSubscribedForums = asyncHandler(async (req, res) => {
     const forums = await Forum.find({
-        subscribers: { $in: [req.body.user._id] },
+        subscribers: { $in: [req.params.user] },
     });
 
     if (forums) {
@@ -139,41 +138,56 @@ const getSubscribedForums = asyncHandler(async (req, res) => {
 });
 
 // @desc    Like a forum
-// @route   PUT /api/forums/:id/like
+// @route   POST /api/forums/like/:id
 // @access  Private
 const likeForum = asyncHandler(async (req, res) => {
     const forum = await Forum.findById(req.params.id);
+    let message = "";
 
     if (forum) {
-        forum.likes.push(req.body.user._id);
+        // If user has liked the forum, remove like
+        if(forum.likes.includes(req.body.user._id)) {
+            forum.likes.pull(req.body.user._id);
+            message = "Unliked forum";
+        } else {
+            // If user has disliked the forum, remove dislike
+            if(forum.dislikes.includes(req.body.user._id)) {
+                forum.dislikes.pull(req.body.user._id);
+            }
+
+            forum.likes.push(req.body.user._id);
+            message = "Liked forum";
+        }
+
         forum.save();
-        res.json({ message: "Liked forum" });
+        res.status(255).json({ message: message });
     } else {
         res.status(404).send({message: "Forum not found"});
     }
 });
 
+//TODO: remove depricated method
 // @desc    Unlike a forum
-// @route   PUT /api/forums/:id/unlike
+// @route   POST /api/forums/unlike/:id
 // @access  Private
 const unlikeForum = asyncHandler(async (req, res) => {
     const forum = await Forum.findById(req.params.id);
 
-    if (forum) {
+    if (forum && forum.likes.includes(req.body.user._id)) {
         forum.likes.pull(req.body.user._id);
         forum.save();
-        res.json({ message: "Unliked forum" });
+        res.status(255).json({ message: "Unliked forum" });
     } else {
         res.status(404).send({message: "Forum not found"});
     }
 });
 
 // @desc    Get liked forums
-// @route   GET /api/forums/liked
+// @route   GET /api/forums/liked/:user
 // @access  Private
 const getLikedForums = asyncHandler(async (req, res) => {
     const forums = await Forum.find({
-        likes: { $in: [req.body.user._id] },
+        likes: { $in: [req.params.user] },
     });
 
     if (forums) {
@@ -184,41 +198,56 @@ const getLikedForums = asyncHandler(async (req, res) => {
 });
 
 // @desc    Dislike a forum
-// @route   PUT /api/forums/:id/dislike
+// @route   PUT /api/forums/dislike/:id
 // @access  Private
 const dislikeForum = asyncHandler(async (req, res) => {
     const forum = await Forum.findById(req.params.id);
+    let message = "";
 
     if (forum) {
-        forum.dislikes.push(req.body.user._id);
+        // If user has disliked the forum, remove dislike
+        if (forum.dislikes.includes(req.body.user._id)) {
+            forum.dislikes.pull(req.body.user._id);
+            message = "Removed dislike";
+        } else {
+            // If user has liked the forum, remove like
+            if (forum.likes.includes(req.body.user._id)) {
+                forum.likes.pull(req.body.user._id);
+            }
+
+            forum.dislikes.push(req.body.user._id);
+            message = "Disliked forum";
+        }
+
         forum.save();
-        res.json({ message: "Disliked forum" });
+        res.status(255).json({ message: message });
     } else {
         res.status(404).send({message: "Forum not found"});
     }
 });
 
+//TODO: remove depricated method
 // @desc    Undislike a forum
-// @route   PUT /api/forums/:id/undislike
+// @route   PUT /api/forums/undislike/:id
 // @access  Private
 const undislikeForum = asyncHandler(async (req, res) => {
     const forum = await Forum.findById(req.params.id);
 
-    if (forum) {
+    if (forum && forum.dislikes.includes(req.body.user._id)) {
         forum.dislikes.pull(req.body.user._id);
         forum.save();
-        res.json({ message: "Undisliked forum" });
+        res.status(255).json({ message: "Undisliked forum" });
     } else {
         res.status(404).send({message: "Forum not found"});
     }
 });
 
 // @desc    Get disliked forums
-// @route   GET /api/forums/disliked
+// @route   GET /api/forums/disliked/:user
 // @access  Private
 const getDislikedForums = asyncHandler(async (req, res) => {
     const forums = await Forum.find({
-        dislikes: { $in: [req.body.user._id] },
+        dislikes: { $in: [req.params.user] },
     });
 
     if (forums) {
@@ -229,7 +258,7 @@ const getDislikedForums = asyncHandler(async (req, res) => {
 });
 
 // @desc    post a reply on a forum
-// @route   PUT /api/forums/:id/reply
+// @route   PUT /api/forums/reply/:id
 // @access  Private
 const replyToForum = asyncHandler(async (req, res) => {
     const forum = await Forum.findById(req.params.id);
@@ -243,22 +272,22 @@ const replyToForum = asyncHandler(async (req, res) => {
 
         forum.replies.push(reply);
         forum.save();
-        res.json({ message: "Replied to forum" });
+        res.status(255).json({ message: "Replied to forum" });
     } else {
         res.status(404).send({message: "Forum not found"});
     }
 });
 
 // @desc    Delete a reply on a forum
-// @route   DELETE /api/forums/:id/reply
+// @route   DELETE /api/forums/reply/:id/:replyid
 // @access  Private
 const deleteReplyFromForum = asyncHandler(async (req, res) => {
     const forum = await Forum.findById(req.params.id);
 
     if (forum) {
-        forum.replies.pull(req.body.replyID); //TODO: check if this works
+        forum.replies.pull(req.params.replyid); //TODO: check if this works
         forum.save();
-        res.json({ message: "Deleted reply from forum" });
+        res.status(255).json({ message: "Deleted reply from forum" });
     } else {
         res.status(404).send({message: "Forum not found"});
     }
@@ -272,13 +301,13 @@ const editReplyOnForum = asyncHandler(async (req, res) => {
 
     if (forum) {
         const reply = forum.replies.find(
-            (reply) => reply._id.toString() === req.body.replyID
+            (reply) => reply._id.toString() === req.params.replyid
         );
 
         if (reply) {
             reply.content = req.body.content;
             forum.save();
-            res.json({ message: "Edited reply" });
+            res.status(255).json({ message: "Edited reply" });
         } else {
             res.status(404).send({message: "Reply not found"});
         }
@@ -288,20 +317,33 @@ const editReplyOnForum = asyncHandler(async (req, res) => {
 });
 
 // @desc    Like a reply on a forum
-// @route   PUT /api/forums/:id/reply/like
+// @route   POST /api/forums/reply/like/:id/:replyid
 // @access  Private
 const likeReplyOnForum = asyncHandler(async (req, res) => {
     const forum = await Forum.findById(req.params.id);
+    let message = "";
 
     if (forum) {
         const reply = forum.replies.find(
-            (reply) => reply._id.toString() === req.body.replyID
+            (reply) => reply._id.toString() === req.params.replyid
         );
 
         if (reply) {
-            reply.likes.push(req.body.user._id);
+            // If user has liked the reply, remove like
+            if (reply.likes.includes(req.body.user._id)) {
+                reply.likes.pull(req.body.user._id);
+                message = "Removed like";
+            } else {
+                // If user has disliked the reply, remove dislike
+                if (reply.dislikes.includes(req.body.user._id)) {
+                    reply.dislikes.pull(req.body.user._id);
+                }
+
+                reply.likes.push(req.body.user._id);
+                message = "Liked reply";
+            }
             forum.save();
-            res.json({ message: "Liked reply" });
+            res.status(255).json({ message: message });
         } else {
             res.status(404).send({message: "Reply not found"});
         }
@@ -310,21 +352,22 @@ const likeReplyOnForum = asyncHandler(async (req, res) => {
     }
 });
 
+//TODO: remove depricated method
 // @desc    Unlike a reply on a forum
-// @route   PUT /api/forums/:id/reply/unlike
+// @route   POST /api/forums/reply/unlike/:id/:replyid
 // @access  Private
 const unlikeReplyOnForum = asyncHandler(async (req, res) => {
     const forum = await Forum.findById(req.params.id);
     
     if (forum) {
         const reply = forum.replies.find(
-            (reply) => reply._id.toString() === req.body.replyID
+            (reply) => reply._id.toString() === req.params.replyid
         );
 
         if (reply) {
             reply.likes.pull(req.body.user._id);
             forum.save();
-            res.json({ message: "Unliked reply" });
+            res.status(255).json({ message: "Unliked reply" });
         } else {
             res.status(404).send({message: "Reply not found"});
         }
@@ -334,20 +377,34 @@ const unlikeReplyOnForum = asyncHandler(async (req, res) => {
 });
 
 // @desc    Dislike a reply on a forum
-// @route   PUT /api/forums/:id/reply/dislike
+// @route   POST /api/forums/reply/dislike/:id/:replyid
 // @access  Private
 const dislikeReplyOnForum = asyncHandler(async (req, res) => {
     const forum = await Forum.findById(req.params.id);
+    let message = "";
 
     if (forum) {
         const reply = forum.replies.find(
-            (reply) => reply._id.toString() === req.body.replyID
+            (reply) => reply._id.toString() === req.params.replyid
         );
 
         if (reply) {
-            reply.dislikes.push(req.body.user._id);
+            // If user has disliked the reply, remove dislike
+            if (reply.dislikes.includes(req.body.user._id)) {
+                reply.dislikes.pull(req.body.user._id);
+                message = "Removed dislike";
+            } else {
+                // If user has liked the reply, remove like
+                if (reply.likes.includes(req.body.user._id)) {
+                    reply.likes.pull(req.body.user._id);
+                }
+
+                reply.dislikes.push(req.body.user._id);
+                message = "Disliked reply";
+            }
+
             forum.save();
-            res.json({ message: "Disliked reply" });
+            res.status(255).json({ message: message });
         } else {
             res.status(404).send({message: "Reply not found"});
         }
@@ -356,21 +413,23 @@ const dislikeReplyOnForum = asyncHandler(async (req, res) => {
     }
 });
 
+
+//TODO: remove depricated method
 // @desc    Undislike a reply on a forum
-// @route   PUT /api/forums/:id/reply/undislike
+// @route   POST /api/forums/reply/undislike/:id/:replyid
 // @access  Private
 const undislikeReplyOnForum = asyncHandler(async (req, res) => {
     const forum = await Forum.findById(req.params.id);
 
     if (forum) {
         const reply = forum.replies.find(
-            (reply) => reply._id.toString() === req.body.replyID
+            (reply) => reply._id.toString() === req.params.replyid
         );
 
         if (reply) {
             reply.dislikes.pull(req.body.user._id);
             forum.save();
-            res.json({ message: "Undisliked reply" });
+            res.status(255).json({ message: "Undisliked reply" });
         } else {
             res.status(404).send({message: "Reply not found"});
         }
@@ -380,20 +439,20 @@ const undislikeReplyOnForum = asyncHandler(async (req, res) => {
 });
 
 // @desc    Mark reply as accepted answer
-// @route   PUT /api/forums/:id/reply/accept
+// @route   POST /api/forums/reply/accept/:id/:replyid
 // @access  Private
 const acceptReplyAsAnswer = asyncHandler(async (req, res) => {
     const forum = await Forum.findById(req.params.id);
 
     if (forum) {
         const reply = forum.replies.find(
-            (reply) => reply._id.toString() === req.body.replyID
+            (reply) => reply._id.toString() === req.params.replyid
         );
 
         if (reply) {
             forum.acceptedAnswer = reply;
             forum.save();
-            res.json({ message: "Accepted reply as answer" });
+            res.status(255).json({ message: "Accepted reply as answer" });
         } else {
             res.status(404).send({message: "Reply not found"});
         }
@@ -403,7 +462,7 @@ const acceptReplyAsAnswer = asyncHandler(async (req, res) => {
 });
 
 // @desc    Mark forum as resolved
-// @route   PUT /api/forums/:id/resolve
+// @route   POST /api/forums/resolve/:id
 // @access  Private
 const resolveForum = asyncHandler(async (req, res) => {
     const forum = await Forum.findById(req.params.id);
@@ -411,9 +470,22 @@ const resolveForum = asyncHandler(async (req, res) => {
     if (forum) {
         forum.resolved = true;
         forum.save();
-        res.json({ message: "Forum Resolved" });
+        res.status(255).json({ message: "Forum Resolved" });
     } else {
         res.status(404).send({message: "Forum not found"});
+    }
+});
+
+// @desc    Get forums that user has created
+// @route   GET /api/forums/myforums/:user
+// @access  Private
+const getMyForums = asyncHandler(async (req, res) => {
+    const forums = await Forum.find({ user: req.params.user });
+
+    if (forums) {
+        res.json(forums);
+    } else {
+        res.status(404).send({message: "Forums not found"});
     }
 });
 
@@ -441,5 +513,6 @@ export {
     dislikeReplyOnForum,
     undislikeReplyOnForum,
     acceptReplyAsAnswer,
-    resolveForum
+    resolveForum,
+    getMyForums
 };

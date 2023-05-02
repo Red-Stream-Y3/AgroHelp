@@ -13,6 +13,7 @@ import {
   Crop,
 } from './pages';
 import { BlogDashboard } from './pages';
+import { useEffect } from 'react';
 import './App.css';
 
 function App() {
@@ -39,6 +40,7 @@ function App() {
         <Route path="/blogs" element={<BlogDashboard />} />
         
       </Routes>
+
       <Footer />
     </BrowserRouter>
   );

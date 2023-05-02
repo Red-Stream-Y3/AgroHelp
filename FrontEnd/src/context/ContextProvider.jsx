@@ -5,8 +5,12 @@ const Context = createContext();
 
 export const ContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [server, setServer] = useState("http://localhost:9120");
 
   useEffect(() => {
+    //set server url in local storage
+    localStorage.setItem('agroServer', server);
+
     // Get user info from local storage
     const userInfoFromStorage = localStorage.getItem('userInfo')
       ? JSON.parse(localStorage.getItem('userInfo'))
@@ -18,7 +22,9 @@ export const ContextProvider = ({ children }) => {
   }, []);
 
   return (
-    <Context.Provider value={{ user, setUser }}>{children}</Context.Provider>
+    <Context.Provider value={{ user, setUser, server, setServer }}>
+        {children}
+    </Context.Provider>
   );
 };
 
