@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 const commentSchema = new mongoose.Schema({
-    text: {
+    comment: {
         type: String,
         required: true
     },
@@ -10,7 +10,7 @@ const commentSchema = new mongoose.Schema({
         ref: 'User',
         required: true
     },
-    timestamp: {
+    postedAt: {
         type: Date,
         default: Date.now
     }

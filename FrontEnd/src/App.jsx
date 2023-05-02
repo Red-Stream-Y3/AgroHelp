@@ -4,10 +4,13 @@ import {
   Home,
   AdminHome,
   AdminDashboard,
-  ManageArticles,
+  ManageBlogs,
   ManageUsers,
   ManageComments,
-  ForumDashboard
+  ForumDashboard,
+  Login,
+  Register,
+  Crop,
 } from './pages';
 import { BlogDashboard } from './pages';
 import './App.css';
@@ -19,18 +22,22 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/home" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
 
         <Route path="/admin/*" element={<AdminHome />}>
           <Route path="dashboard" element={<AdminDashboard />} />
-          <Route path="manage-articles" element={<ManageArticles />} />
+          <Route path="manage-blogs" element={<ManageBlogs />} />
           <Route path="manage-users" element={<ManageUsers />} />
           <Route path="manage-comments" element={<ManageComments />} />
         </Route>
 
-        <Route path="/blogs" element={<BlogDashboard />} />
+        <Route path="/crops/:id" element={<Crop />} />
 
         <Route path="/forum" element={<ForumDashboard />} />
 
+        <Route path="/blogs" element={<BlogDashboard />} />
+        
       </Routes>
       <Footer />
     </BrowserRouter>

@@ -4,17 +4,26 @@ import User from '../models/userModel.js';
 
 // to protect routes
 const protect = asyncHandler(async (req, res, next) => {
-  const token = req.header('Authorization').replace('Bearer ', '');
-  const decoded = jwt.verify(token, process.env.JWT_SECRET);
-  const user = await User.findOne({ _id: decoded.id, 'tokens.token': token });
+  let token;
 
-  if (!user) {
-    throw new Error();
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith('Bearer')
+  ) {
+    try {
+      token = req.headers.authorization.split(' ')[1];
+
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+      req.user = await User.findById(decoded.id).select('-password');
+
+      next();
+    } catch (error) {
+      console.error(error);
+      res.status(401);
+      throw new Error('Not authorized, token failed');
+    }
   }
-
-  req.token = token;
-  req.user = user;
-  next();
 
   if (!token) {
     res.status(401);
@@ -22,4 +31,13 @@ const protect = asyncHandler(async (req, res, next) => {
   }
 });
 
-export { protect };
+const admin = (req, res, next) => {
+  if (req.user && req.user.role === 'admin') {
+    next();
+  } else {
+    res.status(401);
+    throw new Error('Not authorized as an admin');
+  }
+};
+
+export { protect, admin };

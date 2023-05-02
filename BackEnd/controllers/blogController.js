@@ -5,7 +5,7 @@ import asyncHandler from 'express-async-handler';
 // @route   GET /api/blog
 // @access  Public
 const getBlogs = asyncHandler(async (req, res) => {
-    const blogs = await Blog.find({});
+    const blogs = await Blog.find({}).populate('author', 'username firstName lastName');
     res.json(blogs);
     }
 );
@@ -14,7 +14,7 @@ const getBlogs = asyncHandler(async (req, res) => {
 // @route   GET /api/blog/:id
 // @access  Public
 const getBlogById = asyncHandler(async (req, res) => {
-    const blog = await Blog.findById(req.params.id);
+    const blog = await Blog.findById(req.params.id).populate('author', 'username firstName lastName');
     if (blog) {
         res.json(blog);
     } else {
@@ -74,10 +74,35 @@ const updateBlog = asyncHandler(async (req, res) => {
     }
 });
 
+// @desc    Create new comment
+// @route   POST /api/blog/:id/comment
+// @access  Private
+const createBlogComment = asyncHandler(async (req, res) => {
+    const { comment, postedAs, postedBy } = req.body;
+    const blog = await Blog.findById(req.params.id);
+
+    if (blog) {
+        const newComment = {
+            comment,
+            postedAs,
+            postedBy,
+        };
+
+        blog.comments.push(newComment);
+
+        const updatedBlog = await blog.save();
+        res.status(201).json(updatedBlog);
+    } else {
+        res.status(404);
+        throw new Error("Blog not found");
+    }
+});
+
 export {
     getBlogs,
     getBlogById,
     deleteBlog,
     createBlog,
     updateBlog,
+    createBlogComment
 }

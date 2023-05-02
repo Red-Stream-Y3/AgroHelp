@@ -11,7 +11,7 @@ const AdminSideBar = ({ isSidebarOpen }) => {
 
   return (
     <nav
-      className={`bg-gray-900 w-64 flex-shrink-0 ${
+      className={`bg-darkbg w-64 flex-shrink-0 ${
         isSidebarOpen ? 'block' : 'hidden'
       } md:block`}
     >
@@ -22,8 +22,8 @@ const AdminSideBar = ({ isSidebarOpen }) => {
               to="/admin/dashboard"
               className={`flex items-center py-5 px-4 text-lg text-gray-100 ${
                 activeLink === 'dashboard'
-                  ? 'bg-green-600'
-                  : 'bg-gray-900 hover:bg-green-700'
+                  ? 'bg-primarydark'
+                  : 'bg-darkbg hover:bg-secondary'
               } border-y-2 border-black`}
               onClick={() => handleLinkClick('dashboard')}
             >
@@ -33,16 +33,16 @@ const AdminSideBar = ({ isSidebarOpen }) => {
           </li>
           <li>
             <NavLink
-              to="/admin/manage-articles"
+              to="/admin/manage-blogs"
               className={`flex items-center py-5 px-4 text-lg text-gray-100 ${
-                activeLink === 'manage-articles'
-                  ? 'bg-green-600'
-                  : 'bg-gray-900 hover:bg-green-700'
+                activeLink === 'manage-blogs'
+                  ? 'bg-primarydark'
+                  : 'bg-darkbg hover:bg-secondary'
               } border-y-2 border-black`}
-              onClick={() => handleLinkClick('manage-articles')}
+              onClick={() => handleLinkClick('manage-blogs')}
             >
               <i className="fa-solid fa-newspaper pr-6"></i>
-              Articles
+              Blogs
             </NavLink>
           </li>
           <li>
@@ -50,8 +50,8 @@ const AdminSideBar = ({ isSidebarOpen }) => {
               to="/admin/manage-users"
               className={`flex items-center py-5 px-4 text-lg text-gray-100 ${
                 activeLink === 'manage-users'
-                  ? 'bg-green-600'
-                  : 'bg-gray-900 hover:bg-green-700'
+                  ? 'bg-primarydark'
+                  : 'bg-darkbg hover:bg-secondary'
               } border-y-2 border-black`}
               onClick={() => handleLinkClick('manage-users')}
             >
@@ -64,8 +64,8 @@ const AdminSideBar = ({ isSidebarOpen }) => {
               to="/admin/manage-comments"
               className={`flex items-center py-5 px-4 text-lg text-gray-100 ${
                 activeLink === 'manage-comments'
-                  ? 'bg-green-600'
-                  : 'bg-gray-900 hover:bg-green-700'
+                  ? 'bg-primarydark'
+                  : 'bg-darkbg hover:bg-secondary'
               } border-y-2 border-black`}
               onClick={() => handleLinkClick('manage-comments')}
             >
