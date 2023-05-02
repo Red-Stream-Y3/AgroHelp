@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useGlobalContext } from '../../context/ContextProvider';
 import { getUsers, updateUser } from '../../api/user';
+import { toast } from 'react-toastify';
 
 const ManageUsers = () => {
   const { user } = useGlobalContext();
@@ -10,7 +11,8 @@ const ManageUsers = () => {
 
   const getAllUsers = async () => {
     const { data } = await getUsers(user.token);
-    setUsers(data);
+    const filteredUsers = data.filter((u) => u._id !== user._id); // exclude current user
+    setUsers(filteredUsers);
   };
 
   useEffect(() => {
@@ -34,8 +36,24 @@ const ManageUsers = () => {
   const handleRole = async (id, role) => {
     if (role === 'admin') {
       await updateUser({ _id: id, role: 'admin' }, user.token);
+      toast.success(`Promoted to Admin`, {
+        hideProgressBar: false,
+        closeOnClick: true,
+        autoClose: 1500,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     } else {
       await updateUser({ _id: id, role: 'user' }, user.token);
+      toast.error(`Demoted to User`, {
+        hideProgressBar: false,
+        closeOnClick: true,
+        autoClose: 1500,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     }
     getAllUsers();
   };
@@ -44,7 +62,7 @@ const ManageUsers = () => {
     'py-3.5 text-sm font-semibold text-left rtl:text-right text-gray-500 dark:text-white';
 
   const privilegeBtn =
-    'flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md sm:w-auto gap-x-2 hover:bg-gray-100 dark:bg-primary dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-800 disabled:bg-gray-400 disabled:cursor-not-allowed';
+    'flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md sm:w-auto gap-x-2 hover:bg-gray-100 dark:bg-primary dark:text-gray-200 dark:border-gray-700 dark:hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed';
 
   const userRow = (user) => {
     return (
