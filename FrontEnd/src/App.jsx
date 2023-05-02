@@ -9,6 +9,7 @@ import {
   ManageComments,
   Login,
   Register,
+  Crop,
 } from './pages';
 import { BlogDashboard } from './pages';
 import './App.css';
@@ -29,6 +30,9 @@ function App() {
           <Route path="manage-users" element={<ManageUsers />} />
           <Route path="manage-comments" element={<ManageComments />} />
         </Route>
+
+        <Route path="/crops/:id" element={<Crop />} />
+
 
         <Route path="/blogs" element={<BlogDashboard />} />
       </Routes>
