@@ -115,6 +115,10 @@ const ForumCard = ({forum, checkRes, notify}) => {
         await refreshForum();
     };
 
+    const handleEditReply = async (replyId) => {};
+
+    const handleDeleteReply = async (replyId) => {};
+
     return (
         <div className="rounded-md bg-darkbg p-3 mt-2 sm:max-w-4xl text-sm sm:text-base">
             {!Loading ? (
@@ -179,29 +183,71 @@ const ForumCard = ({forum, checkRes, notify}) => {
                                 {/* reply username and date */}
                                 {forumObj.replies.map((reply) => {
                                     return (
-                                        <div key={reply._id} className="m-1 p-1 mx-auto bg-gray-700 rounded-md sm:max-w-2xl">
-                                            <div className="ml-2 mt-1">@{reply.username}</div>
-                                            <div className="ml-2">{reply.content}</div>
+                                        <div
+                                            key={reply._id}
+                                            className={`m-1 p-1 mx-auto bg-gray-700 rounded-md sm:max-w-2xl ${reply.userID === user._id && "ring-2"}`}>
+                                            <div className="flex justify-between">
+                                                <div className="ml-2 mt-1 text-xs">
+                                                    @{reply.username}
+                                                </div>
+                                                {reply.userID === user._id ? (
+                                                    <div className="w-fit">
+                                                        <button 
+                                                            onClick={() => handleEditReply(reply._id)}
+                                                            className="ml-auto mr-2 text-xs text-gray-500">
+                                                            Edit
+                                                        </button>
+                                                        <button 
+                                                            onClick={() => handleDeleteReply(reply._id)}
+                                                            className="ml-auto mr-2 text-xs text-gray-500">
+                                                            Delete
+                                                        </button>
+                                                    </div>
+                                                ) : null}
+                                            </div>
+                                            <div className="ml-2">
+                                                {reply.content}
+                                            </div>
                                             <div className="flex">
                                                 <div className="flex items-center">
                                                     <button
-                                                        onClick={(e)=>handleReplyLike(reply._id)}
+                                                        onClick={() =>
+                                                            handleReplyLike(
+                                                                reply._id
+                                                            )
+                                                        }
                                                         className="transition-all ease-in-out active:scale-110 hover:bg-gray-500 rounded-full px-2 py-2 m-2">
-                                                        {reply.likes.includes(user._id) ? <AiFillLike /> : <AiOutlineLike />}
+                                                        {reply.likes.includes(
+                                                            user._id
+                                                        ) ? (
+                                                            <AiFillLike />
+                                                        ) : (
+                                                            <AiOutlineLike />
+                                                        )}
                                                     </button>
-                                                    <div>{reply.likes.length}</div>
+                                                    <div>
+                                                        {reply.likes.length}
+                                                    </div>
                                                 </div>
                                                 <div className="flex items-center ml-3">
                                                     <button
-                                                        onClick={(e)=>handleReplyDislike(reply._id)}
+                                                        onClick={() =>
+                                                            handleReplyDislike(
+                                                                reply._id
+                                                            )
+                                                        }
                                                         className="transition-all ease-in-out active:scale-110 hover:bg-gray-500 rounded-full px-2 py-2 m-2">
-                                                        {reply.dislikes.includes(user._id) ? (
+                                                        {reply.dislikes.includes(
+                                                            user._id
+                                                        ) ? (
                                                             <AiFillDislike />
                                                         ) : (
                                                             <AiOutlineDislike />
                                                         )}
                                                     </button>
-                                                    <div>{reply.dislikes.length}</div>
+                                                    <div>
+                                                        {reply.dislikes.length}
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
