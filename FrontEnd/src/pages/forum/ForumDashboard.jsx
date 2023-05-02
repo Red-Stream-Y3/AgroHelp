@@ -2,7 +2,7 @@ import React from "react";
 
 const ForumDashboard = (props) => {
   return (
-    <div>
+    <div className="text-white">
       <h1>Forum Dashboard</h1>
     </div>
   );

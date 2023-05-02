@@ -29,7 +29,7 @@ function App() {
 
         <Route path="/blogs" element={<BlogDashboard />} />
 
-        <Route path="/forums" element={<ForumDashboard />} />
+        <Route path="/forum" element={<ForumDashboard />} />
 
       </Routes>
       <Footer />
