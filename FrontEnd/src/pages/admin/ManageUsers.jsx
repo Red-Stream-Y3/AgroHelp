@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useGlobalContext } from '../../context/ContextProvider';
-import { getUsers } from '../../api/user';
+import { getUsers, updateUser } from '../../api/user';
 
 const ManageUsers = () => {
   const { user } = useGlobalContext();
@@ -8,14 +8,14 @@ const ManageUsers = () => {
   const [value, setValue] = useState('');
   const [tableFilter, setTableFilter] = useState([]);
 
-  useEffect(() => {
-    const getAllUsers = async () => {
-      const { data } = await getUsers(user.token);
-      setUsers(data);
-    };
+  const getAllUsers = async () => {
+    const { data } = await getUsers(user.token);
+    setUsers(data);
+  };
 
+  useEffect(() => {
     getAllUsers();
-  }, [user.token]);
+  }, []);
 
   const filterData = (e) => {
     if (e.target.value !== '') {
@@ -29,6 +29,64 @@ const ManageUsers = () => {
     } else {
       setValue(e.target.value);
     }
+  };
+
+  const handleRole = async (id, role) => {
+    if (role === 'admin') {
+      await updateUser({ _id: id, role: 'admin' }, user.token);
+    } else {
+      await updateUser({ _id: id, role: 'user' }, user.token);
+    }
+    getAllUsers();
+  };
+
+  const theadClass =
+    'py-3.5 text-sm font-semibold text-left rtl:text-right text-gray-500 dark:text-white';
+
+  const privilegeBtn =
+    'flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md sm:w-auto gap-x-2 hover:bg-gray-100 dark:bg-primary dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-800 disabled:bg-gray-400 disabled:cursor-not-allowed';
+
+  const userRow = (user) => {
+    return (
+      <tr key={user._id}>
+        <td className="px-4 py-4 text-sm font-medium whitespace-nowrap">
+          <div>
+            <h2 className="font-medium text-gray-800 dark:text-white capitalize">
+              {user.firstName} {user.lastName}
+            </h2>
+          </div>
+        </td>
+        <td className="py-4 text-sm font-medium whitespace-nowrap">
+          <h2 className="font-medium text-gray-800 dark:text-white">
+            {user.email}
+          </h2>
+        </td>
+        <td className="py-4 text-sm whitespace-nowrap">
+          <h2 className="font-medium text-gray-800 dark:text-white capitalize">
+            {user.role}
+          </h2>
+        </td>
+        <td className="py-4 text-sm whitespace-nowrap">
+          <div className="flex items-center mt-4 gap-x-4 sm:mt-0 justify-center">
+            <button
+              className={privilegeBtn}
+              disabled={user.role === 'admin'}
+              onClick={() => handleRole(user._id, 'admin')}
+            >
+              <span>Promote</span>
+            </button>
+
+            <button
+              className={privilegeBtn}
+              disabled={user.role === 'user'}
+              onClick={() => handleRole(user._id, 'user')}
+            >
+              <span>Demote</span>
+            </button>
+          </div>
+        </td>
+      </tr>
+    );
   };
 
   return (
@@ -77,93 +135,21 @@ const ManageUsers = () => {
                 <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                   <thead className="bg-gray-50 dark:bg-gray-800">
                     <tr>
-                      <th
-                        scope="col"
-                        className="py-3.5 px-4 text-sm font-semibold text-left rtl:text-right text-gray-500 dark:text-white"
-                      >
-                        NAME
-                      </th>
+                      <th className={`px-4 ${theadClass}`}>NAME</th>
 
-                      <th
-                        scope="col"
-                        className="py-3.5 text-sm font-semibold text-left rtl:text-right text-gray-500 dark:text-white"
-                      >
-                        EMAIL
-                      </th>
+                      <th className={theadClass}>EMAIL</th>
 
-                      <th
-                        scope="col"
-                        className="py-3.5 text-sm font-semibold text-left rtl:text-right text-gray-500 dark:text-white"
-                      >
-                        ROLE
-                      </th>
+                      <th className={theadClass}>ROLE</th>
 
-                      <th
-                        scope="col"
-                        className="py-3.5 text-sm font-semibold text-left rtl:text-right text-gray-500 dark:text-white"
-                      >
+                      <th className={`text-center ${theadClass}`}>
                         PRIVILEGES
                       </th>
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
                     {value.length > 0
-                      ? tableFilter.map((user) => (
-                          <tr key={user._id}>
-                            <td className="px-4 py-4 text-sm font-medium whitespace-nowrap">
-                              <div>
-                                <h2 className="font-medium text-gray-800 dark:text-white capitalize">
-                                  {user.firstName} {user.lastName}
-                                </h2>
-                              </div>
-                            </td>
-                            <td className="py-4 text-sm font-medium whitespace-nowrap">
-                              <h2 className="font-medium text-gray-800 dark:text-white">
-                                {user.email}
-                              </h2>
-                            </td>
-                            <td className="py-4 text-sm whitespace-nowrap">
-                              <h2 className="font-medium text-gray-800 dark:text-white capitalize">
-                                {user.role}
-                              </h2>
-                            </td>
-                            <td className="py-4 text-sm whitespace-nowrap">
-                              <div>
-                                <h2 className="font-medium text-gray-800 dark:text-white">
-                                  {/* {privileges} */}
-                                </h2>
-                              </div>
-                            </td>
-                          </tr>
-                        ))
-                      : users.map((user) => (
-                          <tr key={user._id}>
-                            <td className="px-4 py-4 text-sm font-medium whitespace-nowrap">
-                              <div>
-                                <h2 className="font-medium text-gray-800 dark:text-white capitalize">
-                                  {user.firstName} {user.lastName}
-                                </h2>
-                              </div>
-                            </td>
-                            <td className="py-4 text-sm font-medium whitespace-nowrap">
-                              <h2 className="font-medium text-gray-800 dark:text-white">
-                                {user.email}
-                              </h2>
-                            </td>
-                            <td className="py-4 text-sm whitespace-nowrap">
-                              <h2 className="font-medium text-gray-800 dark:text-white capitalize">
-                                {user.role}
-                              </h2>
-                            </td>
-                            <td className="py-4 text-sm whitespace-nowrap">
-                              <div>
-                                <h2 className="font-medium text-gray-800 dark:text-white">
-                                  {/* {privileges} */}
-                                </h2>
-                              </div>
-                            </td>
-                          </tr>
-                        ))}
+                      ? tableFilter.map((user) => userRow(user))
+                      : users.map((user) => userRow(user))}
                   </tbody>
                 </table>
               </div>
