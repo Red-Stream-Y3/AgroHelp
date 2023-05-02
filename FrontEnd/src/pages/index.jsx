@@ -2,6 +2,8 @@ export { default as Home } from './common/Home';
 export { default as Login } from './common/Login';
 export { default as Register } from './common/Register';
 
+export { default as Crop } from './knowledgebase/Crop';
+
 export { default as AdminHome } from './admin/AdminHome';
 export { default as AdminDashboard } from './admin/AdminDashboard';
 export { default as ManageBlogs } from './admin/ManageBlogs';

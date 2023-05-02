@@ -99,6 +99,18 @@ export const getAllDiseases = async () => {
     }
 }
 
+// get random diseases
+export const getRandomDiseases = async () => {
+    try {
+        const response = await axios.get('http://localhost:9120/api/diseases/random');
+        console.log('disease', response.data);
+        return response.data;
+    } catch(error) {
+        console.log(error);
+        return [];
+    }
+}
+
 // get disease by id
 export const getDiseaseById = async (id) => {
     try {
