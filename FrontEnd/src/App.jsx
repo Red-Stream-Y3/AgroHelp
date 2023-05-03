@@ -9,12 +9,14 @@ import {
   ManageBlogs,
   ManageUsers,
   ManageComments,
+  ForumDashboard,
   Login,
   Register,
   Crop,
   Disease,
 } from './pages';
 import { BlogDashboard } from './pages';
+import './App.css';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -41,10 +43,14 @@ function App() {
           <Route path="/crops/:id" element={<Crop />} />
           <Route path="/diseases/:id" element={<Disease />} />
 
-          <Route path="/blogs" element={<BlogDashboard />} />
-        </Routes>
-        <Footer />
-      </BrowserRouter>
+        <Route path="/forum" element={<ForumDashboard />} />
+
+        <Route path="/blogs" element={<BlogDashboard />} />
+        
+      </Routes>
+
+      <Footer />
+    </BrowserRouter>
     </>
   );
 }

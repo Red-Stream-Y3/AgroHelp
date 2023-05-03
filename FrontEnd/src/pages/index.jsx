@@ -14,3 +14,6 @@ export { default as ManageComments } from './admin/ManageComments';
 
 //blog related exports
 export { default as BlogDashboard } from './blog/BlogDashboard';
+
+//forum related exports
+export { default as ForumDashboard } from './forum/ForumDashboard';
