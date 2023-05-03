@@ -3,6 +3,7 @@ export { default as Login } from './common/Login';
 export { default as Register } from './common/Register';
 
 export { default as Crop } from './knowledgebase/Crop';
+export { default as Disease } from './knowledgebase/Disease';
 
 export { default as AdminHome } from './admin/AdminHome';
 export { default as AdminDashboard } from './admin/AdminDashboard';
