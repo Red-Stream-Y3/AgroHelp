@@ -26,7 +26,7 @@ const AdminHome = () => {
       {!isAdmin ? (
         <Loader />
       ) : (
-        <div className="flex h-screen overflow-hidden">
+        <div className="flex overflow-hidden">
           {/* Sidebar */}
           <AdminSideBar isSidebarOpen={isSidebarOpen} />
 
@@ -71,7 +71,7 @@ const AdminHome = () => {
             </div>
 
             {/* Content */}
-            <div className="flex flex-col w-full overflow-y-auto">
+            <div className="flex flex-col w-full overflow-x-auto md:overflow-x-hidden">
               <div className="flex-grow p-6">
                 <Outlet />
               </div>
