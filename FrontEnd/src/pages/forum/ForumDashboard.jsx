@@ -9,6 +9,8 @@ import { MdOutlineAdd } from "react-icons/md";
 import { Popup } from "../../components";
 
 const ForumDashboard = (props) => {
+	//TODO: search, markanswer, resolved, liked, unliked
+
     //current user and toast methods
     const { user, notify } = useGlobalContext();
 
