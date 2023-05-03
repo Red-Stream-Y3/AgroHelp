@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 
 const LineChart = ({ siteVisits, loading }) => {
   const data = {
-    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+    labels: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
     datasets: [
       {
         label: 'Traffic',
