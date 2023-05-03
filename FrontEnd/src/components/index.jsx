@@ -5,9 +5,13 @@ export { default as Loader } from './common/Loader';
 export { default as CropCard } from './knowledgebase/CropCard';
 export { default as DiseaseCard } from './knowledgebase/DiseaseCard';
 
+//admin components
 export { default as AdminSideBar } from './admin/AdminSideBar';
 export { default as BoxWidget } from './admin/BoxWidget';
+export { default as Crops } from './admin/Crops';
+export { default as CropDiseases } from './admin/CropDiseases';
 export { default as BlogTable } from './admin/BlogTable';
+export { default as LineChart } from './admin/LineChart';
 
 //blog components
 export { default as BlogBanner } from './blog/BlogBanner';

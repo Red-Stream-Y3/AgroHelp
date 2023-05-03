@@ -5,13 +5,14 @@ import {
   Home,
   AdminHome,
   AdminDashboard,
+  ManageKnowledge,
   ManageBlogs,
   ManageUsers,
   ManageComments,
   Login,
   Register,
   Crop,
-  Disease
+  Disease,
 } from './pages';
 import { BlogDashboard } from './pages';
 import { ToastContainer } from 'react-toastify';
@@ -29,18 +30,16 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
 
-
           <Route path="/admin/*" element={<AdminHome />}>
             <Route path="dashboard" element={<AdminDashboard />} />
-            <Route path="manage-blogs" element={<ManageBlogs />} />
-            <Route path="manage-users" element={<ManageUsers />} />
-            <Route path="manage-comments" element={<ManageComments />} />
+            <Route path="knowledge" element={<ManageKnowledge />} />
+            <Route path="blogs" element={<ManageBlogs />} />
+            <Route path="users" element={<ManageUsers />} />
+            <Route path="comments" element={<ManageComments />} />
           </Route>
-
 
           <Route path="/crops/:id" element={<Crop />} />
           <Route path="/diseases/:id" element={<Disease />} />
-
 
           <Route path="/blogs" element={<BlogDashboard />} />
         </Routes>

@@ -78,3 +78,22 @@ export const updateUser = async (user, token) => {
     console.log(error);
   }
 };
+
+// get site visits
+export const getSiteVisits = async (token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  try {
+    const response = await axios.get(
+      'http://localhost:9120/api/visits',
+      config
+    );
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};
