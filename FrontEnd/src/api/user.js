@@ -58,3 +58,23 @@ export const getUsers = async (token) => {
     console.log(error);
   }
 };
+
+// update user
+export const updateUser = async (user, token) => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  try {
+    const response = await axios.put(
+      `http://localhost:9120/api/users/${user._id}`,
+      user,
+      config
+    );
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};

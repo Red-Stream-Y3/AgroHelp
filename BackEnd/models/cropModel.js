@@ -81,7 +81,7 @@ const cropSchema = new Schema({
         required: true
     },
     cropInfo: {
-        type: [cropInfoSchema],
+        type: cropInfoSchema,
         required: true
     },
     otherInfo: {
