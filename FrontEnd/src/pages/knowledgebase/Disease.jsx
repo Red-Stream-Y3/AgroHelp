@@ -35,15 +35,21 @@ const Disease = () => {
             )}
             <div className="py-4 px-6">
                 <h1 className="text-3xl font-semibold mb-3">{disease.diseaseName}</h1>
-                <p className="text-gray-300 leading-relaxed mb-3">Affected Crops:
-                    {disease.diseaseCrops && (
-                        disease.diseaseCrops.map((crop, index) => (
-                            <span key={index}> {crop},</span>
-                        ))
-                    )}
+                <p className="text-gray-300 font-bold mb-3">Affected Crops:
+                    <span className="text-gray-300 font-normal">
+                        {disease.diseaseCrops && (
+                            disease.diseaseCrops.map((crop, index) => (
+                                <span key={index}> {crop},</span>
+                            ))
+                        )}
+                    </span>
                 </p>
-                <p className="text-gray-300 leading-relaxed mb-3">Disease Type: {disease.diseaseType}</p>
-                <p className="text-gray-300 leading-relaxed mb-3">Disease Status: {disease.diseaseStatus}</p>
+                <p className="text-gray-300 font-bold mb-3">Disease Type: 
+                    <span className="text-gray-400 font-normal"> {disease.diseaseType}</span>
+                </p>
+                <p className="text-gray-300 font-bold mb-3">Disease Status: 
+                    <span className="text-gray-400 font-normal"> {disease.diseaseStatus}</span>
+                </p>
             </div>
         </div>
 
@@ -62,15 +68,21 @@ const Disease = () => {
                 <div className="col-span-1">
                     <div className="py-4 px-6 flex flex-col justify-center h-full">
                         <h1 className="text-3xl font-semibold mb-3">{disease.diseaseName}</h1>
-                        <p className="text-gray-300 leading-relaxed mb-3">Affected Crops:
+                        <p className="text-gray-300 font-bold mb-3">Affected Crops:
+                            <span className="text-gray-300 font-normal">
                                 {disease.diseaseCrops && (
                                     disease.diseaseCrops.map((crop, index) => (
                                         <span key={index}> {crop},</span>
                                     ))
                                 )}
+                            </span>
                         </p>
-                        <p className="text-gray-300 leading-relaxed mb-3">Disease Type: {disease.diseaseType}</p>
-                        <p className="text-gray-300 leading-relaxed mb-3">Disease Status: {disease.diseaseStatus}</p>
+                        <p className="text-gray-300 font-bold mb-3">Disease Type: 
+                            <span className="text-gray-400 font-normal"> {disease.diseaseType}</span>
+                        </p>
+                        <p className="text-gray-300 font-bold mb-3">Disease Status: 
+                            <span className="text-gray-400 font-normal"> {disease.diseaseStatus}</span>
+                        </p>
                     </div>
                 </div>
             </div>

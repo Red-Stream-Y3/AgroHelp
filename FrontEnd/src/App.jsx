@@ -11,7 +11,13 @@ import {
   Login,
   Register,
   Crop,
-  Disease
+  Disease,
+  KnowledgeBase,
+  CreateCrop,
+  CreateDisease, 
+  UpdateCrop,
+  UpdateDisease,
+  MyArticles,
 } from './pages';
 import { BlogDashboard } from './pages';
 import { ToastContainer } from 'react-toastify';
@@ -37,9 +43,14 @@ function App() {
             <Route path="manage-comments" element={<ManageComments />} />
           </Route>
 
-
-          <Route path="/crops/:id" element={<Crop />} />
-          <Route path="/diseases/:id" element={<Disease />} />
+          <Route path="knowledge-base" element={<KnowledgeBase />} />
+          <Route path="crop/:id" element={<Crop />} />
+          <Route path="disease/:id" element={<Disease />} />
+          <Route path="create/crop" element={<CreateCrop />} />
+          <Route path="create/disease" element={<CreateDisease />} />
+          <Route path="update/crop/:id" element={<UpdateCrop />} />
+          <Route path="update/disease/:id" element={<UpdateDisease />} />
+          <Route path="my/articles" element={<MyArticles />} />
 
 
           <Route path="/blogs" element={<BlogDashboard />} />
