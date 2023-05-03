@@ -30,7 +30,7 @@ app.use(bodyParser.json());
 app.use(visitMiddleware);
 app.use(incrementCountMiddleware);
 
-app.use('/api', visitRoutes);
+app.use('/api/visits', visitRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/forums', forumRoutes);
 app.use('/api/blog', blogRoutes);
