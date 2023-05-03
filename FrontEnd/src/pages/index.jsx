@@ -7,6 +7,7 @@ export { default as Disease } from './knowledgebase/Disease';
 
 export { default as AdminHome } from './admin/AdminHome';
 export { default as AdminDashboard } from './admin/AdminDashboard';
+export { default as ManageKnowledge } from './admin/ManageKnowledge';
 export { default as ManageBlogs } from './admin/ManageBlogs';
 export { default as ManageUsers } from './admin/ManageUsers';
 export { default as ManageComments } from './admin/ManageComments';
