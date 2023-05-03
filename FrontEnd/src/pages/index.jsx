@@ -2,8 +2,14 @@ export { default as Home } from './common/Home';
 export { default as Login } from './common/Login';
 export { default as Register } from './common/Register';
 
+export { default as KnowledgeBase } from './knowledgebase/KnowledgeBase';
 export { default as Crop } from './knowledgebase/Crop';
 export { default as Disease } from './knowledgebase/Disease';
+export { default as CreateCrop } from './knowledgebase/CreateCrop';
+export { default as CreateDisease } from './knowledgebase/CreateDisease';
+export { default as MyArticles } from './knowledgebase/MyArticles';
+export { default as UpdateCrop } from './knowledgebase/UpdateCrop';
+export { default as UpdateDisease } from './knowledgebase/UpdateDisease';
 
 export { default as AdminHome } from './admin/AdminHome';
 export { default as AdminDashboard } from './admin/AdminDashboard';
