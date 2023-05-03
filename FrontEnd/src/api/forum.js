@@ -145,8 +145,8 @@ export const unsubscribeFromForum = async (user, id, checkStatus) => {
 }
 
 //get subscribed forums
-export const getSubscribedForumsByUser = async (id, checkStatus) => {
-    const res = await axios.get(`${BASE_URL}/subscribed/${id}`);
+export const getSubscribedForumsByUser = async (user, checkStatus) => {
+    const res = await axios.get(`${BASE_URL}/subscribed/${user._id}`, getconfig(user));
 
     if (res.data) {
         return res.data;

@@ -2,89 +2,183 @@ import React, { useState, useEffect } from "react";
 import { Forum } from "../../api/forum.js";
 import { FaSpinner } from "react-icons/fa";
 import { useGlobalContext } from "../../context/ContextProvider";
-import { ForumCard } from "../../components";
+import { ForumCardContainer, ForumSearch } from "../../components";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { MdOutlineAdd } from "react-icons/md";
+import { Popup } from "../../components";
 
 const ForumDashboard = (props) => {
+    //current user and toast methods
+    const { user, notify } = useGlobalContext();
 
-	const { user } = useGlobalContext();
+    //forums
+    const [recentForums, setRecentForums] = useState([]);
+    const [myForums, setMyForums] = useState([]);
+    const [subscribedForums, setSubscribedForums] = useState([]);
 
-	const [recentForums, setRecentForums] = useState([]);
-	const [search, setSearch] = useState("");
-	const [searchResults, setSearchResults] = useState([]);
-	const [searched, setSearched] = useState(false);
-	const [loading, setLoading] = useState(false);
+    //inputs
+    const [search, setSearch] = useState("");
+    const [searchResults, setSearchResults] = useState([]);
 
-	//save toast method in global context
-	const notify = (type, message) => {
-		switch (type) {
-		case "success":
-			toast.success(message);
-			break;
-		case "error":
-			toast.error(message);
-			break;
-		case "info":
-			toast.info(message);
-			break;
-		case "warning":
-			toast.warn(message);
-			break;
-		default:
-			toast(message);
-			break;
-		}
-	};
+    //status
+    const [searched, setSearched] = useState(false);
+    const [refresh, setRefresh] = useState(false); //to refresh a single the forum list
+    const [loading, setLoading] = useState(false);
+	const [showCreateForum, setShowCreateForum] = useState(false);
+    const [tab, setTab] = useState("dashboard"); //dashboard, myForums, subscribed
 
-	//function to check status and create a toast notification
-	const checkStatus = (res) => {
-		switch (res.status) {
-			case 255:
-				notify("success", res.data.message);
-				break;
-			case 256:
-				notify("success", "Forum created successfully");
-				break;
-			case 404:
-				if(res.data.message){
-					notify("error", res.data.message);
-				} else {
-					notify("error", "Error! Forum not found");
-				}
-				break;
-			case 401:
-				notify("error", "Unauthorized");
-				break;
-			case 500:
-				notify("error", "Server error");
-				break;
-			default:
-				notify("error", "Error getting forum");
-				break;
-		}
-	};
-	
-	
+    //function to check status and create a toast notification
+    const checkStatus = (res) => {
+        switch (res.status) {
+            case 255:
+                notify("success", res.data.message);
+                break;
+            case 256:
+                notify("success", "Forum created successfully");
+                break;
+            case 404:
+                if (res.data.message) {
+                    notify("error", res.data.message);
+                } else {
+                    notify("error", "Error! Forum not found");
+                }
+                break;
+            case 401:
+                notify("error", "Unauthorized");
+                break;
+            case 500:
+                notify("error", "Server error");
+                break;
+            default:
+                notify("error", "Error getting forum");
+                break;
+        }
+    };
 
-	//get the top 10 recent forums
-	useEffect(() => {
-		const fetchForums = async () => {
-			setLoading(true);
-			const forums = await Forum.getForums(checkStatus);
-			setRecentForums(forums);
-			setLoading(false);
-		};
-		fetchForums();
-		
-	}, []);
+    const selectTab = (tab) => {
+        setTab(tab);
+    };
 
+    //search forums
+    const handleSearch = async () => {};
+
+    //initial forum loading
+    useEffect(() => {
+        const fetchForums = async () => {
+            setLoading(true);
+
+            switch (tab) {
+                case "dashboard": //get the top 10 recent forums
+                    const recent = await Forum.getForums(checkStatus);
+                    setRecentForums(recent);
+                    break;
+                case "myForums": //get user's created forums
+                    const my = await Forum.getForumsByUser(user, checkStatus);
+                    setMyForums(my);
+                    break;
+                case "subscribed": //get subscribed forums
+                    const sub = await Forum.getSubscribedForumsByUser(
+                        user,
+                        checkStatus
+                    );
+                    setSubscribedForums(sub);
+                    break;
+                default:
+                    break;
+            }
+            setLoading(false);
+        };
+
+        if (user !== null || user !== undefined) {
+            fetchForums();
+        }
+    }, [user, refresh]);
+
+    //refresh all forums
+    const refreshAllForums = async () => {
+        setLoading(true);
+
+        //get the top 10 recent forums
+        const recent = await Forum.getForums(checkStatus);
+        setRecentForums(recent);
+        //get user's created forums
+        const my = await Forum.getForumsByUser(user, checkStatus);
+        setMyForums(my);
+        //get subscribed forums
+        const sub = await Forum.getSubscribedForumsByUser(user, checkStatus);
+        setSubscribedForums(sub);
+
+        setLoading(false);
+    };
+
+    const tabClasses =
+        "transition-all border-b border-gray-200 inline-block p-4 rounded-t-lg text-gray-400 hover:text-green-400 hover:border-green-400";
+    const tabHighlightClasses =
+        " text-green-500 border-green-500 border-b-4 bg-gray-700 rounded-t-lg";
     return (
         <div className="text-white p-5 sm:p-5">
-            <h1 className="my-1 sm:my-3 text-2xl sm:text-3xl font-bold tracking-tight ml-4 sm:ml-8">
-                FORUM
-            </h1>
+            {/* Search bar for mobile */}
+            <div className="lg:hidden">
+                <ForumSearch
+                    search={search}
+                    setSearch={setSearch}
+                    handleSearchClick={handleSearch}
+                />
+            </div>
+
+            {/* Title and tabs */}
+            <div className="mt-2 flex">
+                <h1 className="hidden sm:block my-1 sm:my-3 text-2xl sm:text-3xl font-bold tracking-tight ml-4 sm:ml-8">
+                    FORUM
+                </h1>
+                <div className="sm:block sm:ml-5 w-fit dark:border-gray-700">
+                    <ul className="flex flex-wrap -mb-px text-sm font-medium text-center">
+                        <li className="mr-2">
+                            <button
+                                onClick={() => selectTab("dashboard")}
+                                className={`${tabClasses}+${
+                                    tab === "dashboard"
+                                        ? tabHighlightClasses
+                                        : ""
+                                }`}>
+                                Latest
+                            </button>
+                        </li>
+                        <li className="mr-2">
+                            <button
+                                onClick={() => selectTab("myForums")}
+                                className={`${tabClasses}+${
+                                    tab === "myForums" && tabHighlightClasses
+                                }`}>
+                                My Forums
+                            </button>
+                        </li>
+                        <li className="mr-2">
+                            <button
+                                onClick={() => selectTab("subscribed")}
+                                className={`${tabClasses}+${
+                                    tab === "subscribed" && tabHighlightClasses
+                                }`}>
+                                Subscribed
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+
+                {/* searchbar for desktop */}
+                <div className="ml-3 hidden lg:inline w-120 pt-2">
+                    <ForumSearch
+                        search={search}
+                        setSearch={setSearch}
+                        handleSearchClick={handleSearch}
+                    />
+                </div>
+            </div>
+
             <hr className="border-1 border-white opacity-50" />
+
+            {/* main container */}
             <div id="forumContainer" className="max-w-md sm:max-w-3xl m-auto">
                 {loading ? (
                     <FaSpinner
@@ -92,14 +186,72 @@ const ForumDashboard = (props) => {
                         size={40}
                     />
                 ) : (
-                    <div>
-						{recentForums.map((forum) => {
-							return <ForumCard key={forum._id} forum={forum} checkRes={checkStatus} notify={notify} />;
-						})}
-					</div>
+                    <>
+                        {tab === "dashboard" && (
+                            <>
+                                {recentForums.length > 0 ? (
+                                    <ForumCardContainer
+                                        forums={recentForums}
+                                        checkStatus={checkStatus}
+                                        notify={notify}
+                                    />
+                                ) : (
+                                    <div className="m-auto w-fit mt-5 text-gray-500">
+                                        No forums to display!
+                                    </div>
+                                )}
+                            </>
+                        )}
+                        {tab === "myForums" && (
+                            <>
+                                <div className="m-auto w-fit">
+                                    <button
+                                        onClick={() => {
+                                            setShowCreateForum(true);
+                                        }}
+                                        className="bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 rounded mt-5 mb-5">
+                                        <MdOutlineAdd className="inline-block mr-2" />
+                                        Create Forum
+                                    </button>
+                                </div>
+                                {myForums.length > 0 ? (
+                                    <ForumCardContainer
+                                        forums={myForums}
+                                        checkStatus={checkStatus}
+                                        notify={notify}
+                                    />
+                                ) : (
+                                    <div className="m-auto w-fit mt-5 text-gray-500">
+                                        You have not created any forums yet {" "+ showCreateForum}
+                                    </div>
+                                )}
+                            </>
+                        )}
+                        {tab === "subscribed" && (
+                            <>
+                                {subscribedForums.length > 0 ? (
+                                    <ForumCardContainer
+                                        forums={subscribedForums}
+                                        checkStatus={checkStatus}
+                                        notify={notify}
+                                    />
+                                ) : (
+                                    <div className="m-auto w-fit mt-5 text-gray-500">
+                                        You have not subscribed to any forums
+                                        yet
+                                    </div>
+                                )}
+                            </>
+                        )}
+                    </>
                 )}
             </div>
-			<ToastContainer />
+			<Popup show={showCreateForum} setShow={setShowCreateForum}>
+				<div>
+					Create Forum
+				</div>
+			</Popup>
+            <ToastContainer />
         </div>
     );
 };

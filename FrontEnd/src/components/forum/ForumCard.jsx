@@ -3,8 +3,9 @@ import { AiOutlineLike, AiOutlineDislike } from "react-icons/ai";
 import { AiFillLike, AiFillDislike } from "react-icons/ai";
 import { useGlobalContext } from "../../context/ContextProvider";
 import { Forum } from "../../api/forum.js";
+import Skeleton from "../common/Skeleton";
 
-const ForumCard = ({forum, checkRes, notify}) => {
+const ForumCard = ({ forum, checkRes, notify }) => {
 
     const [Loading, setLoading] = useState(false);
     const [forumObj, setForumObj] = useState(forum);
@@ -41,17 +42,19 @@ const ForumCard = ({forum, checkRes, notify}) => {
             setLiked(false);
         }
 
-        if (forumObj.dislikes.length > 0 && forumObj.dislikes.includes(user._id)) {
+        if (
+            forumObj.dislikes.length > 0 &&
+            forumObj.dislikes.includes(user._id)
+        ) {
             setDisliked(true);
         } else {
             setDisliked(false);
         }
-
     }, [forumObj]);
 
     const handleLike = async () => {
         let res = await Forum.likeForum(user, forum._id, checkRes);
-        if(res.message === "Unliked forum"){
+        if (res.message === "Unliked forum") {
             setLiked(false);
             setDisliked(false);
         } else if (res.message === "Liked forum") {
@@ -63,7 +66,7 @@ const ForumCard = ({forum, checkRes, notify}) => {
 
     const handleDislike = async () => {
         let res = await Forum.dislikeForum(user, forum._id, checkRes);
-        if(res.message === "Removed dislike"){
+        if (res.message === "Removed dislike") {
             setLiked(false);
             setDisliked(false);
         } else if (res.message === "Disliked forum") {
@@ -76,14 +79,19 @@ const ForumCard = ({forum, checkRes, notify}) => {
     const handleReplySubmit = async () => {
         setLoading(true);
 
-        if(replyInput === "") {
+        if (replyInput === "") {
             notify("info", "Reply field is empty");
             setLoading(false);
             return;
         }
 
-        let res = await Forum.replyToForum(user, forum._id, replyInput, checkRes);
-        if(res.message === "Replied to forum"){
+        let res = await Forum.replyToForum(
+            user,
+            forum._id,
+            replyInput,
+            checkRes
+        );
+        if (res.message === "Replied to forum") {
             setReplyInput("");
             notify("success", "Replied to forum");
         }
@@ -93,7 +101,7 @@ const ForumCard = ({forum, checkRes, notify}) => {
 
     const handleReplyLike = async (replyId) => {
         let res = await Forum.likeReply(user, forum._id, replyId, checkRes);
-        if(res.message === "Removed like"){
+        if (res.message === "Removed like") {
             setLiked(false);
             setDisliked(false);
         } else if (res.message === "Liked reply") {
@@ -105,7 +113,7 @@ const ForumCard = ({forum, checkRes, notify}) => {
 
     const handleReplyDislike = async (replyId) => {
         let res = await Forum.dislikeReply(user, forum._id, replyId, checkRes);
-        if(res.message === "Removed dislike"){
+        if (res.message === "Removed dislike") {
             setLiked(false);
             setDisliked(false);
         } else if (res.message === "Disliked reply") {
@@ -123,13 +131,40 @@ const ForumCard = ({forum, checkRes, notify}) => {
         <div className="rounded-md bg-darkbg p-3 mt-2 sm:max-w-4xl text-sm sm:text-base">
             {!Loading ? (
                 <div>
-                    {/* username and date */}
-                    <div className="flex">
-                        <div className="mr-2">@{forumObj.username}</div>
-                        <div className="text-gray-500">
-                            {forumObj.createdAt.toString().split("T")[0]}
+                    <div className="justify-between">
+                        {/* username and date */}
+                        <div className="flex">
+                            <div className="mr-2">@{forumObj.username}</div>
+                            <div className="text-gray-500">
+                                {forumObj.createdAt.toString().split("T")[0]}
+                            </div>
                         </div>
+
+                        {/* forum delete and edit buttons */}
+                        {forum.userID === user._id ? (
+                            <div className="w-fit">
+                                <button
+                                    onClick={() =>
+                                        handleEditReply(
+                                            reply._id
+                                        )
+                                    }
+                                    className="ml-auto mr-2 text-xs text-gray-500">
+                                    Edit
+                                </button>
+                                <button
+                                    onClick={() =>
+                                        handleDeleteReply(
+                                            reply._id
+                                        )
+                                    }
+                                    className="ml-auto mr-2 text-xs text-gray-500">
+                                    Delete
+                                </button>
+                            </div>
+                        ) : null}
                     </div>
+                    
 
                     {/* title */}
                     <div className="font-bold">{forumObj.title}</div>
@@ -185,20 +220,31 @@ const ForumCard = ({forum, checkRes, notify}) => {
                                     return (
                                         <div
                                             key={reply._id}
-                                            className={`m-1 p-1 mx-auto bg-gray-700 rounded-md sm:max-w-2xl ${reply.userID === user._id && "ring-2"}`}>
+                                            className={`m-1 p-1 mx-auto bg-gray-700 rounded-md sm:max-w-2xl ${
+                                                reply.userID === user._id &&
+                                                "ring-2"
+                                            }`}>
                                             <div className="flex justify-between">
                                                 <div className="ml-2 mt-1 text-xs">
                                                     @{reply.username}
                                                 </div>
                                                 {reply.userID === user._id ? (
                                                     <div className="w-fit">
-                                                        <button 
-                                                            onClick={() => handleEditReply(reply._id)}
+                                                        <button
+                                                            onClick={() =>
+                                                                handleEditReply(
+                                                                    reply._id
+                                                                )
+                                                            }
                                                             className="ml-auto mr-2 text-xs text-gray-500">
                                                             Edit
                                                         </button>
-                                                        <button 
-                                                            onClick={() => handleDeleteReply(reply._id)}
+                                                        <button
+                                                            onClick={() =>
+                                                                handleDeleteReply(
+                                                                    reply._id
+                                                                )
+                                                            }
                                                             className="ml-auto mr-2 text-xs text-gray-500">
                                                             Delete
                                                         </button>
@@ -278,14 +324,7 @@ const ForumCard = ({forum, checkRes, notify}) => {
                     </div>
                 </div>
             ) : (
-                <div className="animate-pulse w-full">
-                    <div className="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-96 mb-4"></div>
-                    <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-2.5"></div>
-                    <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-2.5"></div>
-                    <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-2.5"></div>
-                    <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-2.5"></div>
-                    <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700"></div>
-                </div>
+                <Skeleton />
             )}
         </div>
     );
