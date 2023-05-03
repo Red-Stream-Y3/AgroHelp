@@ -20,12 +20,17 @@ const ForumDashboard = (props) => {
     //inputs
     const [search, setSearch] = useState("");
     const [searchResults, setSearchResults] = useState([]);
+	const [title, setTitle] = useState("");
+	const [content, setContent] = useState("");
 
     //status
     const [searched, setSearched] = useState(false);
-    const [refresh, setRefresh] = useState(false); //to refresh a single the forum list
     const [loading, setLoading] = useState(false);
 	const [showCreateForum, setShowCreateForum] = useState(false);
+	const [createForumLoading, setCreateForumLoading] = useState(false);
+	const [dashLoaded, setDashLoaded] = useState(false);
+	const [myLoaded, setMyLoaded] = useState(false);
+	const [subLoaded, setSubLoaded] = useState(false);
     const [tab, setTab] = useState("dashboard"); //dashboard, myForums, subscribed
 
     //function to check status and create a toast notification
@@ -60,57 +65,95 @@ const ForumDashboard = (props) => {
         setTab(tab);
     };
 
-    //search forums
+    //TODO: search forums
     const handleSearch = async () => {};
 
-    //initial forum loading
-    useEffect(() => {
-        const fetchForums = async () => {
-            setLoading(true);
+    //refresh dashboard forums
+	useEffect(() => {
+		if(dashLoaded) return;
+		
+		const refresh = async () => {
+			setLoading(true);
 
-            switch (tab) {
-                case "dashboard": //get the top 10 recent forums
-                    const recent = await Forum.getForums(checkStatus);
-                    setRecentForums(recent);
-                    break;
-                case "myForums": //get user's created forums
-                    const my = await Forum.getForumsByUser(user, checkStatus);
-                    setMyForums(my);
-                    break;
-                case "subscribed": //get subscribed forums
-                    const sub = await Forum.getSubscribedForumsByUser(
-                        user,
-                        checkStatus
-                    );
-                    setSubscribedForums(sub);
-                    break;
-                default:
-                    break;
-            }
-            setLoading(false);
-        };
+			const recent = await Forum.getForums(checkStatus);
+			setRecentForums(recent);
 
-        if (user !== null || user !== undefined) {
-            fetchForums();
-        }
-    }, [user, refresh]);
+			setDashLoaded(true);
+			setLoading(false);
+		};
+
+		refresh();
+
+	}, [dashLoaded, tab]);
+
+	//refresh my forums
+	useEffect(() => {
+		if(myLoaded) return;
+
+		const refresh = async () => {
+			setLoading(true);
+
+			const my = await Forum.getForumsByUser(user, checkStatus);
+            setMyForums(my);
+
+			setMyLoaded(true);
+			setLoading(false);
+		};
+
+		refresh();
+
+	}, [myLoaded, tab]);
+
+	//refresh subscribed forums
+	useEffect(() => {
+		if(subLoaded) return;
+
+		const refresh = async () => {
+			setLoading(true);
+
+			const sub = await Forum.getSubscribedForumsByUser(
+				user,
+				checkStatus
+			);
+			setSubscribedForums(sub);
+
+			setSubLoaded(true);
+			setLoading(false);
+		};
+
+		refresh();
+
+	}, [subLoaded, tab]);
 
     //refresh all forums
     const refreshAllForums = async () => {
-        setLoading(true);
-
-        //get the top 10 recent forums
-        const recent = await Forum.getForums(checkStatus);
-        setRecentForums(recent);
-        //get user's created forums
-        const my = await Forum.getForumsByUser(user, checkStatus);
-        setMyForums(my);
-        //get subscribed forums
-        const sub = await Forum.getSubscribedForumsByUser(user, checkStatus);
-        setSubscribedForums(sub);
-
-        setLoading(false);
+        setDashLoaded(false);
+		setMyLoaded(false);
+		setSubLoaded(false);
     };
+
+	//create a forum
+	const handleCreateForum = async () => {
+		
+		if (title === "" || content === "") {
+			notify("error", "Please fill in all fields");
+			return;
+		}
+
+		setCreateForumLoading(true);
+
+		const res = await Forum.createForum(user, {title:title, content:content}, checkStatus);
+		if (res) {
+			setShowCreateForum(false);
+			setTitle("");
+			setContent("");
+			setDashLoaded(false);
+			setMyLoaded(false);
+			notify("success", "Forum created successfully");
+		}
+
+		setCreateForumLoading(false);
+	};
 
     const tabClasses =
         "transition-all border-b border-gray-200 inline-block p-4 rounded-t-lg text-gray-400 hover:text-green-400 hover:border-green-400";
@@ -194,6 +237,7 @@ const ForumDashboard = (props) => {
                                         forums={recentForums}
                                         checkStatus={checkStatus}
                                         notify={notify}
+										setSubLoaded={setSubLoaded}
                                     />
                                 ) : (
                                     <div className="m-auto w-fit mt-5 text-gray-500">
@@ -219,6 +263,7 @@ const ForumDashboard = (props) => {
                                         forums={myForums}
                                         checkStatus={checkStatus}
                                         notify={notify}
+										setSubLoaded={setSubLoaded}
                                     />
                                 ) : (
                                     <div className="m-auto w-fit mt-5 text-gray-500">
@@ -234,6 +279,7 @@ const ForumDashboard = (props) => {
                                         forums={subscribedForums}
                                         checkStatus={checkStatus}
                                         notify={notify}
+										setSubLoaded={setSubLoaded}
                                     />
                                 ) : (
                                     <div className="m-auto w-fit mt-5 text-gray-500">
@@ -248,7 +294,32 @@ const ForumDashboard = (props) => {
             </div>
 			<Popup show={showCreateForum} setShow={setShowCreateForum}>
 				<div>
-					Create Forum
+					<p className="text-xl font-bold">Create Forum</p>
+					<hr className="border-1 border-gray-200 opacity-50" />
+					<input
+						type="text"
+						className="w-full bg-slate-800 mt-5 p-2 rounded border-2 border-gray-500 focus:outline-none focus:border-green-500"
+						placeholder="Title"
+						value={title}
+						onChange={(e) => setTitle(e.target.value)}
+					/>
+					<textarea
+						className="w-full bg-slate-800 mt-5 p-2 rounded border-2 border-gray-500 focus:outline-none focus:border-green-500"
+						placeholder="Further desriptions or explanations"
+						value={content}
+						onChange={(e) => setContent(e.target.value)}
+					/>
+					<div className="flex justify-end mt-5">
+						<button
+							className="bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 rounded"
+							onClick={handleCreateForum}>
+							{createForumLoading ? (
+								<FaSpinner className="animate-spin" />
+							) : (
+								"Create"
+							)}
+						</button>
+					</div>
 				</div>
 			</Popup>
             <ToastContainer />

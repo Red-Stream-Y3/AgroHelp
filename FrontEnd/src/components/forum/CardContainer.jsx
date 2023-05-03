@@ -1,6 +1,6 @@
 import React from "react";
 import { useGlobalContext } from "../../context/ContextProvider";
-import ForumCard from "./forumCard";
+import ForumCard from "./ForumCard";
 
 const CardContainer = (props) => {
     return (
@@ -12,6 +12,7 @@ const CardContainer = (props) => {
                         forum={forum}
                         checkRes={props.checkStatus}
                         notify={props.notify}
+                        setSubLoaded={props.setSubLoaded}
                     />
                 );
             })}

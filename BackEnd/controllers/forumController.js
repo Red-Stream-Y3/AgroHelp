@@ -480,7 +480,7 @@ const resolveForum = asyncHandler(async (req, res) => {
 // @route   GET /api/forums/myforums/:user
 // @access  Private
 const getMyForums = asyncHandler(async (req, res) => {
-    const forums = await Forum.find({ user: req.params.user });
+    const forums = await Forum.find({ userID: req.params.user }).sort({ createdAt: -1 });
 
     if (forums) {
         res.json(forums);

@@ -5,7 +5,7 @@ import { useGlobalContext } from "../../context/ContextProvider";
 import { Forum } from "../../api/forum.js";
 import Skeleton from "../common/Skeleton";
 
-const ForumCard = ({ forum, checkRes, notify }) => {
+const ForumCard = ({ forum, checkRes, notify, setSubLoaded }) => {
 
     const [Loading, setLoading] = useState(false);
     const [forumObj, setForumObj] = useState(forum);
@@ -127,16 +127,49 @@ const ForumCard = ({ forum, checkRes, notify }) => {
 
     const handleDeleteReply = async (replyId) => {};
 
+    const handleSubscribe = async () => {
+        let res = await Forum.subscribeToForum(user, forum._id, checkRes);
+        if (res.message === "Subscribed to forum") {
+            notify("success", "Subscribed to forum");
+        }
+        await refreshForum();
+        setSubLoaded(false);
+    };
+
+    const handleUnsubscribe = async () => {
+        let res = await Forum.unsubscribeFromForum(user, forum._id, checkRes);
+        if (res.message === "Unsubscribed from forum") {
+            notify("success", "Unsubscribed from forum");
+        }
+        await refreshForum();
+        setSubLoaded(false);
+    };
+
     return (
         <div className="rounded-md bg-darkbg p-3 mt-2 sm:max-w-4xl text-sm sm:text-base">
             {!Loading ? (
                 <div>
-                    <div className="justify-between">
+                    <div className="flex justify-between">
                         {/* username and date */}
-                        <div className="flex">
+                        <div className="inline-flex">
                             <div className="mr-2">@{forumObj.username}</div>
                             <div className="text-gray-500">
                                 {forumObj.createdAt.toString().split("T")[0]}
+                            </div>
+                            <div className="ml-3">
+                                {forumObj.subscribers.includes(user._id) ? (
+                                    <button
+                                        onClick={handleUnsubscribe}
+                                        className="ml-auto mr-2 text-xs text-green-500">
+                                        Unsubscribe
+                                    </button>
+                                ) : (
+                                    <button
+                                        onClick={handleSubscribe}
+                                        className="ml-auto mr-2 text-xs text-blue-500">
+                                        Subscribe
+                                    </button>
+                                )}
                             </div>
                         </div>
 

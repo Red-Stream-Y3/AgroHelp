@@ -6,9 +6,8 @@ const Popup = ({ children, show, setShow }) => {
             {show ? (
                 <div className="fixed z-10 inset-0 overflow-y-auto">
                     <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-                        <div 
-                            style={{ marginTop: "45vh" }}
-                            className="p-5 sm:p-7 z-20 mx-auto relative m-auto bg-darkbg rounded-lg shadow-xl transition-all sm:max-w-xl w-fit">
+                        <div
+                            className="text-sm sm:text-base p-5 sm:p-7 z-20 absolute left-0 right-0 top-0 bottom-0 m-auto bg-darkbg rounded-lg shadow-xl transition-all sm:max-w-xl w-fit h-fit overflow-y-auto">
                             {children}
                         </div>
                         <div className="fixed inset-0 transition-opacity">
