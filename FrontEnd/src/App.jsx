@@ -10,6 +10,7 @@ import {
   Login,
   Register,
   Crop,
+  Disease
 } from './pages';
 import { BlogDashboard } from './pages';
 import './App.css';
@@ -32,6 +33,7 @@ function App() {
         </Route>
 
         <Route path="/crops/:id" element={<Crop />} />
+        <Route path="/diseases/:id" element={<Disease />} />
 
 
         <Route path="/blogs" element={<BlogDashboard />} />
