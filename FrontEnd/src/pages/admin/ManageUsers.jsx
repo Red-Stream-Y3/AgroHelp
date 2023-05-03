@@ -36,28 +36,26 @@ const ManageUsers = () => {
     }
   };
 
-  const handleRole = async (id, role) => {
-    if (role === 'admin') {
-      await updateUser({ _id: id, role: 'admin' }, user.token);
-      toast.success(`Promoted to Admin`, {
-        hideProgressBar: false,
-        closeOnClick: true,
-        autoClose: 1500,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-    } else {
-      await updateUser({ _id: id, role: 'user' }, user.token);
-      toast.error(`Demoted to User`, {
-        hideProgressBar: false,
-        closeOnClick: true,
-        autoClose: 1500,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+  const handleRole = async (id, role, type) => {
+    let toastMsg;
+
+    if (type === 'promote') {
+      toastMsg = `Promoted to ${role}`;
+    } else if (type === 'demote') {
+      toastMsg = `Demoted to ${role}`;
     }
+
+    await updateUser({ _id: id, role: role }, user.token);
+
+    toast.success(toastMsg, {
+      hideProgressBar: false,
+      closeOnClick: true,
+      autoClose: 1500,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+
     getAllUsers();
   };
 
@@ -92,15 +90,31 @@ const ManageUsers = () => {
             <button
               className={privilegeBtn}
               disabled={user.role === 'admin'}
-              onClick={() => handleRole(user._id, 'admin')}
+              onClick={() => {
+                if (user.role === 'regular') {
+                  handleRole(user._id, 'contributor', 'promote');
+                } else if (user.role === 'contributor') {
+                  handleRole(user._id, 'moderator', 'promote');
+                } else if (user.role === 'moderator') {
+                  handleRole(user._id, 'admin', 'promote');
+                }
+              }}
             >
               <span>Promote</span>
             </button>
 
             <button
               className={privilegeBtn}
-              disabled={user.role === 'user'}
-              onClick={() => handleRole(user._id, 'user')}
+              disabled={user.role === 'regular'}
+              onClick={() => {
+                if (user.role === 'contributor') {
+                  handleRole(user._id, 'regular', 'demote');
+                } else if (user.role === 'moderator') {
+                  handleRole(user._id, 'contributor', 'demote');
+                } else if (user.role === 'admin') {
+                  handleRole(user._id, 'moderator', 'demote');
+                }
+              }}
             >
               <span>Demote</span>
             </button>
