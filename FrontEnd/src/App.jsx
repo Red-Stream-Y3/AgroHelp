@@ -5,9 +5,11 @@ import {
   Home,
   AdminHome,
   AdminDashboard,
+  ManageKnowledge,
   ManageBlogs,
   ManageUsers,
   ManageComments,
+  ForumDashboard,
   Login,
   Register,
   Crop,
@@ -20,6 +22,7 @@ import {
   MyArticles,
 } from './pages';
 import { BlogDashboard } from './pages';
+import './App.css';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -35,12 +38,12 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
 
-
           <Route path="/admin/*" element={<AdminHome />}>
             <Route path="dashboard" element={<AdminDashboard />} />
-            <Route path="manage-blogs" element={<ManageBlogs />} />
-            <Route path="manage-users" element={<ManageUsers />} />
-            <Route path="manage-comments" element={<ManageComments />} />
+            <Route path="knowledge" element={<ManageKnowledge />} />
+            <Route path="blogs" element={<ManageBlogs />} />
+            <Route path="users" element={<ManageUsers />} />
+            <Route path="comments" element={<ManageComments />} />
           </Route>
 
           <Route path="knowledge-base" element={<KnowledgeBase />} />
@@ -52,11 +55,14 @@ function App() {
           <Route path="update/disease/:id" element={<UpdateDisease />} />
           <Route path="my/articles" element={<MyArticles />} />
 
+        <Route path="/forum" element={<ForumDashboard />} />
 
-          <Route path="/blogs" element={<BlogDashboard />} />
-        </Routes>
-        <Footer />
-      </BrowserRouter>
+        <Route path="/blogs" element={<BlogDashboard />} />
+        
+      </Routes>
+
+      <Footer />
+    </BrowserRouter>
     </>
   );
 }

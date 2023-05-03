@@ -33,13 +33,27 @@ const AdminSideBar = ({ isSidebarOpen }) => {
           </li>
           <li>
             <NavLink
-              to="/admin/manage-blogs"
+              to="/admin/knowledge"
               className={`flex items-center py-5 px-4 text-lg text-gray-100 ${
-                activeLink === 'manage-blogs'
+                activeLink === 'knowledge'
                   ? 'bg-primarydark'
                   : 'bg-darkbg hover:bg-secondary'
               } border-y-2 border-black`}
-              onClick={() => handleLinkClick('manage-blogs')}
+              onClick={() => handleLinkClick('knowledge')}
+            >
+              <i className="fa-solid fa-book pr-6"></i>
+              Knowledge Base
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/admin/blogs"
+              className={`flex items-center py-5 px-4 text-lg text-gray-100 ${
+                activeLink === 'blogs'
+                  ? 'bg-primarydark'
+                  : 'bg-darkbg hover:bg-secondary'
+              } border-y-2 border-black`}
+              onClick={() => handleLinkClick('blogs')}
             >
               <i className="fa-solid fa-newspaper pr-6"></i>
               Blogs
@@ -47,13 +61,13 @@ const AdminSideBar = ({ isSidebarOpen }) => {
           </li>
           <li>
             <NavLink
-              to="/admin/manage-users"
+              to="/admin/users"
               className={`flex items-center py-5 px-4 text-lg text-gray-100 ${
-                activeLink === 'manage-users'
+                activeLink === 'users'
                   ? 'bg-primarydark'
                   : 'bg-darkbg hover:bg-secondary'
               } border-y-2 border-black`}
-              onClick={() => handleLinkClick('manage-users')}
+              onClick={() => handleLinkClick('users')}
             >
               <i className="fa-solid fa-users pr-5"></i>
               Users
@@ -61,13 +75,13 @@ const AdminSideBar = ({ isSidebarOpen }) => {
           </li>
           <li>
             <NavLink
-              to="/admin/manage-comments"
+              to="/admin/comments"
               className={`flex items-center py-5 px-4 text-lg text-gray-100 ${
-                activeLink === 'manage-comments'
+                activeLink === 'comments'
                   ? 'bg-primarydark'
                   : 'bg-darkbg hover:bg-secondary'
               } border-y-2 border-black`}
-              onClick={() => handleLinkClick('manage-comments')}
+              onClick={() => handleLinkClick('comments')}
             >
               <i className="fa-solid fa-comments pr-5"></i>
               Comments

@@ -11,6 +11,7 @@ import {
   FaCog,
   FaSignInAlt,
   FaUserPlus,
+  FaLock,
 } from 'react-icons/fa';
 import { ImLeaf } from 'react-icons/im';
 import { HiMenu, HiOutlineX } from 'react-icons/hi';
@@ -24,6 +25,11 @@ const Navbar = () => {
   const [isLogged, setIsLogged] = useState(false);
 
   const { user } = useGlobalContext();
+  const isAdmin =
+    user &&
+    (user.role === 'admin' ||
+      user.role === 'contributor' ||
+      user.role === 'moderator');
 
   const location = useLocation();
 
@@ -302,8 +308,8 @@ const Navbar = () => {
       )}
 
       {isProfilePopupOpen && (
-        <div className="lg">
-          <div className="px-2 pt-2 pb-3 space-y-1 bg-primarydark">
+        <div className="lg w-50 absolute right-0 rounded-xl">
+          <div className="px-2 pt-2 pb-3 space-y-1 bg-primarydark rounded-b-xl">
             <Link
               to="/profile"
               className="flex px-3 py-2 text-base font-medium text-white hover:bg-secondary rounded-md items-center"
@@ -311,6 +317,15 @@ const Navbar = () => {
               <FaUser className="h-6 w-6" />
               <span className="ml-2">Profile</span>
             </Link>
+            {isAdmin && (
+              <Link
+                to="/admin/dashboard"
+                className="flex px-3 py-2 text-base font-medium text-white hover:bg-secondary rounded-md items-center"
+              >
+                <FaLock className="h-6 w-6" />
+                <span className="ml-2">Admin Panel</span>
+              </Link>
+            )}
             <Link
               to="/settings"
               className="flex px-3 py-2 text-base font-medium text-white hover:bg-secondary rounded-md items-center"

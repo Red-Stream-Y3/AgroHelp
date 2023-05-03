@@ -35,12 +35,6 @@ const Footer = () => {
           <Link to="/contact" className="mx-3  md:my-0 hover:text-white">
             Contact
           </Link>
-          <Link
-            to="/admin/dashboard"
-            className="mx-3  md:my-0 hover:text-white"
-          >
-            Admin Login
-          </Link>
         </div>
         <div className="flex flex-col md:flex-row items-center pt-5 md:pt-0">
           <div className="flex items-center">
