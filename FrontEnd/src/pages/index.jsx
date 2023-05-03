@@ -10,3 +10,5 @@ export { default as ManageComments } from './admin/ManageComments';
 
 //blog related exports
 export { default as BlogDashboard } from './blog/BlogDashboard';
+export { default as BlogView } from './blog/BlogView';
+export { default as BlogCreate } from './blog/BlogCreate';

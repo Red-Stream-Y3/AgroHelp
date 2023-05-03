@@ -14,7 +14,7 @@ const getBlogs = asyncHandler(async (req, res) => {
 // @route   GET /api/blog/:id
 // @access  Public
 const getBlogById = asyncHandler(async (req, res) => {
-    const blog = await Blog.findById(req.params.id).populate('author', 'username firstName lastName');
+    const blog = await Blog.findById(req.params.id).populate('author', 'username firstName lastName profilePic');
     if (blog) {
         res.json(blog);
     } else {

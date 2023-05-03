@@ -13,3 +13,4 @@ export { default as BlogBanner } from './blog/BlogBanner';
 export { default as BlogCard } from './blog/BlogCard';
 export { default as BlogContainer } from './blog/BlogContainer';
 export { default as BlogSearchBar } from './blog/BlogSearchBar';
+export { default as BlogHeader } from './blog/BlogHeader';
