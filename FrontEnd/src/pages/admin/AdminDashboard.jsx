@@ -5,7 +5,8 @@ import { logout } from '../../api/user';
 
 const AdminDashboard = () => {
   const { user } = useGlobalContext();
-  const isAdmin = user.role === 'admin';
+  const isAdmin = user && user.role === 'admin'; // Check if user exists
+
   const total = 25;
 
   useEffect(() => {
