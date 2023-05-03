@@ -16,7 +16,6 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
     const [liked, setLiked] = useState(false);
     const [disliked, setDisliked] = useState(false);
     const [showReplies, setShowReplies] = useState(false);
-    const [showPopup, setShowPopup] = useState(false);
 
     //user object
     const { user } = useGlobalContext();
@@ -37,6 +36,13 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
     //delete reply
     const [showDeleteReplyPopup, setShowDeleteReplyPopup] = useState(false);
     const [replyDeleteId, setReplyDeleteId] = useState("");
+
+    //edit forum
+    const [showEditForumPopup, setShowEditForumPopup] = useState(false);
+    const [forumEditInput, setForumEditInput] = useState("");
+
+    //delete forum
+    const [showDeleteForumPopup, setShowDeleteForumPopup] = useState(false);
 
     //refresh forum object
     const refreshForum = async () => {
@@ -202,9 +208,41 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
         refreshAll();
     };
 
-    const handleDeleteForum = async () => {};
+    const handleDeleteForum = async () => {
+        setLoading(true);
 
-    const handleEditForum = async () => {};
+        let res = await Forum.deleteForum(user, forumObj._id, checkRes);
+        if (res.message === "Forum removed") {
+            setShowDeleteForumPopup(false);
+            notify("success", "Forum removed");
+        }
+
+        setLoading(false);
+        refreshAll();
+    };
+
+    const handleEditForum = async () => {
+        setLoading(true);
+
+        let res = await Forum.updateForum(
+            user,
+            {
+                _id: forumObj._id,
+                title: forumObj.title,
+                content: forumEditInput,
+            },
+            checkRes
+        );
+
+        if (res) {
+            setForumEditInput("");
+            setShowEditForumPopup(false);
+            notify("success", "Forum edited");
+        }
+
+        setLoading(false);
+        refreshAll();
+    };
 
     return (
         <div className="rounded-md bg-darkbg p-3 mt-2 sm:max-w-4xl text-sm sm:text-base">
@@ -213,7 +251,12 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
                     <div className="flex justify-between">
                         {/* username and date */}
                         <div className="inline-flex">
-                            <div className="mr-2">@{forumObj.username}</div>
+                            <div className="mr-2">
+                                @
+                                {forumObj.username +
+                                    " " +
+                                    (forumObj.userID === user._id ? "(me)" : "")}
+                            </div>
                             <div className="text-gray-500">
                                 {forumObj.createdAt.toString().split("T")[0]}
                             </div>
@@ -238,12 +281,17 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
                         {forum.userID === user._id ? (
                             <div className="w-fit">
                                 <button
-                                    onClick={() => handleEditReply(reply._id)}
+                                    onClick={() => {
+                                        setForumEditInput(forumObj.content);
+                                        setShowEditForumPopup(true);
+                                    }}
                                     className="ml-auto mr-2 text-xs text-gray-500">
                                     Edit
                                 </button>
                                 <button
-                                    onClick={() => handleDeleteReply(reply._id)}
+                                    onClick={() => {
+                                        setShowDeleteForumPopup(true);
+                                    }}
                                     className="ml-auto mr-2 text-xs text-gray-500">
                                     Delete
                                 </button>
@@ -301,7 +349,13 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
                         {showReplies ? (
                             <div>
                                 {/* reply username and date */}
-                                {forumObj.replies.map((reply) => {
+                                {forumObj.replies
+                                .sort((a, b) => {
+                                    if(a.likes.length > b.likes.length) return -1;
+                                    if(a.likes.length < b.likes.length) return 1;
+                                    return 0;
+                                })
+                                .map((reply) => {
                                     return (
                                         <div
                                             key={reply._id}
@@ -311,23 +365,37 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
                                             }`}>
                                             <div className="flex justify-between">
                                                 <div className="ml-2 mt-1 text-xs">
-                                                    @{reply.username}
+                                                    @
+                                                    {reply.username +
+                                                        " " +
+                                                        (reply.userID ===
+                                                            user._id ? "(me)" : "")}
                                                 </div>
                                                 {reply.userID === user._id ? (
                                                     <div className="w-fit">
                                                         <button
                                                             onClick={() => {
-                                                                setReplyEditId(reply._id);
-                                                                setReplyEditInput(reply.content);
-                                                                setShowEditReplyPopup(true);
+                                                                setReplyEditId(
+                                                                    reply._id
+                                                                );
+                                                                setReplyEditInput(
+                                                                    reply.content
+                                                                );
+                                                                setShowEditReplyPopup(
+                                                                    true
+                                                                );
                                                             }}
                                                             className="ml-auto mr-2 text-xs text-gray-500">
                                                             Edit
                                                         </button>
                                                         <button
                                                             onClick={() => {
-                                                                setReplyDeleteId(reply._id);
-                                                                setShowDeleteReplyPopup(true);
+                                                                setReplyDeleteId(
+                                                                    reply._id
+                                                                );
+                                                                setShowDeleteReplyPopup(
+                                                                    true
+                                                                );
                                                             }}
                                                             className="ml-auto mr-2 text-xs text-gray-500">
                                                             Delete
@@ -412,7 +480,9 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
             )}
 
             {/* delete reply popup */}
-            <Popup show={showDeleteReplyPopup} setShow={setShowDeleteReplyPopup}>
+            <Popup
+                show={showDeleteReplyPopup}
+                setShow={setShowDeleteReplyPopup}>
                 <div className="items-center">Delete this reply?</div>
 
                 {/* confirm, cancel buttons */}
@@ -456,6 +526,61 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
                             Cancel
                         </button>
                     </div>
+                </div>
+            </Popup>
+
+            {/* edit forum popup */}
+            <Popup show={showEditForumPopup} setShow={setShowEditForumPopup}>
+                <div className="items-center w-100 sm:w-102">
+                    <div className="text-sm font-bold">{forumObj.title}</div>
+                    <div className="text-slate-500 text-xs mb-3">
+                        To protect the integrity of the question, you cannot
+                        edit the title
+                    </div>
+                    <textarea
+                        placeholder="Edit forum"
+                        value={forumEditInput}
+                        autoFocus={true}
+                        onChange={({ target }) =>
+                            setForumEditInput(target.value)
+                        }
+                        className="rounded-md bg-slate-800 w-full p-2 text-sm"
+                    />
+
+                    {/* confirm, cancel buttons */}
+                    <div className="flex justify-center mt-2">
+                        <button
+                            onClick={handleEditForum}
+                            className="transition-all ease-in-out active:scale-95 hover:bg-green-700 bg-green-800 focus:ring-2 ring-green-700 rounded-md px-2 py-2 my-2 ml-2">
+                            Confirm
+                        </button>
+                        <button
+                            onClick={() => setShowEditForumPopup(false)}
+                            className="transition-all ease-in-out active:scale-95 hover:bg-red-700 bg-red-800 focus:ring-2 ring-red-700 rounded-md px-2 py-2 my-2 ml-2">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </Popup>
+
+            {/* delete forum popup */}
+            <Popup
+                show={showDeleteForumPopup}
+                setShow={setShowDeleteForumPopup}>
+                <div className="items-center">Delete this forum?</div>
+
+                {/* confirm, cancel buttons */}
+                <div className="flex justify-center mt-2">
+                    <button
+                        onClick={handleDeleteForum}
+                        className="transition-all ease-in-out active:scale-95 hover:bg-green-700 bg-green-800 focus:ring-2 ring-green-700 rounded-md px-2 py-2 my-2 ml-2">
+                        Confirm
+                    </button>
+                    <button
+                        onClick={() => setShowDeleteForumPopup(false)}
+                        className="transition-all ease-in-out active:scale-95 hover:bg-red-700 bg-red-800 focus:ring-2 ring-red-700 rounded-md px-2 py-2 my-2 ml-2">
+                        Cancel
+                    </button>
                 </div>
             </Popup>
         </div>

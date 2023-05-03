@@ -9,6 +9,8 @@ import { MdOutlineAdd } from "react-icons/md";
 import { Popup } from "../../components";
 
 const ForumDashboard = (props) => {
+	//TODO: search, markanswer, resolved, liked, unliked
+
     //current user and toast methods
     const { user, notify } = useGlobalContext();
 
@@ -160,7 +162,9 @@ const ForumDashboard = (props) => {
     const tabHighlightClasses =
         " text-green-500 border-green-500 border-b-4 bg-gray-700 rounded-t-lg";
     return (
-        <div className="text-white p-5 sm:p-5">
+        <div 
+			style={{height: 'calc(100% - 20px)'}}
+			className="text-white p-5 sm:p-5">
             {/* Search bar for mobile */}
             <div className="lg:hidden">
                 <ForumSearch
