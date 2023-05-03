@@ -237,7 +237,7 @@ const ForumDashboard = (props) => {
                                         forums={recentForums}
                                         checkStatus={checkStatus}
                                         notify={notify}
-										setSubLoaded={setSubLoaded}
+										refreshAll={refreshAllForums}
                                     />
                                 ) : (
                                     <div className="m-auto w-fit mt-5 text-gray-500">
@@ -263,7 +263,7 @@ const ForumDashboard = (props) => {
                                         forums={myForums}
                                         checkStatus={checkStatus}
                                         notify={notify}
-										setSubLoaded={setSubLoaded}
+										refreshAll={refreshAllForums}
                                     />
                                 ) : (
                                     <div className="m-auto w-fit mt-5 text-gray-500">
@@ -279,7 +279,7 @@ const ForumDashboard = (props) => {
                                         forums={subscribedForums}
                                         checkStatus={checkStatus}
                                         notify={notify}
-										setSubLoaded={setSubLoaded}
+										refreshAll={refreshAllForums}
                                     />
                                 ) : (
                                     <div className="m-auto w-fit mt-5 text-gray-500">

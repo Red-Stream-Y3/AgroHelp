@@ -4,19 +4,39 @@ import { AiFillLike, AiFillDislike } from "react-icons/ai";
 import { useGlobalContext } from "../../context/ContextProvider";
 import { Forum } from "../../api/forum.js";
 import Skeleton from "../common/Skeleton";
+import Popup from "../common/Popup";
 
-const ForumCard = ({ forum, checkRes, notify, setSubLoaded }) => {
+const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
 
-    const [Loading, setLoading] = useState(false);
+    //forum object
     const [forumObj, setForumObj] = useState(forum);
-    const { user } = useGlobalContext();
+
+    //status
+    const [Loading, setLoading] = useState(false);
     const [liked, setLiked] = useState(false);
     const [disliked, setDisliked] = useState(false);
+    const [showReplies, setShowReplies] = useState(false);
+    const [showPopup, setShowPopup] = useState(false);
+
+    //user object
+    const { user } = useGlobalContext();
+
+    //input
     const [replyInput, setReplyInput] = useState("");
+
+    //counters
     const [numReplies, setNumReplies] = useState(0);
     const [numLikes, setNumLikes] = useState(0);
     const [numDislikes, setNumDislikes] = useState(0);
-    const [showReplies, setShowReplies] = useState(false);
+
+    //edit reply
+    const [showEditReplyPopup, setShowEditReplyPopup] = useState(false);
+    const [replyEditInput, setReplyEditInput] = useState("");
+    const [replyEditId, setReplyEditId] = useState("");
+
+    //delete reply
+    const [showDeleteReplyPopup, setShowDeleteReplyPopup] = useState(false);
+    const [replyDeleteId, setReplyDeleteId] = useState("");
 
     //refresh forum object
     const refreshForum = async () => {
@@ -52,6 +72,7 @@ const ForumCard = ({ forum, checkRes, notify, setSubLoaded }) => {
         }
     }, [forumObj]);
 
+    //action handlers
     const handleLike = async () => {
         let res = await Forum.likeForum(user, forum._id, checkRes);
         if (res.message === "Unliked forum") {
@@ -62,6 +83,7 @@ const ForumCard = ({ forum, checkRes, notify, setSubLoaded }) => {
             setDisliked(false);
         }
         await refreshForum();
+        refreshAll();
     };
 
     const handleDislike = async () => {
@@ -74,6 +96,7 @@ const ForumCard = ({ forum, checkRes, notify, setSubLoaded }) => {
             setDisliked(true);
         }
         await refreshForum();
+        refreshAll();
     };
 
     const handleReplySubmit = async () => {
@@ -97,6 +120,7 @@ const ForumCard = ({ forum, checkRes, notify, setSubLoaded }) => {
         }
         await refreshForum();
         setLoading(false);
+        refreshAll();
     };
 
     const handleReplyLike = async (replyId) => {
@@ -109,6 +133,7 @@ const ForumCard = ({ forum, checkRes, notify, setSubLoaded }) => {
             setDisliked(false);
         }
         await refreshForum();
+        refreshAll();
     };
 
     const handleReplyDislike = async (replyId) => {
@@ -121,11 +146,43 @@ const ForumCard = ({ forum, checkRes, notify, setSubLoaded }) => {
             setDisliked(true);
         }
         await refreshForum();
+        refreshAll();
     };
 
-    const handleEditReply = async (replyId) => {};
+    const handleEditReplySubmit = async () => {
+        setLoading(true);
 
-    const handleDeleteReply = async (replyId) => {};
+        if (replyEditInput === "") {
+            notify("info", "Reply field is empty");
+            setLoading(false);
+            return;
+        }
+
+        let res = await Forum.editReply(user, forum._id, replyEditId, replyEditInput, checkRes);
+        if (res.message === "Reply edited") {
+            setReplyEditInput("");
+            setReplyEditId("");
+            setShowEditReplyPopup(false);
+            notify("success", "Edited reply");
+        }
+        await refreshForum();
+        setLoading(false);
+        refreshAll();
+    };
+
+    const handleDeleteReply = async () => {
+        setLoading(true);
+
+        let res = await Forum.deleteReply(user, forum._id, replyDeleteId, checkRes);
+        if (res.message === "Deleted reply from forum") {
+            setReplyDeleteId("");
+            setShowDeleteReplyPopup(false);
+            notify("success", "Deleted reply from forum");
+        }
+        await refreshForum();
+        setLoading(false);
+        refreshAll();
+    };
 
     const handleSubscribe = async () => {
         let res = await Forum.subscribeToForum(user, forum._id, checkRes);
@@ -133,7 +190,7 @@ const ForumCard = ({ forum, checkRes, notify, setSubLoaded }) => {
             notify("success", "Subscribed to forum");
         }
         await refreshForum();
-        setSubLoaded(false);
+        refreshAll();
     };
 
     const handleUnsubscribe = async () => {
@@ -142,8 +199,12 @@ const ForumCard = ({ forum, checkRes, notify, setSubLoaded }) => {
             notify("success", "Unsubscribed from forum");
         }
         await refreshForum();
-        setSubLoaded(false);
+        refreshAll();
     };
+
+    const handleDeleteForum = async () => {};
+
+    const handleEditForum = async () => {};
 
     return (
         <div className="rounded-md bg-darkbg p-3 mt-2 sm:max-w-4xl text-sm sm:text-base">
@@ -177,27 +238,18 @@ const ForumCard = ({ forum, checkRes, notify, setSubLoaded }) => {
                         {forum.userID === user._id ? (
                             <div className="w-fit">
                                 <button
-                                    onClick={() =>
-                                        handleEditReply(
-                                            reply._id
-                                        )
-                                    }
+                                    onClick={() => handleEditReply(reply._id)}
                                     className="ml-auto mr-2 text-xs text-gray-500">
                                     Edit
                                 </button>
                                 <button
-                                    onClick={() =>
-                                        handleDeleteReply(
-                                            reply._id
-                                        )
-                                    }
+                                    onClick={() => handleDeleteReply(reply._id)}
                                     className="ml-auto mr-2 text-xs text-gray-500">
                                     Delete
                                 </button>
                             </div>
                         ) : null}
                     </div>
-                    
 
                     {/* title */}
                     <div className="font-bold">{forumObj.title}</div>
@@ -264,20 +316,19 @@ const ForumCard = ({ forum, checkRes, notify, setSubLoaded }) => {
                                                 {reply.userID === user._id ? (
                                                     <div className="w-fit">
                                                         <button
-                                                            onClick={() =>
-                                                                handleEditReply(
-                                                                    reply._id
-                                                                )
-                                                            }
+                                                            onClick={() => {
+                                                                setReplyEditId(reply._id);
+                                                                setReplyEditInput(reply.content);
+                                                                setShowEditReplyPopup(true);
+                                                            }}
                                                             className="ml-auto mr-2 text-xs text-gray-500">
                                                             Edit
                                                         </button>
                                                         <button
-                                                            onClick={() =>
-                                                                handleDeleteReply(
-                                                                    reply._id
-                                                                )
-                                                            }
+                                                            onClick={() => {
+                                                                setReplyDeleteId(reply._id);
+                                                                setShowDeleteReplyPopup(true);
+                                                            }}
                                                             className="ml-auto mr-2 text-xs text-gray-500">
                                                             Delete
                                                         </button>
@@ -359,6 +410,54 @@ const ForumCard = ({ forum, checkRes, notify, setSubLoaded }) => {
             ) : (
                 <Skeleton />
             )}
+
+            {/* delete reply popup */}
+            <Popup show={showDeleteReplyPopup} setShow={setShowDeleteReplyPopup}>
+                <div className="items-center">Delete this reply?</div>
+
+                {/* confirm, cancel buttons */}
+                <div className="flex justify-center mt-2">
+                    <button
+                        onClick={handleDeleteReply}
+                        className="transition-all ease-in-out active:scale-95 hover:bg-green-700 bg-green-800 focus:ring-2 ring-green-700 rounded-md px-2 py-2 my-2 ml-2">
+                        Confirm
+                    </button>
+                    <button
+                        onClick={() => setShowDeleteReplyPopup(false)}
+                        className="transition-all ease-in-out active:scale-95 hover:bg-red-700 bg-red-800 focus:ring-2 ring-red-700 rounded-md px-2 py-2 my-2 ml-2">
+                        Cancel
+                    </button>
+                </div>
+            </Popup>
+
+            {/* edit reply popup */}
+            <Popup show={showEditReplyPopup} setShow={setShowEditReplyPopup}>
+                <div className="items-center w-100 sm:w-102">
+                    <textarea
+                        placeholder="Edit reply"
+                        value={replyEditInput}
+                        autoFocus={true}
+                        onChange={({ target }) =>
+                            setReplyEditInput(target.value)
+                        }
+                        className="rounded-md bg-slate-800 w-full p-2 text-sm"
+                    />
+
+                    {/* confirm, cancel buttons */}
+                    <div className="flex justify-center mt-2">
+                        <button
+                            onClick={handleEditReplySubmit}
+                            className="transition-all ease-in-out active:scale-95 hover:bg-green-700 bg-green-800 focus:ring-2 ring-green-700 rounded-md px-2 py-2 my-2 ml-2">
+                            Confirm
+                        </button>
+                        <button
+                            onClick={() => setShowEditReplyPopup(false)}
+                            className="transition-all ease-in-out active:scale-95 hover:bg-red-700 bg-red-800 focus:ring-2 ring-red-700 rounded-md px-2 py-2 my-2 ml-2">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </Popup>
         </div>
     );
 };

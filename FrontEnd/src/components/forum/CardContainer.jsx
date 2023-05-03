@@ -12,7 +12,7 @@ const CardContainer = (props) => {
                         forum={forum}
                         checkRes={props.checkStatus}
                         notify={props.notify}
-                        setSubLoaded={props.setSubLoaded}
+                        refreshAll={props.refreshAll}
                     />
                 );
             })}
