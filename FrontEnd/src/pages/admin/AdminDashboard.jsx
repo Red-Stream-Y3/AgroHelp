@@ -20,10 +20,6 @@ const AdminDashboard = () => {
     setLoading(false);
   };
 
-  const totalVisits = siteVisits.reduce((acc, visit) => {
-    return acc + visit.count;
-  }, 0);
-
   useEffect(() => {
     if (!user || !isAdmin) {
       logout();
@@ -31,6 +27,18 @@ const AdminDashboard = () => {
     }
     fetchSite();
   }, [isAdmin, user]);
+
+  const totalVisits = siteVisits.reduce((acc, visit) => {
+    return acc + visit.count;
+  }, 0);
+
+  const formatVisits =
+    totalVisits >= 1000
+      ? (totalVisits / 1000).toLocaleString('en', {
+          minimumFractionDigits: 1,
+          maximumFractionDigits: 1,
+        }) + 'K'
+      : totalVisits;
 
   return (
     <>
@@ -42,7 +50,7 @@ const AdminDashboard = () => {
             <div className="w-full md:w-auto">
               <BoxWidget
                 heading={'Traffic'}
-                value={totalVisits}
+                value={formatVisits}
                 icon={'fa-solid fa-arrow-trend-up'}
               />
             </div>

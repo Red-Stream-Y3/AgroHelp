@@ -11,7 +11,7 @@ export default function Table({ header, title, author, tags, createdAt }) {
             </h2>
           </div>
         </div>
-        <div className="relative flex items-center mt-4 md:mt-0">
+        <div className="flex items-center mt-4 md:mt-0">
           <span className="absolute">
             <svg
               xmlns="http://www.w3.org/2000/svg"
