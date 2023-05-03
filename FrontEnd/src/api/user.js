@@ -58,3 +58,60 @@ export const getUsers = async (token) => {
     console.log(error);
   }
 };
+
+// update user
+export const updateUser = async (user, token) => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  try {
+    const response = await axios.put(
+      `http://localhost:9120/api/users/${user._id}`,
+      user,
+      config
+    );
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const deleteUser = async (id, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  try {
+    const response = await axios.delete(
+      `http://localhost:9120/api/users/${id}`,
+      config
+    );
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// get site visits
+export const getSiteVisits = async (token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  try {
+    const response = await axios.get(
+      'http://localhost:9120/api/visits',
+      config
+    );
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};

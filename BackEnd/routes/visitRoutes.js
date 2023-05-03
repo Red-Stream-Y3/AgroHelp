@@ -3,6 +3,6 @@ import { getVisits } from '../controllers/visitController.js';
 
 const router = express.Router();
 
-router.route('/visits').get(getVisits);
+router.route('/').get(getVisits);
 
 export default router;
