@@ -8,6 +8,7 @@ const Crops = ({
   filterData,
   tableFilter,
   crops,
+  handleAccept,
   handleDelete,
 }) => {
   const cropRow = (crop) => {
@@ -42,11 +43,23 @@ const Crops = ({
         </td>
         <td className="py-4 text-sm whitespace-nowrap">
           <h2 className="font-medium text-gray-800 dark:text-white capitalize">
-            {formatDate(crop.createdAt)}
+            {crop.isAccepted === true ? (
+              <span>✅ {formatDate(crop.createdAt)}</span>
+            ) : (
+              <span>❌ {formatDate(crop.createdAt)}</span>
+            )}
           </h2>
         </td>
         <td className="py-4 text-sm whitespace-nowrap">
           <div className="flex items-center mt-4 gap-x-4 sm:mt-0 justify-center">
+            <button
+              className="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md sm:w-auto gap-x-2 hover:bg-gray-100 dark:bg-blue-500 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-blue-700 disabled:bg-gray-500 disabled:hover:bg-gray-500 disabled:text-white disabled:cursor-not-allowed"
+              disabled={crop.isAccepted === true}
+              onClick={() => handleAccept(crop._id, 'crop')}
+            >
+              <i className="fa-solid fa-circle-check"></i>
+            </button>
+
             {/* TODO:  add onClick to redirect to edit page */}
             <button className="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md sm:w-auto gap-x-2 hover:bg-gray-100 dark:bg-primary dark:text-gray-200 dark:border-gray-700 dark:hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed">
               <i className="fa-solid fa-pen-to-square"></i>
@@ -72,7 +85,7 @@ const Crops = ({
             CROPS
           </h2>
         </div>
-        <div className="relative flex items-center mt-4 md:mt-0">
+        <div className="flex items-center mt-4 md:mt-0">
           <span className="absolute">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -110,7 +123,7 @@ const Crops = ({
                     <th className={theadClass}>TYPE</th>
                     <th className={theadClass}>DETAILS</th>
                     <th className={theadClass}>AUTHOR</th>
-                    <th className={`pl-5 ${theadClass}`}>DATE</th>
+                    <th className={`text-center ${theadClass}`}>DATE</th>
                     <th className={`text-center ${theadClass}`}>MANAGE</th>
                   </tr>
                 </thead>
@@ -148,6 +161,7 @@ Crops.propTypes = {
   filterData: PropTypes.func,
   tableFilter: PropTypes.array,
   crops: PropTypes.array,
+  handleAccept: PropTypes.func,
   handleDelete: PropTypes.func,
 };
 

@@ -96,7 +96,10 @@ const updateUserProfile = asyncHandler(async (req, res) => {
 
   if (user) {
     user.username = req.body.username || user.username;
+    user.firstName = req.body.firstName || user.firstName;
+    user.lastName = req.body.lastName || user.lastName;
     user.email = req.body.email || user.email;
+    user.profilePic = req.body.profilePic || user.profilePic;
     if (req.body.password) {
       user.password = req.body.password;
     }

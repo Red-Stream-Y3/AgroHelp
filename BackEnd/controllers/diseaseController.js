@@ -117,6 +117,7 @@ const updateCropDisease = asyncHandler(async (req, res) => {
       diseaseCrops,
       diseaseType,
       diseaseStatus,
+      isAccepted,
     } = req.body;
     const cropDisease = await CropDisease.findById(req.params.id);
     if (cropDisease) {
@@ -129,6 +130,8 @@ const updateCropDisease = asyncHandler(async (req, res) => {
       cropDisease.diseaseCrops = diseaseCrops;
       cropDisease.diseaseType = diseaseType;
       cropDisease.diseaseStatus = diseaseStatus;
+      cropDisease.isAccepted = isAccepted;
+
       const updatedCropDisease = await cropDisease.save();
       res.json(updatedCropDisease);
     } else {
@@ -182,12 +185,31 @@ const getRandomCropDiseases = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc    Update disease accept
+// @route   PUT /api/diseases/:id/accept
+// @access  Private/Admin
+const updateDiseaseAccept = asyncHandler(async (req, res) => {
+  const disease = await CropDisease.findById(req.params.id);
+
+  if (disease) {
+    disease.isAccepted = req.body.isAccepted || disease.isAccepted;
+
+    const updatedDisease = await disease.save();
+
+    res.json(updatedDisease);
+  } else {
+    res.status(404);
+    throw new Error('Disease not found');
+  }
+});
+
 export {
   getCropDiseases,
   getCropDiseaseById,
   deleteCropDisease,
   createCropDisease,
   updateCropDisease,
+  updateDiseaseAccept,
   searchCropDisease,
   getRandomCropDiseases,
 };

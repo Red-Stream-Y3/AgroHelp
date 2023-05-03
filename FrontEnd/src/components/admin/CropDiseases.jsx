@@ -8,6 +8,7 @@ const CropDiseases = ({
   filterData,
   tableFilter,
   diseases,
+  handleAccept,
   handleDelete,
 }) => {
   const diseaseRow = (disease) => {
@@ -32,7 +33,7 @@ const CropDiseases = ({
         </td>
         <td className="py-4 text-sm whitespace-nowrap">
           <h2 className="font-medium text-gray-800 dark:text-white capitalize">
-            {disease.diseaseSymptoms.split(' ').slice(0, 8).join(' ')} ...
+            {disease.diseaseSymptoms.split(' ').slice(0, 7).join(' ')} ...
           </h2>
         </td>
         <td className="py-4 text-sm whitespace-nowrap">
@@ -40,13 +41,25 @@ const CropDiseases = ({
             {disease.author.firstName}
           </h2>
         </td>
-        <td className="py-4 text-sm whitespace-nowrap">
+        <td className="py-4 px-2 text-sm whitespace-nowrap">
           <h2 className="font-medium text-gray-800 dark:text-white capitalize">
-            {formatDate(disease.createdAt)}
+            {disease.isAccepted === true ? (
+              <span>✅ {formatDate(disease.createdAt)}</span>
+            ) : (
+              <span>❌ {formatDate(disease.createdAt)}</span>
+            )}
           </h2>
         </td>
         <td className="py-4 text-sm whitespace-nowrap">
           <div className="flex items-center mt-4 gap-x-4 sm:mt-0 justify-center">
+            <button
+              className="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md sm:w-auto gap-x-2 hover:bg-gray-100 dark:bg-blue-500 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-blue-700 disabled:bg-gray-500 disabled:hover:bg-gray-500 disabled:text-white disabled:cursor-not-allowed"
+              disabled={disease.isAccepted === true}
+              onClick={() => handleAccept(disease._id, 'disease')}
+            >
+              <i className="fa-solid fa-circle-check"></i>
+            </button>
+
             {/* TODO:  add onClick to redirect to edit page */}
             <button className="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md sm:w-auto gap-x-2 hover:bg-gray-100 dark:bg-primary dark:text-gray-200 dark:border-gray-700 dark:hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed">
               <i className="fa-solid fa-pen-to-square"></i>
@@ -72,7 +85,7 @@ const CropDiseases = ({
             CROP DISEASES
           </h2>
         </div>
-        <div className="relative flex items-center mt-4 md:mt-0">
+        <div className="flex items-center mt-4 md:mt-0">
           <span className="absolute">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -110,7 +123,7 @@ const CropDiseases = ({
                     <th className={theadClass}>TYPE</th>
                     <th className={theadClass}>SYMPTOMS</th>
                     <th className={theadClass}>AUTHOR</th>
-                    <th className={`pl-5 ${theadClass}`}>DATE</th>
+                    <th className={`text-center ${theadClass}`}>DATE</th>
                     <th className={`text-center ${theadClass}`}>MANAGE</th>
                   </tr>
                 </thead>
@@ -147,6 +160,7 @@ CropDiseases.propTypes = {
   filterData: PropTypes.func,
   tableFilter: PropTypes.array,
   diseases: PropTypes.array,
+  handleAccept: PropTypes.func,
   handleDelete: PropTypes.func,
 };
 

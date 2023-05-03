@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useGlobalContext } from '../../context/ContextProvider';
-import { getUsers, updateUser } from '../../api/user';
+import { getUsers, updateUser, deleteUser } from '../../api/user';
 import { toast } from 'react-toastify';
 import { Loader } from '../../components';
 
@@ -21,6 +21,19 @@ const ManageUsers = () => {
   useEffect(() => {
     getAllUsers();
   }, []);
+
+  const handleDelete = async (id) => {
+    await deleteUser(id, user.token);
+    toast.success('User removed successfully', {
+      hideProgressBar: false,
+      closeOnClick: true,
+      autoClose: 1500,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+    getAllUsers();
+  };
 
   const filterData = (e) => {
     if (e.target.value !== '') {
@@ -120,6 +133,16 @@ const ManageUsers = () => {
             </button>
           </div>
         </td>
+        <td className="py-4 text-sm whitespace-nowrap">
+          <div className="flex items-center mt-4 gap-x-4 sm:mt-0 justify-center">
+            <button
+              className="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md sm:w-auto gap-x-2 hover:bg-gray-100 dark:bg-red-600 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-red-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
+              onClick={() => handleDelete(user._id)}
+            >
+              <i className="fa-solid fa-user-slash"></i>
+            </button>
+          </div>
+        </td>
       </tr>
     );
   };
@@ -139,7 +162,7 @@ const ManageUsers = () => {
                   </h2>
                 </div>
               </div>
-              <div className="relative flex items-center mt-4 md:mt-0">
+              <div className="flex items-center mt-4 md:mt-0">
                 <span className="absolute">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -175,13 +198,13 @@ const ManageUsers = () => {
                       <thead className="bg-gray-50 dark:bg-gray-800">
                         <tr>
                           <th className={`px-4 ${theadClass}`}>NAME</th>
-
                           <th className={theadClass}>EMAIL</th>
-
                           <th className={theadClass}>ROLE</th>
-
                           <th className={`text-center ${theadClass}`}>
                             PRIVILEGES
+                          </th>
+                          <th className={`text-center ${theadClass}`}>
+                            MANAGE
                           </th>
                         </tr>
                       </thead>

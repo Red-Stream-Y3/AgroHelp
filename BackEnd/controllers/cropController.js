@@ -167,6 +167,24 @@ const getShortCrops = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc    Update crop accept
+// @route   PUT /api/crops/:id/accept
+// @access  Private/Admin
+const updateCropAccept = asyncHandler(async (req, res) => {
+  const crop = await Crop.findById(req.params.id);
+
+  if (crop) {
+    crop.isAccepted = req.body.isAccepted || crop.isAccepted;
+
+    const updatedCrop = await crop.save();
+
+    res.json(updatedCrop);
+  } else {
+    res.status(404);
+    throw new Error('Crop not found');
+  }
+});
+
 export {
   getCrops,
   getCropById,
@@ -175,4 +193,5 @@ export {
   updateCrop,
   searchCrops,
   getShortCrops,
+  updateCropAccept,
 };

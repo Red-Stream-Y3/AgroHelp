@@ -4,6 +4,8 @@ import {
   deleteCrop,
   getAllDiseases,
   deleteDisease,
+  updateCropAccept,
+  updateDiseaseAccept,
 } from '../../api/knowlegdebase';
 import { Loader } from '../../components';
 import { toast } from 'react-toastify';
@@ -55,6 +57,34 @@ const ManageKnowledge = () => {
       }
     } else {
       setValue(e.target.value);
+    }
+  };
+
+  const handleAccept = async (id, type) => {
+    if (type === 'crop') {
+      await updateCropAccept(id, { _id: id, isAccepted: true });
+      const data = await getAllCrops();
+      setCrops(data);
+      toast.success(`Crop Accepted Successfully`, {
+        hideProgressBar: false,
+        closeOnClick: true,
+        autoClose: 1500,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    } else if (type === 'disease') {
+      await updateDiseaseAccept(id, { _id: id, isAccepted: true });
+      const data = await getAllDiseases();
+      setDiseases(data);
+      toast.success(`Disease Accepted Successfully`, {
+        hideProgressBar: false,
+        closeOnClick: true,
+        autoClose: 1500,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     }
   };
 
@@ -118,6 +148,7 @@ const ManageKnowledge = () => {
                   filterData={filterData}
                   tableFilter={tableFilter}
                   crops={crops}
+                  handleAccept={handleAccept}
                   handleDelete={handleDelete}
                 />
               ) : (
@@ -129,6 +160,7 @@ const ManageKnowledge = () => {
                   filterData={filterData}
                   tableFilter={tableFilter}
                   diseases={diseases}
+                  handleAccept={handleAccept}
                   handleDelete={handleDelete}
                 />
               )}
