@@ -21,38 +21,53 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
-  return (
-    <>
-      <ToastContainer />
-      <BrowserRouter>
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+    return (
+        <>
+            <ToastContainer />
+            <BrowserRouter>
+                <div
+                    style={{
+                        minHeight: "100vh",
+                        display: "flex",
+                        flexDirection: "column",
+                    }}>
+                    <Navbar />
+                    <Routes>
+                        <Route path="/" element={<Home />} />
+                        <Route path="/home" element={<Home />} />
+                        <Route path="/login" element={<Login />} />
+                        <Route path="/register" element={<Register />} />
 
-          <Route path="/admin/*" element={<AdminHome />}>
-            <Route path="dashboard" element={<AdminDashboard />} />
-            <Route path="knowledge" element={<ManageKnowledge />} />
-            <Route path="blogs" element={<ManageBlogs />} />
-            <Route path="users" element={<ManageUsers />} />
-            <Route path="comments" element={<ManageComments />} />
-          </Route>
+                        <Route path="/admin/*" element={<AdminHome />}>
+                            <Route
+                                path="dashboard"
+                                element={<AdminDashboard />}
+                            />
+                            <Route
+                                path="knowledge"
+                                element={<ManageKnowledge />}
+                            />
+                            <Route path="blogs" element={<ManageBlogs />} />
+                            <Route path="users" element={<ManageUsers />} />
+                            <Route
+                                path="comments"
+                                element={<ManageComments />}
+                            />
+                        </Route>
 
-          <Route path="/crops/:id" element={<Crop />} />
-          <Route path="/diseases/:id" element={<Disease />} />
+                        <Route path="/crops/:id" element={<Crop />} />
+                        <Route path="/diseases/:id" element={<Disease />} />
 
-        <Route path="/forum" element={<ForumDashboard />} />
+                        <Route path="/forum" element={<ForumDashboard />} />
 
-        <Route path="/blogs" element={<BlogDashboard />} />
-        
-      </Routes>
+                        <Route path="/blogs" element={<BlogDashboard />} />
+                    </Routes>
 
-      <Footer />
-    </BrowserRouter>
-    </>
-  );
+                    <Footer />
+                </div>
+            </BrowserRouter>
+        </>
+    );
 }
 
 export default App;
