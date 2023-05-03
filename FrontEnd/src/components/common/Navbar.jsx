@@ -25,11 +25,7 @@ const Navbar = () => {
   const [isLogged, setIsLogged] = useState(false);
 
   const { user } = useGlobalContext();
-  const isAdmin =
-    user &&
-    (user.role === 'admin' ||
-      user.role === 'contributor' ||
-      user.role === 'moderator');
+  const isAccess = user && (user.role === 'admin' || user.role === 'moderator');
 
   const location = useLocation();
 
@@ -145,7 +141,6 @@ const Navbar = () => {
           {/* desktop menu */}
           {/* if current tab is active, add bg-secondary to the link */}
           <div className="hidden md:ml-6 md:flex md:items-center">
-            
             {navigation.map((item) => (
               <Link
                 key={item.name}
@@ -160,7 +155,6 @@ const Navbar = () => {
                 <span className="ml-2">{item.name}</span>
               </Link>
             ))}
-          
 
             {/* desktop icon */}
             <div className="lg:hidden ml-4 relative flex items-center">
@@ -317,7 +311,7 @@ const Navbar = () => {
               <FaUser className="h-6 w-6" />
               <span className="ml-2">Profile</span>
             </Link>
-            {isAdmin && (
+            {isAccess && (
               <Link
                 to="/admin/dashboard"
                 className="flex px-3 py-2 text-base font-medium text-white hover:bg-secondary rounded-md items-center"

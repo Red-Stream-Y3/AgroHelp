@@ -5,7 +5,7 @@ import { logout, getSiteVisits, getUsers } from '../../api/user';
 
 const AdminDashboard = () => {
   const { user } = useGlobalContext();
-  const isAdmin = user && user.role === 'admin'; // Check if user exists
+  const isAccess = (user && user.role === 'admin') || user.role === 'moderator';
   const [siteVisits, setSiteVisits] = useState([]);
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -21,12 +21,12 @@ const AdminDashboard = () => {
   };
 
   useEffect(() => {
-    if (!user || !isAdmin) {
+    if (!user || !isAccess) {
       logout();
       window.location.href = '/login';
     }
     fetchSite();
-  }, [isAdmin, user]);
+  }, [isAccess, user]);
 
   const totalVisits = siteVisits.reduce((acc, visit) => {
     return acc + visit.count;
@@ -42,7 +42,7 @@ const AdminDashboard = () => {
 
   return (
     <>
-      {!isAdmin && loading ? (
+      {!isAccess && loading ? (
         <Loader />
       ) : (
         <>

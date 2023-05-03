@@ -8,22 +8,22 @@ const AdminHome = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const { user } = useGlobalContext();
 
-  const isAdmin = user && user.role === 'admin'; // Check if user exists
+  const isAccess = (user && user.role === 'admin') || user.role === 'moderator';
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
   useEffect(() => {
-    if (!user || !isAdmin) {
+    if (!user || !isAccess) {
       logout();
       window.location.href = '/login';
     }
-  }, [isAdmin, user]);
+  }, [isAccess, user]);
 
   return (
     <>
-      {!isAdmin ? (
+      {!isAccess ? (
         <Loader />
       ) : (
         <div className="flex overflow-hidden">
