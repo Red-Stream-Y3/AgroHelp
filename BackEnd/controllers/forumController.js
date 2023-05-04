@@ -65,10 +65,9 @@ const updateForum = asyncHandler(async (req, res) => {
 // @route   DELETE /api/forums/:id
 // @access  Private/Admin
 const deleteForum = asyncHandler(async (req, res) => {
-    const forum = await Forum.findById(req.params.id);
+    const forum = await Forum.findByIdAndDelete(req.params.id);
 
     if (forum) {
-        await forum.remove();
         res.status(255).json({ message: "Forum removed" });
     } else {
         res.status(404).send({message: "Forum not found"});
@@ -82,7 +81,7 @@ const searchForums = asyncHandler(async (req, res) => {
     const title = req.params.q;
 
     const forums = await Forum.find({
-        title: { $regex: title, $options: "g" },
+        title: { $regex: title, $options: "" },
     });
 
     if (forums) {
@@ -450,7 +449,7 @@ const acceptReplyAsAnswer = asyncHandler(async (req, res) => {
         );
 
         if (reply) {
-            forum.acceptedAnswer = reply;
+            reply.accepted = true;
             forum.save();
             res.status(255).json({ message: "Accepted reply as answer" });
         } else {

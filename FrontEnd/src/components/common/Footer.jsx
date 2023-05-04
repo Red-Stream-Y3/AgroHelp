@@ -4,7 +4,7 @@ import { ImLeaf } from 'react-icons/im';
 
 const Footer = () => {
   return (
-    <footer className="bg-darkbg text-gray-300 py-5">
+    <footer className="bg-darkbg text-gray-300 py-5 mt-auto">
       <div className="container mx-auto px-4 md:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between">
         <div className="flex items-center">
           <Link to="/" className="flex-shrink-0 flex items-center">

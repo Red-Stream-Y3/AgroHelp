@@ -146,15 +146,22 @@ export const unsubscribeFromForum = async (user, id, checkStatus) => {
 
 //get subscribed forums
 export const getSubscribedForumsByUser = async (user, checkStatus) => {
-    const res = await axios.get(`${BASE_URL}/subscribed/${user._id}`, getconfig(user));
+    try {
+        const res = await axios.get(
+            `${BASE_URL}/subscribed/${user._id}`,
+            getconfig(user)
+        );
 
-    if (res.data) {
-        return res.data;
-    } else {
-        checkStatus(res);
-        return null;
+        if (res.data) {
+            return res.data;
+        } else {
+            checkStatus(res);
+            return null;
+        }
+    } catch (error) {
+        //console.log(error);
     }
-}
+};
 
 //like a forum
 export const likeForum = async (user, id, checkStatus) => {
@@ -386,7 +393,7 @@ export const acceptReply = async (user, id, replyID, checkStatus) => {
 
 //mark forum as resolved
 export const markResolved = async (user, id, checkStatus) => {
-    const res = await axios.post(`${BASE_URL}/resolved/${id}`, {}, getconfig(user));
+    const res = await axios.post(`${BASE_URL}/resolve/${id}`, {}, getconfig(user));
 
     if (res.data) {
         return res.data;
@@ -398,15 +405,22 @@ export const markResolved = async (user, id, checkStatus) => {
 
 //get user's forums
 export const getForumsByUser = async (user, checkStatus) => {
-    const res = await axios.get(`${BASE_URL}/myforums/${user._id}`, getconfig(user));
+    try {
+        const res = await axios.get(
+            `${BASE_URL}/myforums/${user._id}`,
+            getconfig(user)
+        );
 
-    if (res.data) {
-        return res.data;
-    } else {
-        checkStatus(res);
-        return null;
+        if (res.data) {
+            return res.data;
+        } else {
+            checkStatus(res);
+            return null;
+        }
+    } catch (error) {
+        //console.log(error.message);
     }
-}
+};
 
 export const Forum = {
     getForums,
