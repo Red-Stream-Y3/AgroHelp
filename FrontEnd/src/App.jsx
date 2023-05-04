@@ -65,10 +65,8 @@ function App() {
             <Route path="update/crop/:id" element={<UpdateCrop />} />
             <Route path="update/disease/:id" element={<UpdateDisease />} />
             <Route path="my/articles" element={<MyArticles />} />
-
             <Route path="/forum" element={<ForumDashboard />} />
-
-            <Route path="/blogs" element={<BlogDashboard />} />
+            <Route path="/blog" element={<BlogDashboard />} />
           </Routes>
 
           <Footer />
