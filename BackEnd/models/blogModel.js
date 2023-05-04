@@ -9,7 +9,7 @@ const commentSchema = new mongoose.Schema({
   },
   postedBy: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
+    ref: 'User',
     required: true,
   },
   postedAt: {
@@ -27,7 +27,7 @@ const blogSchema = new mongoose.Schema({
     {
       type: {
         type: String,
-        enum: ["text", "image"],
+        enum: ['text', 'image'],
         required: false,
       },
       content: {
@@ -38,7 +38,7 @@ const blogSchema = new mongoose.Schema({
   ],
   author: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
+    ref: 'User',
     required: true,
   },
   tags: {
@@ -53,6 +53,10 @@ const blogSchema = new mongoose.Schema({
   },
 
   comments: [commentSchema],
+  isAccepted: {
+    type: Boolean,
+    default: false,
+  },
 
   timestamp: {
     type: Date,

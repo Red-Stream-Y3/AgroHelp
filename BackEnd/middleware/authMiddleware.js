@@ -40,4 +40,16 @@ const admin = (req, res, next) => {
   }
 };
 
-export { protect, admin };
+const adminMod = (req, res, next) => {
+  if (
+    req.user &&
+    (req.user.role === 'admin' || req.user.role === 'moderator')
+  ) {
+    next();
+  } else {
+    res.status(401);
+    throw new Error(`Not authorized as an ${req.user.role}`);
+  }
+};
+
+export { protect, admin, adminMod };
