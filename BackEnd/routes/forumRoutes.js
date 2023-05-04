@@ -47,7 +47,7 @@ router.route("/unlike/:id").post(protect, unlikeForum);
 router.route("/liked/:user").get(protect, getLikedForums);
 router.route("/dislike/:id").post(protect, dislikeForum);
 router.route("/undislike/:id").post(protect, undislikeForum);
-router.route("/disliked:user").get(protect, getDislikedForums);
+router.route("/disliked/:user").get(protect, getDislikedForums);
 router.route("/reply/:id").post(protect, replyToForum);
 
 router
