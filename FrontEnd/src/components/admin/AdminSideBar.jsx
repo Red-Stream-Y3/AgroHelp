@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { FaBookOpen, FaQuestion, FaPenNib } from 'react-icons/fa';
 
 const AdminSideBar = ({ isSidebarOpen }) => {
   const [activeLink, setActiveLink] = useState('dashboard');
@@ -14,6 +15,11 @@ const AdminSideBar = ({ isSidebarOpen }) => {
       className={`bg-darkbg w-64 flex-shrink-0 ${
         isSidebarOpen ? 'block' : 'hidden'
       } md:block`}
+      style={{
+        minHeight: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+      }}
     >
       <div className="sidebar-links">
         <ul className="text-gray-500 text-sm font-medium">
@@ -33,27 +39,55 @@ const AdminSideBar = ({ isSidebarOpen }) => {
           </li>
           <li>
             <NavLink
-              to="/admin/manage-blogs"
+              to="/admin/knowledge"
               className={`flex items-center py-5 px-4 text-lg text-gray-100 ${
-                activeLink === 'manage-blogs'
+                activeLink === 'knowledge'
                   ? 'bg-primarydark'
                   : 'bg-darkbg hover:bg-secondary'
               } border-y-2 border-black`}
-              onClick={() => handleLinkClick('manage-blogs')}
+              onClick={() => handleLinkClick('knowledge')}
             >
-              <i className="fa-solid fa-newspaper pr-6"></i>
-              Blogs
+              <FaBookOpen className="h-6 w-6" />
+              <span className="ml-4">Knowledge Base</span>
+            </NavLink>
+          </li>{' '}
+          <li>
+            <NavLink
+              to="/admin/forum"
+              className={`flex items-center py-5 px-4 text-lg text-gray-100 ${
+                activeLink === 'forum'
+                  ? 'bg-primarydark'
+                  : 'bg-darkbg hover:bg-secondary'
+              } border-y-2 border-black`}
+              onClick={() => handleLinkClick('forum')}
+            >
+              <FaQuestion className="h-6 w-6" />
+              <span className="ml-4">Forum</span>
             </NavLink>
           </li>
           <li>
             <NavLink
-              to="/admin/manage-users"
+              to="/admin/blogs"
               className={`flex items-center py-5 px-4 text-lg text-gray-100 ${
-                activeLink === 'manage-users'
+                activeLink === 'blogs'
                   ? 'bg-primarydark'
                   : 'bg-darkbg hover:bg-secondary'
               } border-y-2 border-black`}
-              onClick={() => handleLinkClick('manage-users')}
+              onClick={() => handleLinkClick('blogs')}
+            >
+              <FaPenNib className="h-6 w-6" />
+              <span className="ml-4">Blogs</span>
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/admin/users"
+              className={`flex items-center py-5 px-4 text-lg text-gray-100 ${
+                activeLink === 'users'
+                  ? 'bg-primarydark'
+                  : 'bg-darkbg hover:bg-secondary'
+              } border-y-2 border-black`}
+              onClick={() => handleLinkClick('users')}
             >
               <i className="fa-solid fa-users pr-5"></i>
               Users
@@ -61,13 +95,13 @@ const AdminSideBar = ({ isSidebarOpen }) => {
           </li>
           <li>
             <NavLink
-              to="/admin/manage-comments"
+              to="/admin/comments"
               className={`flex items-center py-5 px-4 text-lg text-gray-100 ${
-                activeLink === 'manage-comments'
+                activeLink === 'comments'
                   ? 'bg-primarydark'
                   : 'bg-darkbg hover:bg-secondary'
               } border-y-2 border-black`}
-              onClick={() => handleLinkClick('manage-comments')}
+              onClick={() => handleLinkClick('comments')}
             >
               <i className="fa-solid fa-comments pr-5"></i>
               Comments

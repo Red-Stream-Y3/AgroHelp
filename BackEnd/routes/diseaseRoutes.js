@@ -1,11 +1,25 @@
 import express from 'express';
-import { getCropDiseases, getCropDiseaseById, deleteCropDisease, createCropDisease, updateCropDisease, searchCropDisease, getRandomCropDiseases } from '../controllers/diseaseController.js';
+import {
+  getCropDiseases,
+  getCropDiseaseById,
+  deleteCropDisease,
+  createCropDisease,
+  updateCropDisease,
+  searchCropDisease,
+  getRandomCropDiseases,
+  updateDiseaseAccept,
+} from '../controllers/diseaseController.js';
 
-const cropDiseaseRoutes = express.Router();
+const diseaseRoutes = express.Router();
 
-cropDiseaseRoutes.route('/').get(getCropDiseases).post(createCropDisease);
-cropDiseaseRoutes.route('/random').get(getRandomCropDiseases);
-cropDiseaseRoutes.route('/:id').get(getCropDiseaseById).delete(deleteCropDisease).put(updateCropDisease);
-cropDiseaseRoutes.route('/search/:cropDiseaseName').get(searchCropDisease);
+diseaseRoutes.route('/').get(getCropDiseases).post(createCropDisease);
+diseaseRoutes.route('/random').get(getRandomCropDiseases);
+diseaseRoutes
+  .route('/:id')
+  .get(getCropDiseaseById)
+  .delete(deleteCropDisease)
+  .put(updateCropDisease);
+diseaseRoutes.route('/:id/accept').put(updateDiseaseAccept);
+diseaseRoutes.route('/search/:cropDiseaseName').get(searchCropDisease);
 
-export default cropDiseaseRoutes;
+export default diseaseRoutes;

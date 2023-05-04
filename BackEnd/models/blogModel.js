@@ -9,7 +9,7 @@ const commentSchema = new mongoose.Schema({
   },
   postedBy: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
+    ref: 'User',
     required: true,
   },
   postedAt: {
@@ -36,12 +36,12 @@ const blogSchema = new mongoose.Schema({
     required: true,
   },
   body: {
-    type: String,
-    required: true,
+        type: String,
+        required: true
   },
   author: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
+    ref: 'User',
     required: true,
   },
   tags: {
@@ -56,12 +56,13 @@ const blogSchema = new mongoose.Schema({
   },
   likes: [likesSchema],
 
-  likesCount: {
-    type: Number,
-    default: 0,
+  comments: [commentSchema],
+
+  isAccepted: {
+    type: Boolean,
+    default: false,
   },
 
-  comments: [commentSchema]
 });
 
 const Blog = mongoose.model("Blog", blogSchema);

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import {
   FaHome,
   FaBookOpen,
@@ -11,6 +11,7 @@ import {
   FaCog,
   FaSignInAlt,
   FaUserPlus,
+  FaLock,
 } from 'react-icons/fa';
 import { ImLeaf } from 'react-icons/im';
 import { HiMenu, HiOutlineX } from 'react-icons/hi';
@@ -24,6 +25,32 @@ const Navbar = () => {
   const [isLogged, setIsLogged] = useState(false);
 
   const { user } = useGlobalContext();
+  const isAccess = user && (user.role === 'admin' || user.role === 'moderator');
+
+  const location = useLocation();
+
+  const navigation = [
+    {
+      name: 'Home',
+      link: '/home',
+      icon: <FaHome className="h-6 w-6 text-white" />,
+    },
+    {
+      name: 'Knowledge',
+      link: '/knowledge-base',
+      icon: <FaBookOpen className="h-6 w-6 text-white" />,
+    },
+    {
+      name: 'Forum',
+      link: '/forum',
+      icon: <FaQuestion className="h-6 w-6 text-white" />,
+    },
+    {
+      name: 'Blog',
+      link: '/blog',
+      icon: <FaPenNib className="h-6 w-6 text-white" />,
+    },
+  ];
 
   useEffect(() => {
     if (user) {
@@ -58,7 +85,7 @@ const Navbar = () => {
       <div className=" max-w-full mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
-            <Link to="/" className="flex-shrink-0 flex items-center">
+            <Link to="/home" className="flex-shrink-0 flex items-center">
               <ImLeaf className="h-8 w-8 text-white" />
               <span className="text-white font-extrabold ml-2 text-3xl">
                 AgroHelp
@@ -112,35 +139,22 @@ const Navbar = () => {
           </div>
 
           {/* desktop menu */}
+          {/* if current tab is active, add bg-secondary to the link */}
           <div className="hidden md:ml-6 md:flex md:items-center">
-            <Link
-              to="/"
-              className="px-3 py-2 text-white hover:bg-secondary rounded-md flex items-center"
-            >
-              <FaHome className="h-6 w-6" />
-              <span className="ml-2">Home</span>
-            </Link>
-            <Link
-              to="/knowledge-base"
-              className="px-3 py-2 text-white hover:bg-secondary rounded-md flex items-center"
-            >
-              <FaBookOpen className="h-6 w-6" />
-              <span className="ml-2">Knowledge</span>
-            </Link>
-            <Link
-              to="/forum"
-              className="px-3 py-2 text-white hover:bg-secondary rounded-md flex items-center"
-            >
-              <FaQuestion className="h-6 w-6" />
-              <span className="ml-2">Forum</span>
-            </Link>
-            <Link
-              to="/blogs"
-              className="px-3 py-2 text-white hover:bg-secondary rounded-md flex items-center"
-            >
-              <FaPenNib className="h-6 w-6" />
-              <span className="ml-2">Blog</span>
-            </Link>
+            {navigation.map((item) => (
+              <Link
+                key={item.name}
+                to={item.link}
+                className={`${
+                  location.pathname === item.link
+                    ? 'bg-primarydark hover:bg-secondary'
+                    : ''
+                } px-3 py-2 hover:bg-secondary text-white rounded-md flex items-center mx-1`}
+              >
+                {item.icon}
+                <span className="ml-2">{item.name}</span>
+              </Link>
+            ))}
 
             {/* desktop icon */}
             <div className="lg:hidden ml-4 relative flex items-center">
@@ -288,18 +302,30 @@ const Navbar = () => {
       )}
 
       {isProfilePopupOpen && (
-        <div className="lg">
-          <div className="px-2 pt-2 pb-3 space-y-1 bg-primarydark">
+        <div className="lg w-50 absolute right-0 rounded-xl">
+          <div className="px-2 pt-2 pb-3 space-y-1 bg-primarydark rounded-b-xl">
             <Link
               to="/profile"
               className="flex px-3 py-2 text-base font-medium text-white hover:bg-secondary rounded-md items-center"
+              onClick={() => setIsProfilePopupOpen(false)}
             >
               <FaUser className="h-6 w-6" />
               <span className="ml-2">Profile</span>
             </Link>
+            {isAccess && (
+              <Link
+                to="/admin/dashboard"
+                className="flex px-3 py-2 text-base font-medium text-white hover:bg-secondary rounded-md items-center"
+                onClick={() => setIsProfilePopupOpen(false)}
+              >
+                <FaLock className="h-6 w-6" />
+                <span className="ml-2">Admin Panel</span>
+              </Link>
+            )}
             <Link
               to="/settings"
               className="flex px-3 py-2 text-base font-medium text-white hover:bg-secondary rounded-md items-center"
+              onClick={() => setIsProfilePopupOpen(false)}
             >
               <FaCog className="h-6 w-6" />
               <span className="ml-2">Settings</span>
@@ -310,7 +336,12 @@ const Navbar = () => {
               onClick={handleLogout}
             >
               <FaSignOutAlt className="h-6 w-6" />
-              <span className="ml-2">Logout</span>
+              <span
+                className="ml-2"
+                onClick={() => setIsProfilePopupOpen(false)}
+              >
+                Logout
+              </span>
             </Link>
           </div>
         </div>
