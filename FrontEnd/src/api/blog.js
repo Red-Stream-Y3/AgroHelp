@@ -71,3 +71,14 @@ export const searchBlog = async (keyword) => {
         return [];
     }
 }
+
+export const commentonBlog = async (id,comment) => {
+    try {
+        const response = await axios.post(`http://localhost:9120/api/blog/comment/${id}`, comment);
+        console.log('blog', response.data);
+        return response.data;
+    } catch(error) {
+        console.log(error);
+        return [];
+    }
+}
