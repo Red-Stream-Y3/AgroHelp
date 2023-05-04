@@ -61,7 +61,7 @@ const createBlog = asyncHandler(async (req, res) => {
 // @route   PUT /api/blog/:id
 // @access  Private/Admin
 const updateBlog = asyncHandler(async (req, res) => {
-  const { title, body, author, tags, isAccepted } = req.body;
+  const { title, body, author, tags, isAccepted, likesCount} = req.body;
   const blog = await Blog.findById(req.params.id);
 
   if (blog) {
@@ -71,6 +71,7 @@ const updateBlog = asyncHandler(async (req, res) => {
     blog.tags = tags;
     blog.updatedAt = Date.now();
     blog.isAccepted = isAccepted;
+    blog.likesCount = likesCount;
 
     const updatedBlog = await blog.save();
     res.json(updatedBlog);
@@ -81,17 +82,17 @@ const updateBlog = asyncHandler(async (req, res) => {
 });
 
 // @desc    Create new comment
-// @route   POST /api/blog/:id/comment
+// @route   POST /api/blog/comment/:id
 // @access  Private
 const createBlogComment = asyncHandler(async (req, res) => {
-  const { comment, postedAs, postedBy } = req.body;
+  const { text, postedBy, userName } = req.body;
   const blog = await Blog.findById(req.params.id);
 
   if (blog) {
     const newComment = {
-      comment,
-      postedAs,
+      text,
       postedBy,
+      userName
     };
 
     blog.comments.push(newComment);
@@ -117,6 +118,50 @@ const searchBlogs = asyncHandler(async (req, res) => {
     }
 }); 
 
+// @desc    Like a blog
+// @route   PUT /api/blog/like/:id
+// @access  Private
+const likeBlog = asyncHandler(async (req, res) => {
+  const blog = await Blog.findById(req.params.id);
+
+  if (blog) {
+    if (blog.likes.find((like) => like.user.toString() === req.user._id.toString())) {
+      blog.likes = blog.likes.filter((like) => like.user.toString() !== req.user._id.toString());
+    } else {
+      blog.likes.push({ user: req.user._id });
+    }
+
+    await blog.save();
+    res.json(blog);
+  } else {
+    res.status(404);
+    throw new Error('Blog not found');
+  }
+});
+
+// @desc    Delete a blog comment
+// @route   DELETE /api/blog/comment/:id/:commentId
+// @access  Private
+const deleteBlogComment = asyncHandler(async (req, res) => {
+  const blog = await Blog.findById(req.params.id);
+
+  if (blog) {
+    const comment = blog.comments.find((comment) => comment.postedBy.toString() === req.params.commentId.toString());
+
+    if (comment) {
+      blog.comments = blog.comments.filter((comment) => comment.postedBy.toString() !== req.params.commentId.toString());
+      await blog.save();
+      res.json({ message: 'Comment removed' });
+    } else {
+      res.status(404);
+      throw new Error('Comment not found');
+    }
+  } else {
+    res.status(404);
+    throw new Error('Blog not found');
+  }
+});
+
 export {
     getBlogs,
     getBlogById,
@@ -125,4 +170,5 @@ export {
     updateBlog,
     createBlogComment,
     searchBlogs,
+    deleteBlogComment
 }

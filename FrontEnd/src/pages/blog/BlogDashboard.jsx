@@ -37,10 +37,6 @@ export default function BlogDashboard() {
     return date.toLocaleDateString("en-US");
   }
 
-  function handleBlogClick(id) {
-    window.location.href = `/viewblog/${id}`;
-  }
-
   return (
     <div>
       <BlogBanner />
@@ -62,6 +58,7 @@ export default function BlogDashboard() {
                   date={formatDate(blog.createdAt)}
                   tags={blog.tags}
                   //onClick={}
+                  likes={blog.comments.length}
                 />
               </Link>
             </div>
