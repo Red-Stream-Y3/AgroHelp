@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useGlobalContext } from '../../context/ContextProvider';
 import { updateProfile } from '../../api/user';
 
 function Profile() {
-  const { user } = useGlobalContext();
+  const { user, setUser } = useGlobalContext();
   const [username, setUserName] = useState(user.username);
   const [email, setEmail] = useState(user.email);
   const [profilePic, setProfilePic] = useState(user.profilePic);
@@ -41,6 +41,17 @@ function Profile() {
         },
         user.token
       );
+
+      setUser({
+        id: user._id,
+        firstName,
+        lastName,
+        profilePic,
+        username,
+        email,
+        password,
+      });
+
       toast.success('Profile Updated Successfully', {
         hideProgressBar: false,
         closeOnClick: true,
@@ -51,6 +62,22 @@ function Profile() {
       });
       navigate('/home');
     }
+  };
+
+  const handleOpenWidget = () => {
+    var myWidget = window.cloudinary.createUploadWidget(
+      {
+        cloudName: 'dqyue23nj',
+        uploadPreset: 'agrohelp',
+        upload_single: true,
+      },
+      (error, result) => {
+        if (!error && result && result.event === 'success') {
+          setProfilePic(result.info.url);
+        }
+      }
+    );
+    myWidget.open();
   };
 
   return (
@@ -109,18 +136,19 @@ function Profile() {
                       alt="Profile"
                     />
                     <div className="flex flex-col gap-y-2">
-                      <input
-                        type="file"
-                        name="photo"
-                        id="photo"
-                        className="sr-only"
-                      />
+                      <input type="file" name="photo" className="sr-only" />
                       <label
                         htmlFor="photo"
                         className="cursor-pointer relative bg-gray-900/10 rounded-md py-2 px-3 flex items-center text-sm font-medium text-white hover:bg-gray-900/20 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                       >
                         <i className="fa-regular fa-image"></i>
-                        <span className="ml-2">Change</span>
+                        <span
+                          className="ml-2"
+                          id="upload-widget"
+                          onClick={handleOpenWidget}
+                        >
+                          Change
+                        </span>
                       </label>
                     </div>
                   </div>
@@ -252,12 +280,14 @@ function Profile() {
           </div>
 
           <div className="mt-6 flex items-center justify-end gap-x-6">
-            <button
-              type="button"
-              className="rounded-md bg-lightbg px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
-            >
-              Cancel
-            </button>
+            <Link to="/home">
+              <button
+                type="button"
+                className="rounded-md bg-lightbg px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+              >
+                Cancel
+              </button>
+            </Link>
 
             <button
               type="submit"

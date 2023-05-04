@@ -92,6 +92,8 @@ export const updateProfile = async (user, token) => {
       user,
       config
     );
+
+    localStorage.setItem('userInfo', JSON.stringify(response.data));
     return response;
   } catch (error) {
     console.log(error);
