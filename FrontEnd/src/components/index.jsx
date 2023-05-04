@@ -21,8 +21,11 @@ export { default as BlogCard } from './blog/BlogCard';
 export { default as BlogContainer } from './blog/BlogContainer';
 export { default as BlogSearchBar } from './blog/BlogSearchBar';
 
+
 //forum components
 export { default as ForumCard } from './forum/ForumCard';
 export { default as ForumCardContainer } from './forum/CardContainer';
 export { default as ForumSearch } from './forum/ForumSearch';
 export { default as ForumSearchResults } from './forum/SearchResults';
+export { default as BlogHeader } from './blog/BlogHeader';
+

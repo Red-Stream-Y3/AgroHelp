@@ -22,6 +22,9 @@ export { default as ManageForum } from './admin/ManageForum';
 
 //blog related exports
 export { default as BlogDashboard } from './blog/BlogDashboard';
+export { default as BlogView } from './blog/BlogView';
+export { default as BlogCreate } from './blog/BlogCreate';
+
 
 //forum related exports
 export { default as ForumDashboard } from './forum/ForumDashboard';

@@ -1,4 +1,6 @@
-import mongoose from 'mongoose';
+/** @format */
+
+import mongoose from "mongoose";
 
 const commentSchema = new mongoose.Schema({
   comment: {
@@ -51,7 +53,6 @@ const blogSchema = new mongoose.Schema({
   },
 
   comments: [commentSchema],
-
   isAccepted: {
     type: Boolean,
     default: false,
@@ -63,6 +64,6 @@ const blogSchema = new mongoose.Schema({
   },
 });
 
-const Blog = mongoose.model('Blog', blogSchema);
+const Blog = mongoose.model("Blog", blogSchema);
 
 export default Blog;
