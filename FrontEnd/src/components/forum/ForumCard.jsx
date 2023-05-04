@@ -363,7 +363,7 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
                             <div>
                                 <button
                                     onClick={() => setShowReplies(!showReplies)}
-                                    className="transition-all ease-in-out active:scale-105s text-blue-500 px-2 py-2 m-2 ml-5 sm:ml-10">
+                                    className="transition-all ease-in-out text-sm active:scale-105s text-blue-500 px-2 py-2 m-2 ml-5 sm:ml-10">
                                     {showReplies
                                         ? "Hide replies"
                                         : "Show replies"}
@@ -391,10 +391,7 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
                                         return (
                                             <div
                                                 key={reply._id}
-                                                className={`m-1 p-1 mx-auto bg-gray-700 rounded-md sm:max-w-2xl ${
-                                                    reply.userID === user._id &&
-                                                    "ring-2"
-                                                }`}>
+                                                className={`m-1 p-1 mx-auto bg-gray-700 rounded-md sm:max-w-2xl`}>
                                                 <div className="flex justify-between">
                                                     <div className="ml-2 mt-1 text-xs">
                                                         @
@@ -407,7 +404,7 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
                                                         {reply.accepted ? (
                                                             <p 
                                                                 className="inline ml-2 text-green-500">
-                                                                Accepted
+                                                                Accepted answer
                                                             </p>
                                                         ) : (
                                                             ""
@@ -416,7 +413,8 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
                                                     <div className="flex">
                                                         {forumObj.userID ===
                                                             user._id &&
-                                                        !reply.accepted ? (
+                                                        !reply.accepted &&
+                                                        !forumObj.resolved ? (
                                                             <div className="w-fit">
                                                                 <button
                                                                     onClick={() => {
@@ -664,6 +662,7 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
             {/* accept reply popup */}
             <Popup show={showAcceptReplyPopup} setShow={setShowAcceptReplyPopup}>
                 <div className="items-center">Accept this reply as the answer?</div>
+                <div className="items-center text-slate-400 text-xs">Note: This action is permenant and cannot be undone</div>
 
                 {/* confirm, cancel buttons */}
                 <div className="flex justify-center mt-2">

@@ -9,7 +9,7 @@ import { MdOutlineAdd } from "react-icons/md";
 import { Popup } from "../../components";
 
 const ForumDashboard = (props) => {
-	//TODO: markanswer, resolved, liked, unliked
+    //TODO: send email when resolved
 
     //current user and toast methods
     const { user, notify } = useGlobalContext();
@@ -189,7 +189,7 @@ const ForumDashboard = (props) => {
     return (
         <div
             style={{ height: "calc(100% - 20px)" }}
-            className="text-white p-5 sm:p-5">
+            className="text-white p-5">
 
             {searched && (
                 <div
@@ -285,7 +285,9 @@ const ForumDashboard = (props) => {
             <hr className="border-1 border-white opacity-50" />
 
             {/* main container */}
-            <div id="forumContainer" className="max-w-md sm:max-w-3xl m-auto">
+            <div 
+                id="forumContainer" 
+                className="sm:px-20 sm:py-2 max-w-md sm:max-w-full m-auto">
                 {loading ? (
                     <FaSpinner
                         className={"animate-spin mt-5 sm:mt-10 mx-auto"}
