@@ -5,7 +5,7 @@ import React from "react";
 const Card = ({ title, author, date, tags, onClick }) => {
   return (
     <div
-      className="bg-white shadow-lg rounded-lg px-4 py-6 sm:flex sm:flex-col sm:justify-between sm:items-start sm:px-6 sm:py-8"
+      className="bg-white shadow-lg rounded-lg px-4 py-6 sm:flex sm:flex-col sm:justify-between sm:items-start sm:px-6 sm:py-8 transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-20 hover:bg-green-100 cursor-pointer"
       onClick={onClick}
     >
       <div className="text-2xl font-bold mb-2">{title}</div>

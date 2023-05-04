@@ -18,24 +18,27 @@ const commentSchema = new mongoose.Schema({
   },
 });
 
+const likesSchema = new mongoose.Schema({
+  likedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
+  likedAt: {
+    type: Date,
+    default: Date.now,
+  },
+});
+
 const blogSchema = new mongoose.Schema({
   title: {
     type: String,
     required: true,
   },
-  body: [
-    {
-      type: {
+  body: {
         type: String,
-        enum: ['text', 'image'],
-        required: false,
-      },
-      content: {
-        type: String,
-        required: true,
-      },
-    },
-  ],
+        required: true
+  },
   author: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
@@ -51,17 +54,15 @@ const blogSchema = new mongoose.Schema({
   updatedAt: {
     type: Date,
   },
+  likes: [likesSchema],
 
   comments: [commentSchema],
+
   isAccepted: {
     type: Boolean,
     default: false,
   },
 
-  timestamp: {
-    type: Date,
-    default: Date.now,
-  },
 });
 
 const Blog = mongoose.model("Blog", blogSchema);
