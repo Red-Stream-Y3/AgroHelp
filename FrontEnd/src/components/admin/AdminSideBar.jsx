@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { FaBookOpen, FaQuestion, FaPenNib } from 'react-icons/fa';
 
 const AdminSideBar = ({ isSidebarOpen }) => {
   const [activeLink, setActiveLink] = useState('dashboard');
@@ -14,6 +15,11 @@ const AdminSideBar = ({ isSidebarOpen }) => {
       className={`bg-darkbg w-64 flex-shrink-0 ${
         isSidebarOpen ? 'block' : 'hidden'
       } md:block`}
+      style={{
+        minHeight: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+      }}
     >
       <div className="sidebar-links">
         <ul className="text-gray-500 text-sm font-medium">
@@ -41,8 +47,22 @@ const AdminSideBar = ({ isSidebarOpen }) => {
               } border-y-2 border-black`}
               onClick={() => handleLinkClick('knowledge')}
             >
-              <i className="fa-solid fa-book pr-6"></i>
-              Knowledge Base
+              <FaBookOpen className="h-6 w-6" />
+              <span className="ml-4">Knowledge Base</span>
+            </NavLink>
+          </li>{' '}
+          <li>
+            <NavLink
+              to="/admin/forum"
+              className={`flex items-center py-5 px-4 text-lg text-gray-100 ${
+                activeLink === 'forum'
+                  ? 'bg-primarydark'
+                  : 'bg-darkbg hover:bg-secondary'
+              } border-y-2 border-black`}
+              onClick={() => handleLinkClick('forum')}
+            >
+              <FaQuestion className="h-6 w-6" />
+              <span className="ml-4">Forum</span>
             </NavLink>
           </li>
           <li>
@@ -55,8 +75,8 @@ const AdminSideBar = ({ isSidebarOpen }) => {
               } border-y-2 border-black`}
               onClick={() => handleLinkClick('blogs')}
             >
-              <i className="fa-solid fa-newspaper pr-6"></i>
-              Blogs
+              <FaPenNib className="h-6 w-6" />
+              <span className="ml-4">Blogs</span>
             </NavLink>
           </li>
           <li>

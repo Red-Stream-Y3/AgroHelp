@@ -17,6 +17,7 @@ export { default as ManageKnowledge } from './admin/ManageKnowledge';
 export { default as ManageBlogs } from './admin/ManageBlogs';
 export { default as ManageUsers } from './admin/ManageUsers';
 export { default as ManageComments } from './admin/ManageComments';
+export { default as ManageForum } from './admin/ManageForum';
 
 //blog related exports
 export { default as BlogDashboard } from './blog/BlogDashboard';
