@@ -1,71 +1,86 @@
 import mongoose from 'mongoose';
 
 // Define the database model for forum
-const forumSchema = new mongoose.Schema({
+const forumSchema = new mongoose.Schema(
+  {
     userID: {
-        type: String,
-        required: true,
+      type: String,
+      required: true,
+      ref: 'User',
     },
     username: {
-        type: String,
-        required: true,
+      type: String,
+      required: true,
     },
     resolved: {
-        type: Boolean,
-        required: false,
-        default: false,
+      type: Boolean,
+      required: false,
+      default: false,
     },
     title: {
-        type: String,
-        required: true,
+      type: String,
+      required: true,
     },
     content: {
-        type: String,
-        required: false,
+      type: String,
+      required: false,
     },
-    likes: [{
+    likes: [
+      {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-    }],
-    dislikes: [{
+      },
+    ],
+    dislikes: [
+      {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-    }],
-    replies: [{
+      },
+    ],
+    replies: [
+      {
         userID: {
-            type: String,
-            required: true,
+          type: String,
+          required: true,
         },
         username: {
-            type: String,
-            required: true,
+          type: String,
+          required: true,
         },
         accepted: {
-            type: Boolean,
-            required: false,
-            default: false,
+          type: Boolean,
+          required: false,
+          default: false,
         },
         content: {
-            type: String,
-            required: true,
+          type: String,
+          required: true,
         },
-        likes: [{
+        likes: [
+          {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User',
-        }],
-        dislikes: [{
+          },
+        ],
+        dislikes: [
+          {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User',
-        }],
-    }],
-    subscribers: [{
+          },
+        ],
+      },
+    ],
+    subscribers: [
+      {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-    }],
-    
-},{
+      },
+    ],
+  },
+  {
     timestamps: true,
-});
+  }
+);
 
 // Create the model for forum
 const Forum = mongoose.model('Forum', forumSchema);
