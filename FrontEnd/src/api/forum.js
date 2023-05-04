@@ -393,7 +393,7 @@ export const acceptReply = async (user, id, replyID, checkStatus) => {
 
 //mark forum as resolved
 export const markResolved = async (user, id, checkStatus) => {
-    const res = await axios.post(`${BASE_URL}/resolved/${id}`, {}, getconfig(user));
+    const res = await axios.post(`${BASE_URL}/resolve/${id}`, {}, getconfig(user));
 
     if (res.data) {
         return res.data;

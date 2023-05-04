@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { AiOutlineLike, AiOutlineDislike } from "react-icons/ai";
+import { AiOutlineLike, AiOutlineDislike, AiOutlineCheckCircle } from "react-icons/ai";
 import { AiFillLike, AiFillDislike } from "react-icons/ai";
 import { useGlobalContext } from "../../context/ContextProvider";
 import { Forum } from "../../api/forum.js";
@@ -24,7 +24,6 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
     const [replyInput, setReplyInput] = useState("");
 
     //counters
-    const [numReplies, setNumReplies] = useState(0);
     const [numLikes, setNumLikes] = useState(0);
     const [numDislikes, setNumDislikes] = useState(0);
 
@@ -44,6 +43,10 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
     //delete forum
     const [showDeleteForumPopup, setShowDeleteForumPopup] = useState(false);
 
+    //accept reply
+    const [showAcceptReplyPopup, setShowAcceptReplyPopup] = useState(false);
+    const [replyAcceptId, setReplyAcceptId] = useState("");
+
     //refresh forum object
     const refreshForum = async () => {
         setLoading(true);
@@ -57,9 +60,6 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
         //count likes and dislikes
         setNumLikes(forumObj.likes.length);
         setNumDislikes(forumObj.dislikes.length);
-
-        //count replies
-        setNumReplies(forumObj.replies.length);
 
         //check if user has liked or disliked
         if (forumObj.likes.length > 0 && forumObj.likes.includes(user._id)) {
@@ -244,6 +244,27 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
         refreshAll();
     };
 
+    const handleAcceptReply = async () => {
+        setLoading(true);
+
+        let res = await Forum.acceptReply(user, forumObj._id, replyAcceptId, checkRes);
+        if (res.message === "Accepted reply as answer") {
+            setReplyAcceptId("");
+            setShowAcceptReplyPopup(false);
+            notify("success", "Accepted reply as answer");
+        }
+
+        if(!forumObj.resolved) {
+            let res = await Forum.markResolved(user, forumObj._id, checkRes);
+            if (res.message === "Forum Resolved") {
+                notify("success", "Marked forum as resolved");
+            }
+        }
+
+        setLoading(false);
+        refreshAll();
+    };
+
     return (
         <div className="rounded-md bg-darkbg p-3 mt-2 sm:max-w-4xl text-sm sm:text-base">
             {!Loading ? (
@@ -255,7 +276,9 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
                                 @
                                 {forumObj.username +
                                     " " +
-                                    (forumObj.userID === user._id ? "(me)" : "")}
+                                    (forumObj.userID === user._id
+                                        ? "(me)"
+                                        : "")}
                             </div>
                             <div className="text-gray-500">
                                 {forumObj.createdAt.toString().split("T")[0]}
@@ -300,7 +323,7 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
                     </div>
 
                     {/* title */}
-                    <div className="font-bold">{forumObj.title}</div>
+                    <div className="font-bold">{forumObj.title + (forumObj.resolved ? " (Solved)" : "")}</div>
 
                     {/* content */}
                     <div>
@@ -311,8 +334,8 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
                         )}
                     </div>
 
-                    {/* like / dislike buttons */}
-                    <div className="flex">
+                    {/* like / dislike / reply buttons */}
+                    <div className="flex items-center">
                         <div className="flex items-center">
                             <button
                                 onClick={handleLike}
@@ -333,13 +356,20 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
                             </button>
                             <div>{numDislikes}</div>
                         </div>
-                        <div>
-                            <button
-                                onClick={() => setShowReplies(!showReplies)}
-                                className="transition-all ease-in-out active:scale-105s text-blue-500 px-2 py-2 m-2 ml-5 sm:ml-10">
-                                {showReplies ? "Hide replies" : "Show replies"}
-                            </button>
+                        <div className="ml-5 text-sm text-gray-500">
+                            {forumObj.replies.length + " replies"}
                         </div>
+                        {forumObj.replies.length > 0 ? (
+                            <div>
+                                <button
+                                    onClick={() => setShowReplies(!showReplies)}
+                                    className="transition-all ease-in-out active:scale-105s text-blue-500 px-2 py-2 m-2 ml-5 sm:ml-10">
+                                    {showReplies
+                                        ? "Hide replies"
+                                        : "Show replies"}
+                                </button>
+                            </div>
+                        ) : null}
                     </div>
 
                     <hr className="border-gray-500" />
@@ -350,107 +380,146 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
                             <div>
                                 {/* reply username and date */}
                                 {forumObj.replies
-                                .sort((a, b) => {
-                                    if(a.likes.length > b.likes.length) return -1;
-                                    if(a.likes.length < b.likes.length) return 1;
-                                    return 0;
-                                })
-                                .map((reply) => {
-                                    return (
-                                        <div
-                                            key={reply._id}
-                                            className={`m-1 p-1 mx-auto bg-gray-700 rounded-md sm:max-w-2xl ${
-                                                reply.userID === user._id &&
-                                                "ring-2"
-                                            }`}>
-                                            <div className="flex justify-between">
-                                                <div className="ml-2 mt-1 text-xs">
-                                                    @
-                                                    {reply.username +
-                                                        " " +
-                                                        (reply.userID ===
-                                                            user._id ? "(me)" : "")}
-                                                </div>
-                                                {reply.userID === user._id ? (
-                                                    <div className="w-fit">
-                                                        <button
-                                                            onClick={() => {
-                                                                setReplyEditId(
-                                                                    reply._id
-                                                                );
-                                                                setReplyEditInput(
-                                                                    reply.content
-                                                                );
-                                                                setShowEditReplyPopup(
-                                                                    true
-                                                                );
-                                                            }}
-                                                            className="ml-auto mr-2 text-xs text-gray-500">
-                                                            Edit
-                                                        </button>
-                                                        <button
-                                                            onClick={() => {
-                                                                setReplyDeleteId(
-                                                                    reply._id
-                                                                );
-                                                                setShowDeleteReplyPopup(
-                                                                    true
-                                                                );
-                                                            }}
-                                                            className="ml-auto mr-2 text-xs text-gray-500">
-                                                            Delete
-                                                        </button>
-                                                    </div>
-                                                ) : null}
-                                            </div>
-                                            <div className="ml-2">
-                                                {reply.content}
-                                            </div>
-                                            <div className="flex">
-                                                <div className="flex items-center">
-                                                    <button
-                                                        onClick={() =>
-                                                            handleReplyLike(
-                                                                reply._id
-                                                            )
-                                                        }
-                                                        className="transition-all ease-in-out active:scale-110 hover:bg-gray-500 rounded-full px-2 py-2 m-2">
-                                                        {reply.likes.includes(
+                                    .sort((a, b) => {
+                                        if (a.likes.length > b.likes.length)
+                                            return -1;
+                                        if (a.likes.length < b.likes.length)
+                                            return 1;
+                                        return 0;
+                                    })
+                                    .map((reply) => {
+                                        return (
+                                            <div
+                                                key={reply._id}
+                                                className={`m-1 p-1 mx-auto bg-gray-700 rounded-md sm:max-w-2xl ${
+                                                    reply.userID === user._id &&
+                                                    "ring-2"
+                                                }`}>
+                                                <div className="flex justify-between">
+                                                    <div className="ml-2 mt-1 text-xs">
+                                                        @
+                                                        {reply.username +
+                                                            " " +
+                                                            (reply.userID ===
                                                             user._id
-                                                        ) ? (
-                                                            <AiFillLike />
+                                                                ? "(me)"
+                                                                : "")}
+                                                        {reply.accepted ? (
+                                                            <p 
+                                                                className="inline ml-2 text-green-500">
+                                                                Accepted
+                                                            </p>
                                                         ) : (
-                                                            <AiOutlineLike />
+                                                            ""
                                                         )}
-                                                    </button>
-                                                    <div>
-                                                        {reply.likes.length}
+                                                    </div>
+                                                    <div className="flex">
+                                                        {forumObj.userID ===
+                                                            user._id &&
+                                                        !reply.accepted ? (
+                                                            <div className="w-fit">
+                                                                <button
+                                                                    onClick={() => {
+                                                                        setShowAcceptReplyPopup(
+                                                                            true
+                                                                        );
+                                                                        setReplyAcceptId(
+                                                                            reply._id
+                                                                        );
+                                                                    }}
+                                                                    className="ml-auto mr-2 text-xs text-green-500">
+                                                                    <div className="flex items-center">
+                                                                        <AiOutlineCheckCircle />{" "}
+                                                                        Accept
+                                                                    </div>
+                                                                </button>
+                                                            </div>
+                                                        ) : null}
+                                                        {reply.userID ===
+                                                        user._id ? (
+                                                            <div className="w-fit">
+                                                                <button
+                                                                    onClick={() => {
+                                                                        setReplyEditId(
+                                                                            reply._id
+                                                                        );
+                                                                        setReplyEditInput(
+                                                                            reply.content
+                                                                        );
+                                                                        setShowEditReplyPopup(
+                                                                            true
+                                                                        );
+                                                                    }}
+                                                                    className="ml-auto mr-2 text-xs text-gray-500">
+                                                                    Edit
+                                                                </button>
+                                                                <button
+                                                                    onClick={() => {
+                                                                        setReplyDeleteId(
+                                                                            reply._id
+                                                                        );
+                                                                        setShowDeleteReplyPopup(
+                                                                            true
+                                                                        );
+                                                                    }}
+                                                                    className="ml-auto mr-2 text-xs text-gray-500">
+                                                                    Delete
+                                                                </button>
+                                                            </div>
+                                                        ) : null}
                                                     </div>
                                                 </div>
-                                                <div className="flex items-center ml-3">
-                                                    <button
-                                                        onClick={() =>
-                                                            handleReplyDislike(
-                                                                reply._id
-                                                            )
-                                                        }
-                                                        className="transition-all ease-in-out active:scale-110 hover:bg-gray-500 rounded-full px-2 py-2 m-2">
-                                                        {reply.dislikes.includes(
-                                                            user._id
-                                                        ) ? (
-                                                            <AiFillDislike />
-                                                        ) : (
-                                                            <AiOutlineDislike />
-                                                        )}
-                                                    </button>
-                                                    <div>
-                                                        {reply.dislikes.length}
+                                                <div className="ml-2">
+                                                    {reply.content}
+                                                </div>
+                                                <div className="flex">
+                                                    <div className="flex items-center">
+                                                        <button
+                                                            onClick={() =>
+                                                                handleReplyLike(
+                                                                    reply._id
+                                                                )
+                                                            }
+                                                            className="transition-all ease-in-out active:scale-110 hover:bg-gray-500 rounded-full px-2 py-2 m-2">
+                                                            {reply.likes.includes(
+                                                                user._id
+                                                            ) ? (
+                                                                <AiFillLike />
+                                                            ) : (
+                                                                <AiOutlineLike />
+                                                            )}
+                                                        </button>
+                                                        <div>
+                                                            {reply.likes.length}
+                                                        </div>
+                                                    </div>
+                                                    <div className="flex items-center ml-3">
+                                                        <button
+                                                            onClick={() =>
+                                                                handleReplyDislike(
+                                                                    reply._id
+                                                                )
+                                                            }
+                                                            className="transition-all ease-in-out active:scale-110 hover:bg-gray-500 rounded-full px-2 py-2 m-2">
+                                                            {reply.dislikes.includes(
+                                                                user._id
+                                                            ) ? (
+                                                                <AiFillDislike />
+                                                            ) : (
+                                                                <AiOutlineDislike />
+                                                            )}
+                                                        </button>
+                                                        <div>
+                                                            {
+                                                                reply.dislikes
+                                                                    .length
+                                                            }
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    );
-                                })}
+                                        );
+                                    })}
                             </div>
                         ) : null}
                     </div>
@@ -461,6 +530,8 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
                             placeholder="Reply"
                             value={replyInput}
                             autoFocus={true}
+                            autoCapitalize="on"
+                            spellCheck={true}
                             onChange={({ target }) =>
                                 setReplyInput(target.value)
                             }
@@ -507,6 +578,8 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
                         placeholder="Edit reply"
                         value={replyEditInput}
                         autoFocus={true}
+                        autoCapitalize="on"
+                        spellCheck="true"
                         onChange={({ target }) =>
                             setReplyEditInput(target.value)
                         }
@@ -541,6 +614,8 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
                         placeholder="Edit forum"
                         value={forumEditInput}
                         autoFocus={true}
+                        autoCapitalize="on"
+                        spellCheck="true"
                         onChange={({ target }) =>
                             setForumEditInput(target.value)
                         }
@@ -578,6 +653,27 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
                     </button>
                     <button
                         onClick={() => setShowDeleteForumPopup(false)}
+                        className="transition-all ease-in-out active:scale-95 hover:bg-red-700 bg-red-800 focus:ring-2 ring-red-700 rounded-md px-2 py-2 my-2 ml-2">
+                        Cancel
+                    </button>
+                </div>
+            </Popup>
+
+            {/* TODO:report forum popup */}
+
+            {/* accept reply popup */}
+            <Popup show={showAcceptReplyPopup} setShow={setShowAcceptReplyPopup}>
+                <div className="items-center">Accept this reply as the answer?</div>
+
+                {/* confirm, cancel buttons */}
+                <div className="flex justify-center mt-2">
+                    <button
+                        onClick={handleAcceptReply}
+                        className="transition-all ease-in-out active:scale-95 hover:bg-green-700 bg-green-800 focus:ring-2 ring-green-700 rounded-md px-2 py-2 my-2 ml-2">
+                        Confirm
+                    </button>
+                    <button
+                        onClick={() => setShowAcceptReplyPopup(false)}
                         className="transition-all ease-in-out active:scale-95 hover:bg-red-700 bg-red-800 focus:ring-2 ring-red-700 rounded-md px-2 py-2 my-2 ml-2">
                         Cancel
                     </button>

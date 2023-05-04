@@ -2,14 +2,14 @@ import React, { useState, useEffect } from "react";
 import { Forum } from "../../api/forum.js";
 import { FaSpinner } from "react-icons/fa";
 import { useGlobalContext } from "../../context/ContextProvider";
-import { ForumCardContainer, ForumSearch } from "../../components";
+import { ForumCard, ForumCardContainer, ForumSearch, ForumSearchResults } from "../../components";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { MdOutlineAdd } from "react-icons/md";
 import { Popup } from "../../components";
 
 const ForumDashboard = (props) => {
-	//TODO: search, markanswer, resolved, liked, unliked
+	//TODO: markanswer, resolved, liked, unliked
 
     //current user and toast methods
     const { user, notify } = useGlobalContext();
@@ -18,6 +18,7 @@ const ForumDashboard = (props) => {
     const [recentForums, setRecentForums] = useState([]);
     const [myForums, setMyForums] = useState([]);
     const [subscribedForums, setSubscribedForums] = useState([]);
+    const [selectedForum, setSelectedForum] = useState({}); //forum to be displayed in popup
 
     //inputs
     const [search, setSearch] = useState("");
@@ -28,6 +29,8 @@ const ForumDashboard = (props) => {
     //status
     const [searched, setSearched] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [searching, setSearching] = useState(false); //searching forums
+    const [showSelectedForum, setShowSelectedForum] = useState(false); //popup
 	const [showCreateForum, setShowCreateForum] = useState(false);
 	const [createForumLoading, setCreateForumLoading] = useState(false);
 	const [dashLoaded, setDashLoaded] = useState(false);
@@ -67,8 +70,21 @@ const ForumDashboard = (props) => {
         setTab(tab);
     };
 
-    //TODO: search forums
-    const handleSearch = async () => {};
+    //search forums
+    const handleSearch = async () => {
+        if (search === "") {
+            notify("error", "Please enter a search query");
+            return;
+        }
+
+        setSearched(true);
+        setSearching(true);
+
+        const res = await Forum.searchForums(search, checkStatus);
+        setSearchResults(res);
+
+        setSearching(false);
+    };
 
     //refresh dashboard forums
 	useEffect(() => {
@@ -78,9 +94,12 @@ const ForumDashboard = (props) => {
 			setLoading(true);
 
 			const recent = await Forum.getForums(checkStatus);
-			setRecentForums(recent);
 
-			setDashLoaded(true);
+            if (recent !== null && recent !== undefined) {
+                setRecentForums(recent);
+                setDashLoaded(true);
+            }
+			
 			setLoading(false);
 		};
 
@@ -96,9 +115,12 @@ const ForumDashboard = (props) => {
 			setLoading(true);
 
 			const my = await Forum.getForumsByUser(user, checkStatus);
-            setMyForums(my);
 
-			setMyLoaded(true);
+            if (my !== null && my !== undefined) {
+                setMyForums(my);
+                setMyLoaded(true);
+            }
+            
 			setLoading(false);
 		};
 
@@ -117,9 +139,12 @@ const ForumDashboard = (props) => {
 				user,
 				checkStatus
 			);
-			setSubscribedForums(sub);
 
-			setSubLoaded(true);
+            if (sub !== null && sub !== undefined) {
+                setSubscribedForums(sub);
+                setSubLoaded(true);
+            }
+			
 			setLoading(false);
 		};
 
@@ -162,16 +187,37 @@ const ForumDashboard = (props) => {
     const tabHighlightClasses =
         " text-green-500 border-green-500 border-b-4 bg-gray-700 rounded-t-lg";
     return (
-        <div 
-			style={{height: 'calc(100% - 20px)'}}
-			className="text-white p-5 sm:p-5">
+        <div
+            style={{ height: "calc(100% - 20px)" }}
+            className="text-white p-5 sm:p-5">
+
+            {searched && (
+                <div
+                    onClick={() => setSearched(false)}
+                    className="fixed left-0 z-10 w-full h-full"
+                />
+            )}
+
             {/* Search bar for mobile */}
             <div className="lg:hidden">
                 <ForumSearch
                     search={search}
                     setSearch={setSearch}
+                    setSearched={setSearched}
                     handleSearchClick={handleSearch}
                 />
+                {/* Search results */}
+                {searched && (
+                    <div className="relative">
+                        <ForumSearchResults
+                            searching={searching}
+                            searchResults={searchResults}
+                            setSearched={setSearched}
+                            setSelectedForum={setSelectedForum}
+                            setShowSelectedForum={setShowSelectedForum}
+                        />
+                    </div>
+                )}
             </div>
 
             {/* Title and tabs */}
@@ -219,7 +265,20 @@ const ForumDashboard = (props) => {
                         search={search}
                         setSearch={setSearch}
                         handleSearchClick={handleSearch}
+                        setSearched={setSearched}
                     />
+                    {/* Search results */}
+                    {searched && (
+                        <div className="relative">
+                            <ForumSearchResults
+                                searching={searching}
+                                searchResults={searchResults}
+                                setSearched={setSearched}
+                                setSelectedForum={setSelectedForum}
+                                setShowSelectedForum={setShowSelectedForum}
+                            />
+                        </div>
+                    )}
                 </div>
             </div>
 
@@ -241,7 +300,7 @@ const ForumDashboard = (props) => {
                                         forums={recentForums}
                                         checkStatus={checkStatus}
                                         notify={notify}
-										refreshAll={refreshAllForums}
+                                        refreshAll={refreshAllForums}
                                     />
                                 ) : (
                                     <div className="m-auto w-fit mt-5 text-gray-500">
@@ -267,11 +326,12 @@ const ForumDashboard = (props) => {
                                         forums={myForums}
                                         checkStatus={checkStatus}
                                         notify={notify}
-										refreshAll={refreshAllForums}
+                                        refreshAll={refreshAllForums}
                                     />
                                 ) : (
                                     <div className="m-auto w-fit mt-5 text-gray-500">
-                                        You have not created any forums yet {" "+ showCreateForum}
+                                        You have not created any forums yet{" "}
+                                        {" " + showCreateForum}
                                     </div>
                                 )}
                             </>
@@ -283,7 +343,7 @@ const ForumDashboard = (props) => {
                                         forums={subscribedForums}
                                         checkStatus={checkStatus}
                                         notify={notify}
-										refreshAll={refreshAllForums}
+                                        refreshAll={refreshAllForums}
                                     />
                                 ) : (
                                     <div className="m-auto w-fit mt-5 text-gray-500">
@@ -296,36 +356,56 @@ const ForumDashboard = (props) => {
                     </>
                 )}
             </div>
-			<Popup show={showCreateForum} setShow={setShowCreateForum}>
-				<div>
-					<p className="text-xl font-bold">Create Forum</p>
-					<hr className="border-1 border-gray-200 opacity-50" />
-					<input
-						type="text"
-						className="w-full bg-slate-800 mt-5 p-2 rounded border-2 border-gray-500 focus:outline-none focus:border-green-500"
-						placeholder="Title"
-						value={title}
-						onChange={(e) => setTitle(e.target.value)}
-					/>
-					<textarea
-						className="w-full bg-slate-800 mt-5 p-2 rounded border-2 border-gray-500 focus:outline-none focus:border-green-500"
-						placeholder="Further desriptions or explanations"
-						value={content}
-						onChange={(e) => setContent(e.target.value)}
-					/>
-					<div className="flex justify-end mt-5">
-						<button
-							className="bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 rounded"
-							onClick={handleCreateForum}>
-							{createForumLoading ? (
-								<FaSpinner className="animate-spin" />
-							) : (
-								"Create"
-							)}
-						</button>
-					</div>
-				</div>
-			</Popup>
+
+            {/* Create forum popup */}
+            <Popup show={showCreateForum} setShow={setShowCreateForum}>
+                <div>
+                    <p className="text-xl font-bold">Create Forum</p>
+                    <hr className="border-1 border-gray-200 opacity-50" />
+                    <input
+                        type="text"
+                        className="w-full bg-slate-800 mt-5 p-2 rounded border-2 border-gray-500 focus:outline-none focus:border-green-500"
+                        placeholder="Title"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                    />
+                    <textarea
+                        className="w-full bg-slate-800 mt-5 p-2 rounded border-2 border-gray-500 focus:outline-none focus:border-green-500"
+                        placeholder="Further desriptions or explanations"
+                        value={content}
+                        autoCapitalize="on"
+                        spellCheck="true"
+                        onChange={(e) => setContent(e.target.value)}
+                    />
+                    <div className="flex justify-end mt-5">
+                        <button
+                            className="bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 rounded"
+                            onClick={handleCreateForum}>
+                            {createForumLoading ? (
+                                <FaSpinner className="animate-spin" />
+                            ) : (
+                                "Create"
+                            )}
+                        </button>
+                    </div>
+                </div>
+            </Popup>
+
+            {/* Selected forum popup */}
+            <Popup
+                show={showSelectedForum}
+                setShow={setShowSelectedForum}
+                ring={true}>
+                <div className="text-left max-w-sm sm:max-w-lg max-h-96 overflow-y-auto">
+                    <ForumCard
+                        forum={selectedForum}
+                        checkRes={checkStatus}
+                        notify={notify}
+                        refreshAll={refreshAllForums}
+                    />
+                </div>
+            </Popup>
+
             <ToastContainer />
         </div>
     );

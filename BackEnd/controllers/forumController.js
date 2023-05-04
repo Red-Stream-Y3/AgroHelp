@@ -81,7 +81,7 @@ const searchForums = asyncHandler(async (req, res) => {
     const title = req.params.q;
 
     const forums = await Forum.find({
-        title: { $regex: title, $options: "g" },
+        title: { $regex: title, $options: "" },
     });
 
     if (forums) {
@@ -449,7 +449,7 @@ const acceptReplyAsAnswer = asyncHandler(async (req, res) => {
         );
 
         if (reply) {
-            forum.acceptedAnswer = reply;
+            reply.accepted = true;
             forum.save();
             res.status(255).json({ message: "Accepted reply as answer" });
         } else {
