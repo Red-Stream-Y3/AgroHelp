@@ -40,16 +40,20 @@ const deleteBlog = asyncHandler(async (req, res) => {
 // @route   POST /api/blog
 // @access  Private/Admin
 const createBlog = asyncHandler(async (req, res) => {
-    const { title, body, author, tags } = req.body;
+    const { title, body, author } = req.body;
+    
+    const tags = req.body.tags.split(",").map((tag) => tag.trim());
+
     const blog = new Blog({
         title,
-        body,
         author,
         tags,
+        body
     });
 
     const createdBlog = await blog.save();
     res.status(201).json(createdBlog);
+  
 });
 
 // @desc    Update a blog blog
@@ -98,11 +102,25 @@ const createBlogComment = asyncHandler(async (req, res) => {
     }
 });
 
+// @desc    Search blogs
+// @route   GET /api/blog/search
+// @access  Public
+const searchBlogs = asyncHandler(async (req, res) => {
+    try{
+        const blog = await Blog.find({ blogTitle: { $regex: req.query.q, $options: "i" } });
+        res.json(blog);
+    } catch (error) {
+        console.log(error);
+        res.status(404).json({ message: "Blog not found" });
+    }
+}); 
+
 export {
     getBlogs,
     getBlogById,
     deleteBlog,
     createBlog,
     updateBlog,
-    createBlogComment
+    createBlogComment,
+    searchBlogs
 }
