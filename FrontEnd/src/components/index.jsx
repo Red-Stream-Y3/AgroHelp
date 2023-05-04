@@ -25,3 +25,4 @@ export { default as BlogSearchBar } from './blog/BlogSearchBar';
 export { default as ForumCard } from './forum/ForumCard';
 export { default as ForumCardContainer } from './forum/CardContainer';
 export { default as ForumSearch } from './forum/ForumSearch';
+export { default as ForumSearchResults } from './forum/SearchResults';
