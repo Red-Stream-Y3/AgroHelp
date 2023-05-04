@@ -123,5 +123,6 @@ export {
     deleteBlog,
     createBlog,
     updateBlog,
-    createBlogComment
+    createBlogComment,
+    searchBlogs,
 }
