@@ -13,6 +13,7 @@ import {
   ForumDashboard,
   Login,
   Register,
+  Profile,
   Crop,
   Disease,
   KnowledgeBase,
@@ -45,6 +46,7 @@ function App() {
             <Route path="/home" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/profile" element={<Profile />} />
 
             <Route path="/admin/*" element={<AdminHome />}>
               <Route path="dashboard" element={<AdminDashboard />} />

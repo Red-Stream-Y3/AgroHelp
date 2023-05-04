@@ -59,6 +59,45 @@ export const getUsers = async (token) => {
   }
 };
 
+// get user details
+export const getUserDetails = async (id, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  try {
+    const response = await axios.get(
+      `http://localhost:9120/api/users/${id}`,
+      config
+    );
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// update profile details
+export const updateProfile = async (user, token) => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  try {
+    const response = await axios.put(
+      'http://localhost:9120/api/users/profile',
+      user,
+      config
+    );
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 // update user
 export const updateUser = async (user, token) => {
   const config = {

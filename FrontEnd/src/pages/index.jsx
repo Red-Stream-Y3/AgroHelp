@@ -1,6 +1,7 @@
 export { default as Home } from './common/Home';
 export { default as Login } from './common/Login';
 export { default as Register } from './common/Register';
+export { default as Profile } from './common/Profile';
 
 export { default as KnowledgeBase } from './knowledgebase/KnowledgeBase';
 export { default as Crop } from './knowledgebase/Crop';
