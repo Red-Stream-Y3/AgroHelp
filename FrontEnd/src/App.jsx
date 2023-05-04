@@ -81,11 +81,10 @@ function App() {
                             element={<UpdateDisease />}
                         />
                         <Route path="my/articles" element={<MyArticles />} />
-
                         <Route path="/forum" element={<ForumDashboard />} />
-
-                        <Route path="/blogs" element={<BlogDashboard />} />
+                        <Route path="/blog" element={<BlogDashboard />} />
                     </Routes>
+
 
                     <Footer />
                 </div>

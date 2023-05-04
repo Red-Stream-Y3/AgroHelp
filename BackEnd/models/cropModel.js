@@ -79,7 +79,7 @@ const cropSchema = new Schema(
     },
     cropImage: {
       type: String,
-      required: true,
+      // required: true,
     },
     cropInfo: {
       type: cropInfoSchema,
