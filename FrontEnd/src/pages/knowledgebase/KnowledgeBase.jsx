@@ -45,12 +45,12 @@ const KnowledgeBase = () => {
                         Create Crop
                     </button>
                 </Link>
-                <Link to="create/disease">
+                <Link to="/create/disease">
                     <button className="bg-primary hover:bg-secondary text-white font-bold py-2 px-4 rounded mx-1">
                         Create Disease
                     </button>
                 </Link>
-                <Link to="my/articles">
+                <Link to="/my/articles">
                     <button className="bg-primary hover:bg-secondary text-white font-bold py-2 px-4 rounded mx-1">
                         My Articles
                     </button>

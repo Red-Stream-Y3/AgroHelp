@@ -57,7 +57,7 @@ function App() {
 
         <Route path="/forum" element={<ForumDashboard />} />
 
-        <Route path="/blogs" element={<BlogDashboard />} />
+        <Route path="/blog" element={<BlogDashboard />} />
         
       </Routes>
 

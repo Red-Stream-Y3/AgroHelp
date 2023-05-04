@@ -2,36 +2,46 @@ import { useState, useEffect } from 'react'
 import { createCrop } from '../../api/knowlegdebase'
 
 const CreateCrop = () => {
+
+  const user = JSON.parse(localStorage.getItem('userInfo'))
+  const userId = user._id
+
   const [crop, setCrop] = useState({
     cropName: '',
     scientificName: '',
     cropFamily: '',
     cropType: '',
     cropIntro: '',
-    cropImage: [],
+    // cropImage: [],
     cropInfo: {
       climate: '',
       season: '',
       seedType: '',
       soil: '',
       fieldPreparation: '',
-      ferilizer: '',
+      fertilizer: '',
       irrigation: '',
       weedControl: '',
       pestControl: '',
       harvesting: '',
       yield: '',
       storage: '',
-    }
+    },
+    otherInfo: '',
+    author: userId,
   })
-
-  const [error, setError] = useState('')
 
   const handleChange = (e) => {
     setCrop({
       ...crop,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
+      cropInfo: {
+        ...crop.cropInfo,
+        [e.target.name]: e.target.value
+      }
     })
+
+    console.log('crop', crop)
   }
 
   const handleSubmit = async (e) => {
@@ -52,14 +62,14 @@ const CreateCrop = () => {
       cropFamily: '',
       cropType: '',
       cropIntro: '',
-      cropImage: [],
+      // cropImage: [],
       cropInfo: {
         climate: '',
         season: '',
         seedType: '',
         soil: '',
         fieldPreparation: '',
-        ferilizer: '',
+        fertilizer: '',
         irrigation: '',
         weedControl: '',
         pestControl: '',
@@ -75,9 +85,10 @@ const CreateCrop = () => {
 
   return (
     <div>
-      <div className="bg-darkbg text-white overflow-hidden w-full mx-auto">
+      <div className="bg-darkbg text-white overflow-hidden shadow-xl mx-auto px-10 md:my-20 md:mx-20 lg:mx-60 rounded-xl ">
         <div className="py-4 px-6">
           <h1 className="text-3xl font-semibold mb-3">Create Crop</h1>
+          <hr className="border-gray-500 border-1 w-full mb-5" />
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
               <label htmlFor="cropName" className="block mb-1">Crop Name</label>
@@ -88,6 +99,8 @@ const CreateCrop = () => {
                 className="w-full p-2 border border-gray-300 rounded outline-none focus:ring-1 focus:ring-primarylight bg-lightbg text-white"
                 value={crop.cropName}
                 onChange={handleChange}
+                pattern='[A-Za-z0-9]+'
+                required
               />
             </div>
 
@@ -100,6 +113,8 @@ const CreateCrop = () => {
                 className="w-full p-2 border border-gray-300 rounded outline-none focus:ring-1 focus:ring-primarylight bg-lightbg text-white"
                 value={crop.scientificName}
                 onChange={handleChange}
+                pattern='[A-Za-z0-9]+'
+                required
               />
             </div>
 
@@ -112,6 +127,8 @@ const CreateCrop = () => {
                 className="w-full p-2 border border-gray-300 rounded outline-none focus:ring-1 focus:ring-primarylight bg-lightbg text-white"
                 value={crop.cropFamily}
                 onChange={handleChange}
+                pattern='[A-Za-z0-9]+'
+                required
               />
             </div>
 
@@ -124,6 +141,8 @@ const CreateCrop = () => {
                 className="w-full p-2 border border-gray-300 rounded outline-none focus:ring-1 focus:ring-primarylight bg-lightbg text-white"
                 value={crop.cropType}
                 onChange={handleChange}
+                pattern='[A-Za-z0-9]+'
+                required
               />
             </div>
 
@@ -136,10 +155,12 @@ const CreateCrop = () => {
                 className="w-full p-2 border border-gray-300 rounded outline-none focus:ring-1 focus:ring-primarylight bg-lightbg text-white"
                 value={crop.cropIntro}
                 onChange={handleChange}
+                pattern='[A-Za-z0-9]+'
+                required
               />
             </div>
 
-            <div className="mb-3">
+            {/* <div className="mb-3">
               <label htmlFor="cropImage" className="block mb-1">Crop Image</label>
               <input
                 type="file"
@@ -148,8 +169,10 @@ const CreateCrop = () => {
                 className="w-full p-2 border border-gray-300 rounded outline-none focus:ring-1 focus:ring-primarylight bg-lightbg text-white"
                 value={crop.cropImage}
                 onChange={handleChange}
+                pattern='[A-Za-z0-9]+'
+                required
               />
-            </div>
+            </div> */}
 
             <div className="mb-3">
               <label htmlFor="climate" className="block mb-1">Climate</label>
@@ -160,6 +183,8 @@ const CreateCrop = () => {
                 className="w-full p-2 border border-gray-300 rounded outline-none focus:ring-1 focus:ring-primarylight bg-lightbg text-white"
                 value={crop.cropInfo.climate}
                 onChange={handleChange}
+                pattern='[A-Za-z0-9]+'
+                required
               />
             </div>
 
@@ -172,6 +197,8 @@ const CreateCrop = () => {
                 className="w-full p-2 border border-gray-300 rounded outline-none focus:ring-1 focus:ring-primarylight bg-lightbg text-white"
                 value={crop.cropInfo.season}
                 onChange={handleChange}
+                pattern='[A-Za-z0-9]+'
+                required
               />
             </div>
 
@@ -184,6 +211,8 @@ const CreateCrop = () => {
                 className="w-full p-2 border border-gray-300 rounded outline-none focus:ring-1 focus:ring-primarylight bg-lightbg text-white"
                 value={crop.cropInfo.seedType}
                 onChange={handleChange}
+                pattern='[A-Za-z0-9]+'
+                required
               />
             </div>
 
@@ -196,6 +225,8 @@ const CreateCrop = () => {
                 className="w-full p-2 border border-gray-300 rounded outline-none focus:ring-1 focus:ring-primarylight bg-lightbg text-white"
                 value={crop.cropInfo.soil}
                 onChange={handleChange}
+                pattern='[A-Za-z0-9]+'
+                required
               />
             </div>
 
@@ -208,18 +239,22 @@ const CreateCrop = () => {
                 className="w-full p-2 border border-gray-300 rounded outline-none focus:ring-1 focus:ring-primarylight bg-lightbg text-white"
                 value={crop.cropInfo.fieldPreparation}
                 onChange={handleChange}
+                pattern='[A-Za-z0-9]+'
+                required
               />
             </div>
 
             <div className="mb-3">
-              <label htmlFor="ferilizer" className="block mb-1">Fertilizer</label>
+              <label htmlFor="fertilizer" className="block mb-1">Fertilizer</label>
               <textarea
-                name="ferilizer"
-                id="ferilizer"
+                name="fertilizer"
+                id="fertilizer"
                 rows="2"
                 className="w-full p-2 border border-gray-300 rounded outline-none focus:ring-1 focus:ring-primarylight bg-lightbg text-white"
-                value={crop.cropInfo.ferilizer}
+                value={crop.cropInfo.fertilizer}
                 onChange={handleChange}
+                pattern='[A-Za-z0-9]+'
+                required
               />
             </div>
 
@@ -232,6 +267,8 @@ const CreateCrop = () => {
                 className="w-full p-2 border border-gray-300 rounded outline-none focus:ring-1 focus:ring-primarylight bg-lightbg text-white"
                 value={crop.cropInfo.irrigation}
                 onChange={handleChange}
+                pattern='[A-Za-z0-9]+'
+                required
               />
             </div>
 
@@ -244,6 +281,8 @@ const CreateCrop = () => {
                 className="w-full p-2 border border-gray-300 rounded outline-none focus:ring-1 focus:ring-primarylight bg-lightbg text-white"
                 value={crop.cropInfo.weedControl}
                 onChange={handleChange}
+                pattern='[A-Za-z0-9]+'
+                required
               />
             </div>
 
@@ -256,6 +295,8 @@ const CreateCrop = () => {
                 className="w-full p-2 border border-gray-300 rounded outline-none focus:ring-1 focus:ring-primarylight bg-lightbg text-white"
                 value={crop.cropInfo.pestControl}
                 onChange={handleChange}
+                pattern='[A-Za-z0-9]+'
+                required
               />
             </div>
 
@@ -268,6 +309,8 @@ const CreateCrop = () => {
                 className="w-full p-2 border border-gray-300 rounded outline-none focus:ring-1 focus:ring-primarylight bg-lightbg text-white"
                 value={crop.cropInfo.harvesting}
                 onChange={handleChange}
+                pattern='[A-Za-z0-9]+'
+                required
               />
             </div>
 
@@ -280,6 +323,8 @@ const CreateCrop = () => {
                 className="w-full p-2 border border-gray-300 rounded outline-none focus:ring-1 focus:ring-primarylight bg-lightbg text-white"
                 value={crop.cropInfo.yield}
                 onChange={handleChange}
+                pattern='[A-Za-z0-9]+'
+                required
               />
             </div>
 
@@ -292,6 +337,8 @@ const CreateCrop = () => {
                 className="w-full p-2 border border-gray-300 rounded outline-none focus:ring-1 focus:ring-primarylight bg-lightbg text-white"
                 value={crop.cropInfo.storage}
                 onChange={handleChange}
+                pattern='[A-Za-z0-9]+'
+                required
               />
             </div>
 
@@ -304,25 +351,32 @@ const CreateCrop = () => {
                 className="w-full p-2 border border-gray-300 rounded outline-none focus:ring-1 focus:ring-primarylight bg-lightbg text-white"
                 value={crop.otherInfo}
                 onChange={handleChange}
+                pattern='[A-Za-z0-9]+'
+                required
               />
             </div>
 
-            <div className="mt-14">
-              <button type="submit" className="w-48 py-2 px-4 bg-green-500 hover:bg-green-600 rounded text-white" onClick={handleSubmit}>Create Crop</button>
-              <button type="button" className="w-48 py-2 px-4 bg-red-500 hover:bg-red-600 rounded text-white ml-4" onClick={handleCancel}>Cancel</button>
+            {/* buttons */}
+            <div className="flex justify-end space-x-2 mt-10">
+              <button
+                type="button"
+                className="px-4 py-2 rounded bg-red-500 text-white hover:bg-red-600"
+                onClick={handleCancel}
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="px-4 py-2 rounded bg-green-500 text-white hover:bg-green-600"
+                onClick={handleSubmit}
+              >
+                Save
+              </button>
             </div>
-
-
-
-
-              
-
-
-
           </form>
         </div>
+        <hr className="md:hidden mt-3" />
       </div>
-
     </div>
   )
 }
