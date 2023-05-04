@@ -35,6 +35,7 @@ export default function BlogView() {
   const firstName = blog.author ? blog.author.firstName : "";
   const lastName = blog.author ? blog.author.lastName : "";
   const authorDP = blog.author ? blog.author.profilePic : "";
+  const body = blog.body
 
   return (
     <div className="my-4">
@@ -46,8 +47,9 @@ export default function BlogView() {
           date={formatDate(blog.createdAt)}
           tags={blog.tags}
         />
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          {blog.body &&
+        <div  className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div  dangerouslySetInnerHTML={{__html: body}} />
+          {/* {blog.body &&
             blog.body.map((item) => {
               return (
                 <div key={item.id}>
@@ -55,7 +57,7 @@ export default function BlogView() {
                   {item.type === "image" && <img src={item.content} alt="" className="my-4 object-cover h-48 w-96 ..." />}
                 </div>
               );
-            })}
+            })} */}
         </div>
       </BlogContainer>
     </div>

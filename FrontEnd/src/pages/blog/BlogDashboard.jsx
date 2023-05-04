@@ -10,7 +10,6 @@ import {
   BlogSearchBar,
 } from "../../components";
 import { Link } from "react-router-dom";
-import { Example } from "../../components/blog/Example";
 
 export default function BlogDashboard() {
   const [blogs, setBlogs] = useState([]);
@@ -47,13 +46,13 @@ export default function BlogDashboard() {
       <BlogBanner />
       <BlogContainer>
         <div className="flex justify-end">
-          <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-8">
+          <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-0 md:mr-8">
             <Link to="/createblog">Start Your Blog</Link>
           </button>
           <BlogSearchBar />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-4 mt-2">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-4 mt-4">
           {blogs.map((blog) => (
             <div key={blog.id}>
               <Link to={`/viewblog/${blog._id}`}>
@@ -62,7 +61,7 @@ export default function BlogDashboard() {
                   author={blog.author.firstName + " " + blog.author.lastName}
                   date={formatDate(blog.createdAt)}
                   tags={blog.tags}
-                  onClick={""}
+                  //onClick={}
                 />
               </Link>
             </div>
