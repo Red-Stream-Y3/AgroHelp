@@ -19,6 +19,7 @@ const authUser = asyncHandler(async (req, res) => {
       lastName: user.lastName,
       profilePic: user.profilePic,
       role: user.role,
+      request: user.request,
       token: generateToken(user._id),
     });
   } else {
@@ -58,6 +59,7 @@ const registerUser = asyncHandler(async (req, res) => {
       lastName: user.lastName,
       profilePic: user.profilePic,
       role: user.role,
+      request: user.request,
       token: generateToken(user._id),
     });
   } else {
@@ -81,6 +83,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
       lastName: user.lastName,
       profilePic: user.profilePic,
       role: user.role,
+      request: user.request,
     });
   } else {
     res.status(404);
@@ -114,6 +117,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
       lastName: user.lastName,
       profilePic: user.profilePic,
       role: user.role,
+      request: user.request,
       token: generateToken(updatedUser._id),
     });
   } else {
@@ -141,6 +145,34 @@ const updateUser = asyncHandler(async (req, res) => {
       lastName: updatedUser.lastName,
       profilePic: updatedUser.profilePic,
       role: updatedUser.role,
+      request: user.request,
+    });
+  } else {
+    res.status(404);
+    throw new Error('User not found');
+  }
+});
+
+// @desc    Request user role
+// @route   PUT /api/user/:id/request
+// @access  Private
+const requestRole = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.params.id);
+
+  if (user) {
+    user.request = req.body.request || user.request;
+
+    const updatedUser = await user.save();
+
+    res.json({
+      _id: updatedUser._id,
+      username: updatedUser.username,
+      email: updatedUser.email,
+      firstName: updatedUser.firstName,
+      lastName: updatedUser.lastName,
+      profilePic: updatedUser.profilePic,
+      role: updatedUser.role,
+      request: user.request,
     });
   } else {
     res.status(404);
@@ -193,4 +225,5 @@ export {
   getUserById,
   getUsers,
   updateUser,
+  requestRole,
 };
