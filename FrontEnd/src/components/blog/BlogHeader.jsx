@@ -20,7 +20,7 @@ const BlogHeader = ({ title, author, authorDP, date, tags }) => {
         {date}
       </div>
       <div className="flex justify-center sm:justify-end mt-2">
-        <div className="inline-block bg-green-200 rounded px-3 py-1 text-sm font-semibold text-gray-700">
+        <div className="flex justify-center sm:justify-end text-gray-500 mt-4 sm:mt-0">
           {tags}
         </div>
       </div>
