@@ -38,6 +38,10 @@ const userSchema = mongoose.Schema(
       enum: ['regular', 'contributor', 'moderator', 'admin'],
       default: 'regular',
     },
+    request: {
+      type: String,
+      default: '',
+    },
   },
   {
     timestamps: true,
