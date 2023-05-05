@@ -2,14 +2,17 @@
 
 import React from "react";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { FaPenNib } from "react-icons/fa";
 import { BlogContainer, Loader } from "../../components";
 import { Editor } from "@tinymce/tinymce-react";
 import { useGlobalContext } from "../../context/ContextProvider";
 import { createBlog } from "../../api/blog";
+import { toast } from "react-toastify";
 
 export default function BlogCreate() {
   //const { user } = useGlobalContext();
+
   const user = JSON.parse(localStorage.getItem("userInfo"));
   const authorID = user._id;
 
@@ -32,12 +35,23 @@ export default function BlogCreate() {
       [e.target.name]: e.target.value,
     });
   };
+  const navigateTo = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const newBlog = await createBlog(blog);
-      console.log("blog created!");
+      toast.success("Blog created", {
+        hideProgressBar: false,
+        closeOnClick: true,
+        autoClose: 1500,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      setTimeout(() => {
+        navigateTo(`/viewblog/${newBlog._id}`);
+      }, 2000);
     } catch (error) {
       console.log("error", error);
     }
@@ -79,7 +93,7 @@ export default function BlogCreate() {
               <div className="flex flex-col my-4">
                 <label className="text-black font-extrabold">Content</label>
                 <Editor
-                  apiKey='in0avjv2q4rxzz3r60yiu4b4m1uej22oxbuc8pohxxbj2npx'
+                  apiKey="in0avjv2q4rxzz3r60yiu4b4m1uej22oxbuc8pohxxbj2npx"
                   value={blog.body}
                   init={{
                     height: 500,
@@ -99,34 +113,42 @@ export default function BlogCreate() {
                     ],
                     image_uploadtab: true,
                     //images_upload_url: "YOUR_IMAGES_UPLOAD_URL",
-                    images_upload_handler: function (blobInfo, success, failure) {
+                    images_upload_handler: function (
+                      blobInfo,
+                      success,
+                      failure
+                    ) {
                       var xhr, formData;
-            
+
                       xhr = new XMLHttpRequest();
                       xhr.withCredentials = false;
                       xhr.open("POST", "YOUR_IMAGES_UPLOAD_URL");
-            
+
                       xhr.onload = function () {
                         var json;
-            
+
                         if (xhr.status != 200) {
                           failure("HTTP Error: " + xhr.status);
                           return;
                         }
-            
+
                         json = JSON.parse(xhr.responseText);
-            
+
                         if (!json || typeof json.location != "string") {
                           failure("Invalid JSON: " + xhr.responseText);
                           return;
                         }
-            
+
                         success(json.location);
                       };
-            
+
                       formData = new FormData();
-                      formData.append("file", blobInfo.blob(), blobInfo.filename());
-            
+                      formData.append(
+                        "file",
+                        blobInfo.blob(),
+                        blobInfo.filename()
+                      );
+
                       xhr.send(formData);
                     },
                   }}
