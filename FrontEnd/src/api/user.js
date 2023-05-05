@@ -120,6 +120,26 @@ export const updateUser = async (user, token) => {
   }
 };
 
+// request role
+export const requestRole = async (user, token) => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  try {
+    const response = await axios.put(
+      `http://localhost:9120/api/users/${user._id}/request`,
+      user,
+      config
+    );
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const deleteUser = async (id, token) => {
   const config = {
     headers: {

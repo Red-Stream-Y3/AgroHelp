@@ -153,6 +153,7 @@ const ManageUsers = () => {
                 <span>Demote</span>
               </button>
             )}
+
             {isMod && (
               <button
                 className={privilegeBtn}
@@ -169,12 +170,28 @@ const ManageUsers = () => {
               </button>
             )}
           </div>
-        </td>{' '}
+        </td>
+
+        <td className="py-4 text-sm whitespace-nowrap">
+          <h2 className="font-medium text-gray-800 dark:text-white capitalize text-center">
+            {user.request ? (
+              user.request === user.role ? (
+                <i className="fa-solid fa-circle-check text-xl text-green-500"></i>
+              ) : (
+                user.request
+              )
+            ) : (
+              <i className="fa-solid fa-bell-slash text-lg text-yellow-400"></i>
+            )}
+          </h2>
+        </td>
+
         {isAdmin && (
           <td className="py-4 text-sm whitespace-nowrap">
             <div className="flex items-center mt-4 gap-x-4 sm:mt-0 justify-center">
               <button
-                className="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md sm:w-auto gap-x-2 hover:bg-gray-100 dark:bg-red-600 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-red-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                className="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md sm:w-auto gap-x-2 hover:bg-gray-100 dark:bg-red-600 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-red-700 disabled:bg-gray-500 disabled:hover:bg-gray-500 disabled:text-white disabled:cursor-not-allowed"
+                disabled={user.email === 'admin@admin.com'}
                 onClick={() => handleDelete(user._id)}
               >
                 <i className="fa-solid fa-user-slash"></i>
@@ -241,6 +258,9 @@ const ManageUsers = () => {
                           <th className={theadClass}>ROLE</th>
                           <th className={`text-center ${theadClass}`}>
                             PRIVILEGES
+                          </th>
+                          <th className={`text-center ${theadClass}`}>
+                            REQUEST
                           </th>
                           {isAdmin && (
                             <th className={`text-center ${theadClass}`}>
