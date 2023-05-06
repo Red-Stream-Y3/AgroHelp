@@ -2,7 +2,7 @@
 
 import React from "react";
 import { useState, useEffect } from "react";
-import { FaSearch } from "react-icons/fa";
+import { getAllBlogs, getAcceptedBlogs } from "../../api/blog";
 import {
   BlogContainer,
   BlogBanner,
@@ -14,21 +14,17 @@ import { Link } from "react-router-dom";
 export default function BlogDashboard() {
   const [blogs, setBlogs] = useState([]);
 
-  //get all blogs
-  const getAllBlogs = async () => {
-    try {
-      const response = await fetch("http://localhost:9120/api/blog");
-      const jsonData = await response.json();
-
-      setBlogs(jsonData);
-      //console.log(jsonData);
-    } catch (err) {
-      console.error(err.message);
-    }
-  };
-
   useEffect(() => {
-    getAllBlogs();
+    try {
+      const fetchAcceptedBlogs = async () => {
+        const blogs = await getAcceptedBlogs();
+        setBlogs(blogs);
+        console.log(blogs);
+      };
+      fetchAcceptedBlogs();
+    } catch (error) {
+      console.log("error", error);
+    }
   }, []);
 
   //date formatter
@@ -36,6 +32,8 @@ export default function BlogDashboard() {
     const date = new Date(dateString);
     return date.toLocaleDateString("en-US");
   }
+
+  console.log(blogs);
 
   return (
     <div>
@@ -57,8 +55,9 @@ export default function BlogDashboard() {
                   author={blog.author.firstName + " " + blog.author.lastName}
                   date={formatDate(blog.createdAt)}
                   tags={blog.tags}
-                  //onClick={}
-                  likes={blog.comments.length}
+                  likes={blog.likes.length}
+                  dislikes={blog.dislikes.length}
+                  comments={blog.comments.length}
                 />
               </Link>
             </div>

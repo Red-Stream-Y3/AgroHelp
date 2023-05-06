@@ -2,21 +2,23 @@ import { useState, useEffect } from 'react';
 import { BoxWidget, Loader, LineChart } from '../../components';
 import { useGlobalContext } from '../../context/ContextProvider';
 import { logout, getSiteVisits, getUsers } from '../../api/user';
+import { getAllBlogs } from '../../api/blog';
 
 const AdminDashboard = () => {
   const { user } = useGlobalContext();
   const isAccess = (user && user.role === 'admin') || user.role === 'moderator';
   const [siteVisits, setSiteVisits] = useState([]);
   const [users, setUsers] = useState([]);
+  const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  const total = 25;
 
   const fetchSite = async () => {
     const visits = await getSiteVisits(user.token);
     const users = await getUsers(user.token);
+    const blogs = await getAllBlogs();
     setSiteVisits(visits.data);
     setUsers(users.data);
+    setBlogs(blogs);
     setLoading(false);
   };
 
@@ -57,7 +59,7 @@ const AdminDashboard = () => {
             <div className="w-full md:w-auto">
               <BoxWidget
                 heading={'Blogs'}
-                value={total}
+                value={blogs.length}
                 icon={'fa-solid fa-newspaper'}
               />
             </div>

@@ -2,10 +2,11 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useGlobalContext } from '../../context/ContextProvider';
-import { updateProfile } from '../../api/user';
+import { updateProfile, requestRole } from '../../api/user';
 
 function Profile() {
   const { user, setUser } = useGlobalContext();
+  const isAdmin = user && user.role === 'admin';
   const [username, setUserName] = useState(user.username);
   const [email, setEmail] = useState(user.email);
   const [profilePic, setProfilePic] = useState(user.profilePic);
@@ -80,6 +81,18 @@ function Profile() {
     myWidget.open();
   };
 
+  const handleRequestRole = async (id, role) => {
+    await requestRole({ _id: id, request: role }, user.token);
+    toast.success(`Requested ${role} Successfully`, {
+      hideProgressBar: false,
+      closeOnClick: true,
+      autoClose: 1500,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  };
+
   return (
     <div className="bg-darkbg w-3/4 rounded-lg mx-auto my-10 px-10 py-10">
       <div>
@@ -120,6 +133,28 @@ function Profile() {
                       />
                     </div>
                   </div>
+                  {!isAdmin && (
+                    <div className="sm:col-span-3 mt-5">
+                      <button
+                        type="button"
+                        className="mt-3 rounded-md bg-secondary px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primarylight focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                        onClick={() => {
+                          if (user.role === 'regular') {
+                            handleRequestRole(user._id, 'contributor');
+                          } else if (user.role === 'contributor') {
+                            handleRequestRole(user._id, 'moderator');
+                          } else if (user.role === 'moderator') {
+                            handleRequestRole(user._id, 'admin');
+                          }
+                        }}
+                        disabled={user.role === 'admin'}
+                      >
+                        {user.role === 'regular' && 'Request Contributor'}
+                        {user.role === 'contributor' && 'Request Moderator'}
+                        {user.role === 'moderator' && 'Request Admin'}
+                      </button>
+                    </div>
+                  )}
                 </div>
 
                 <div className="col-span-3">
@@ -231,7 +266,7 @@ function Profile() {
                 </div>
               </div>
 
-              <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+              <div className="mt-8 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                 <div className="sm:col-span-2">
                   <label
                     htmlFor="password"

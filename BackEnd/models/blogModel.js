@@ -29,8 +29,8 @@ const blogSchema = new mongoose.Schema({
   likes: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
+    ref: "User",
+    required: true,
     },
   ],
   dislikes: [
@@ -45,11 +45,6 @@ const blogSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   }],
-  likesCount: {
-    type: Number,
-    default: 0,
-  },
-
   comments: [
     {
       text: {
