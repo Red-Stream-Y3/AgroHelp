@@ -146,3 +146,15 @@ export const updateBlogAccept = async (id, blog) => {
     console.log(error);
   }
 };
+
+//get blogs by author
+export const getBlogsByAuthor = async (authorId) => {
+    try {
+        const response = await axios.get(`http://localhost:9120/api/blog/author/${authorId}`);
+        console.log('blog', response.data);
+        return response.data;
+    } catch(error) {
+        console.log(error);
+        return [];
+    }
+}
