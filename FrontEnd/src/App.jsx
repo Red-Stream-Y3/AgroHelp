@@ -31,8 +31,8 @@ import {
   BlogView,
   BlogUpdate,
   BlogsbyAuthor,
+  MyBlogPosts
 } from './pages';
-import { BlogDashboard, BlogCreate, BlogView, BlogUpdate, BlogsbyAuthor, MyBlogPosts } from './pages';
 import './App.css';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
