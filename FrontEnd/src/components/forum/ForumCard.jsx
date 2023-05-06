@@ -62,7 +62,12 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
         setNumDislikes(forumObj.dislikes.length);
 
         //check if user has liked or disliked
-        if (forumObj.likes.length > 0 && forumObj.likes.includes(user._id)) {
+        if (
+            forumObj.likes.length > 0 &&
+            user !== null &&
+            user !== undefined &&
+            forumObj.likes.includes(user._id)
+        ) {
             setLiked(true);
         } else {
             setLiked(false);
@@ -80,6 +85,11 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
 
     //action handlers
     const handleLike = async () => {
+        if(user === null || user === undefined){
+            notify("info", "Please login to like a forum");
+            return;
+        };
+
         let res = await Forum.likeForum(user, forum._id, checkRes);
         if (res.message === "Unliked forum") {
             setLiked(false);
@@ -93,6 +103,11 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
     };
 
     const handleDislike = async () => {
+        if(user === null || user === undefined){
+            notify("info", "Please login to dislike a forum");
+            return;
+        }
+
         let res = await Forum.dislikeForum(user, forum._id, checkRes);
         if (res.message === "Removed dislike") {
             setLiked(false);
@@ -106,6 +121,11 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
     };
 
     const handleReplySubmit = async () => {
+        if(user === null || user === undefined){
+            notify("info", "Please login to reply to a forum");
+            return;
+        }
+
         setLoading(true);
 
         if (replyInput === "") {
@@ -130,6 +150,11 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
     };
 
     const handleReplyLike = async (replyId) => {
+        if(user === null || user === undefined){
+            notify("info", "Please login to like a reply");
+            return;
+        };
+
         let res = await Forum.likeReply(user, forum._id, replyId, checkRes);
         if (res.message === "Removed like") {
             setLiked(false);
@@ -143,6 +168,11 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
     };
 
     const handleReplyDislike = async (replyId) => {
+        if(user === null || user === undefined){
+            notify("info", "Please login to dislike a reply");
+            return;
+        };
+
         let res = await Forum.dislikeReply(user, forum._id, replyId, checkRes);
         if (res.message === "Removed dislike") {
             setLiked(false);
@@ -191,6 +221,11 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
     };
 
     const handleSubscribe = async () => {
+        if(user === null || user === undefined){
+            notify("info", "Please login to subscribe to forum");
+            return;
+        };
+
         let res = await Forum.subscribeToForum(user, forum._id, checkRes);
         if (res.message === "Subscribed to forum") {
             notify("success", "Subscribed to forum");
@@ -276,7 +311,8 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
                                 @
                                 {forumObj.username +
                                     " " +
-                                    (forumObj.userID === user._id
+                                    ((user !== null && user !== undefined) &&
+                                    forumObj.userID === user._id
                                         ? "(me)"
                                         : "")}
                             </div>
@@ -284,7 +320,8 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
                                 {forumObj.createdAt.toString().split("T")[0]}
                             </div>
                             <div className="ml-3">
-                                {forumObj.subscribers.includes(user._id) ? (
+                                {(user !== null && user !== undefined) &&
+                                forumObj.subscribers.includes(user._id) ? (
                                     <button
                                         onClick={handleUnsubscribe}
                                         className="ml-auto mr-2 text-xs text-green-500">
@@ -301,7 +338,8 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
                         </div>
 
                         {/* forum delete and edit buttons */}
-                        {forum.userID === user._id ? (
+                        {(user !== null && user !== undefined) &&
+                        forum.userID === user._id ? (
                             <div className="w-fit">
                                 <button
                                     onClick={() => {
@@ -323,7 +361,10 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
                     </div>
 
                     {/* title */}
-                    <div className="font-bold">{forumObj.title + (forumObj.resolved ? " (Solved)" : "")}</div>
+                    <div className="font-bold">
+                        {forumObj.title +
+                            (forumObj.resolved ? " (Solved)" : "")}
+                    </div>
 
                     {/* content */}
                     <div>
@@ -397,13 +438,15 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
                                                         @
                                                         {reply.username +
                                                             " " +
-                                                            (reply.userID ===
-                                                            user._id
+                                                            (user !== null &&
+                                                            user !==
+                                                                undefined &&
+                                                            reply.userID ===
+                                                                user._id
                                                                 ? "(me)"
                                                                 : "")}
                                                         {reply.accepted ? (
-                                                            <p 
-                                                                className="inline ml-2 text-green-500">
+                                                            <p className="inline ml-2 text-green-500">
                                                                 Accepted answer
                                                             </p>
                                                         ) : (
@@ -411,7 +454,9 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
                                                         )}
                                                     </div>
                                                     <div className="flex">
-                                                        {forumObj.userID ===
+                                                        {user !== null &&
+                                                        user !== undefined &&
+                                                        forumObj.userID ===
                                                             user._id &&
                                                         !reply.accepted &&
                                                         !forumObj.resolved ? (
@@ -433,8 +478,10 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
                                                                 </button>
                                                             </div>
                                                         ) : null}
-                                                        {reply.userID ===
-                                                        user._id ? (
+                                                        {user !== null &&
+                                                        user !== undefined &&
+                                                        reply.userID ===
+                                                            user._id ? (
                                                             <div className="w-fit">
                                                                 <button
                                                                     onClick={() => {
@@ -479,7 +526,10 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
                                                                 )
                                                             }
                                                             className="transition-all ease-in-out active:scale-110 hover:bg-gray-500 rounded-full px-2 py-2 m-2">
-                                                            {reply.likes.includes(
+                                                            {user !== null &&
+                                                            user !==
+                                                                undefined &&
+                                                            reply.likes.includes(
                                                                 user._id
                                                             ) ? (
                                                                 <AiFillLike />
@@ -499,7 +549,10 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
                                                                 )
                                                             }
                                                             className="transition-all ease-in-out active:scale-110 hover:bg-gray-500 rounded-full px-2 py-2 m-2">
-                                                            {reply.dislikes.includes(
+                                                            {user !== null &&
+                                                            user !==
+                                                                undefined &&
+                                                            reply.dislikes.includes(
                                                                 user._id
                                                             ) ? (
                                                                 <AiFillDislike />
@@ -660,9 +713,15 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
             {/* TODO:report forum popup */}
 
             {/* accept reply popup */}
-            <Popup show={showAcceptReplyPopup} setShow={setShowAcceptReplyPopup}>
-                <div className="items-center">Accept this reply as the answer?</div>
-                <div className="items-center text-slate-400 text-xs">Note: This action is permenant and cannot be undone</div>
+            <Popup
+                show={showAcceptReplyPopup}
+                setShow={setShowAcceptReplyPopup}>
+                <div className="items-center">
+                    Accept this reply as the answer?
+                </div>
+                <div className="items-center text-slate-400 text-xs">
+                    Note: This action is permenant and cannot be undone
+                </div>
 
                 {/* confirm, cancel buttons */}
                 <div className="flex justify-center mt-2">

@@ -187,10 +187,7 @@ const ForumDashboard = (props) => {
     const tabHighlightClasses =
         " text-green-500 border-green-500 border-b-4 bg-gray-700 rounded-t-lg";
     return (
-        <div
-            style={{ height: "calc(100% - 20px)" }}
-            className="text-white p-5">
-
+        <div style={{ height: "calc(100% - 20px)" }} className="text-white p-5">
             {searched && (
                 <div
                     onClick={() => setSearched(false)}
@@ -285,8 +282,8 @@ const ForumDashboard = (props) => {
             <hr className="border-1 border-white opacity-50" />
 
             {/* main container */}
-            <div 
-                id="forumContainer" 
+            <div
+                id="forumContainer"
                 className="sm:px-20 sm:py-2 max-w-md sm:max-w-full m-auto">
                 {loading ? (
                     <FaSpinner
@@ -312,48 +309,65 @@ const ForumDashboard = (props) => {
                             </>
                         )}
                         {tab === "myForums" && (
-                            <>
-                                <div className="m-auto w-fit">
-                                    <button
-                                        onClick={() => {
-                                            setShowCreateForum(true);
-                                        }}
-                                        className="bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 rounded mt-5 mb-5">
-                                        <MdOutlineAdd className="inline-block mr-2" />
-                                        Create Forum
-                                    </button>
-                                </div>
-                                {myForums.length > 0 ? (
-                                    <ForumCardContainer
-                                        forums={myForums}
-                                        checkStatus={checkStatus}
-                                        notify={notify}
-                                        refreshAll={refreshAllForums}
-                                    />
-                                ) : (
+                            <div>
+                                {user === null || user === undefined ? (
                                     <div className="m-auto w-fit mt-5 text-gray-500">
-                                        You have not created any forums yet{" "}
-                                        {" " + showCreateForum}
+                                        You must be logged in to create a forum
                                     </div>
+                                ) : (
+                                    <>
+                                        <div className="m-auto w-fit">
+                                            <button
+                                                onClick={() => {
+                                                    setShowCreateForum(true);
+                                                }}
+                                                className="bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 rounded mt-5 mb-5">
+                                                <MdOutlineAdd className="inline-block mr-2" />
+                                                Create Forum
+                                            </button>
+                                        </div>
+                                        {myForums.length > 0 ? (
+                                            <ForumCardContainer
+                                                forums={myForums}
+                                                checkStatus={checkStatus}
+                                                notify={notify}
+                                                refreshAll={refreshAllForums}
+                                            />
+                                        ) : (
+                                            <div className="m-auto w-fit mt-5 text-gray-500">
+                                                You have not created any forums
+                                                yet {" " + showCreateForum}
+                                            </div>
+                                        )}
+                                    </>
                                 )}
-                            </>
+                            </div>
                         )}
                         {tab === "subscribed" && (
-                            <>
-                                {subscribedForums.length > 0 ? (
-                                    <ForumCardContainer
-                                        forums={subscribedForums}
-                                        checkStatus={checkStatus}
-                                        notify={notify}
-                                        refreshAll={refreshAllForums}
-                                    />
-                                ) : (
+                            <div>
+                                {user === null || user === undefined ? (
                                     <div className="m-auto w-fit mt-5 text-gray-500">
-                                        You have not subscribed to any forums
-                                        yet
+                                        You must be logged in to see your
+                                        subscribed forums
                                     </div>
+                                ) : (
+                                    <>
+                                        {subscribedForums.length > 0 ? (
+                                            <ForumCardContainer
+                                                forums={subscribedForums}
+                                                checkStatus={checkStatus}
+                                                notify={notify}
+                                                refreshAll={refreshAllForums}
+                                            />
+                                        ) : (
+                                            <div className="m-auto w-fit mt-5 text-gray-500">
+                                                You have not subscribed to any
+                                                forums yet
+                                            </div>
+                                        )}
+                                    </>
                                 )}
-                            </>
+                            </div>
                         )}
                     </>
                 )}

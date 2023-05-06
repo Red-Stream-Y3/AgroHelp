@@ -23,7 +23,7 @@ const getForumById = asyncHandler(async (req, res) => {
   const forum = await Forum.findById(req.params.id);
 
   if (forum) {
-    res.json(forum);
+    res.status(200).json(forum);
   } else {
     res.status(404).send({ message: 'Forum not found' });
   }
@@ -57,7 +57,7 @@ const updateForum = asyncHandler(async (req, res) => {
     forum.content = content;
 
     const updatedForum = await forum.save();
-    res.json(updatedForum);
+    res.status(200).json(updatedForum);
   } else {
     res.status(404).send({ message: 'Forum not found' });
   }
