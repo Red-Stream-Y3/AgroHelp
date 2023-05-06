@@ -14,12 +14,14 @@ import { Link } from "react-router-dom";
 export default function BlogDashboard() {
   const [blogs, setBlogs] = useState([]);
 
+  const user = JSON.parse(localStorage.getItem("userInfo"));
+
   useEffect(() => {
     try {
       const fetchAcceptedBlogs = async () => {
         const blogs = await getAcceptedBlogs();
         setBlogs(blogs);
-        console.log(blogs);
+        //console.log(blogs);
       };
       fetchAcceptedBlogs();
     } catch (error) {
@@ -27,13 +29,18 @@ export default function BlogDashboard() {
     }
   }, []);
 
+  let userID;
+
+  if (user && blogs) {
+    userID = user._id;
+    //console.log(userID);
+  }
+
   //date formatter
   function formatDate(dateString) {
     const date = new Date(dateString);
     return date.toLocaleDateString("en-US");
   }
-
-  console.log(blogs);
 
   return (
     <div>
@@ -51,13 +58,16 @@ export default function BlogDashboard() {
             <div key={blog.id}>
               <Link to={`/viewblog/${blog._id}`}>
                 <BlogCard
+                  blogID={blog._id}
                   title={blog.title}
                   author={blog.author.firstName + " " + blog.author.lastName}
+                  authorID={blog.author._id}
                   date={formatDate(blog.createdAt)}
                   tags={blog.tags}
                   likes={blog.likes.length}
                   dislikes={blog.dislikes.length}
                   comments={blog.comments.length}
+                  user={userID}
                 />
               </Link>
             </div>

@@ -23,7 +23,7 @@ import {
   UpdateDisease,
   MyArticles,
 } from './pages';
-import { BlogDashboard, BlogCreate, BlogView } from './pages';
+import { BlogDashboard, BlogCreate, BlogView, BlogUpdate } from './pages';
 import './App.css';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -70,6 +70,7 @@ function App() {
             <Route path="/blog" element={<BlogDashboard />} />
             <Route path="/createblog" element={<BlogCreate />} />
             <Route path="/viewblog/:id" element={<BlogView />} />
+            <Route path="/editblog/:id" element={<BlogUpdate />} />
           </Routes>
 
           <Footer />

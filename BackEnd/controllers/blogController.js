@@ -66,7 +66,7 @@ const createBlog = asyncHandler(async (req, res) => {
 // @route   PUT /api/blog/:id
 // @access  Private/Admin
 const updateBlog = asyncHandler(async (req, res) => {
-  const { title, body, author, tags, isAccepted, likesCount } = req.body;
+  const { title, body, author, tags } = req.body;
   const blog = await Blog.findById(req.params.id);
 
   if (blog) {
@@ -75,8 +75,7 @@ const updateBlog = asyncHandler(async (req, res) => {
     blog.author = author;
     blog.tags = tags;
     blog.updatedAt = Date.now();
-    blog.isAccepted = isAccepted;
-    blog.likesCount = likesCount;
+    //blog.isAccepted = isAccepted;
 
     const updatedBlog = await blog.save();
     res.json(updatedBlog);
