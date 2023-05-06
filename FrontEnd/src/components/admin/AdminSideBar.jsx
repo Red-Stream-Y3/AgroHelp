@@ -17,7 +17,6 @@ const AdminSideBar = ({ isSidebarOpen }) => {
       } md:block`}
       style={{
         minHeight: '100vh',
-        display: 'flex',
         flexDirection: 'column',
       }}
     >

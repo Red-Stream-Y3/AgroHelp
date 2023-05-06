@@ -175,32 +175,10 @@ export const getSubscribedForumsByUser = async (user, checkStatus) => {
   }
 };
 
-//like a forum
+//like / unlike a forum
 export const likeForum = async (user, id, checkStatus) => {
   const res = await axios.post(
     `${BASE_URL}/like/${id}`,
-    {
-      user: {
-        _id: user._id,
-        username: user.username,
-      },
-      forum: {},
-    },
-    getconfig(user)
-  );
-
-  if (res.data) {
-    return res.data;
-  } else {
-    checkStatus(res);
-    return null;
-  }
-};
-
-//unlike a forum
-export const unlikeForum = async (user, id, checkStatus) => {
-  const res = await axios.post(
-    `${BASE_URL}/unlike/${id}`,
     {
       user: {
         _id: user._id,
@@ -231,32 +209,10 @@ export const getLikedForumsByUser = async (user, checkStatus) => {
   }
 };
 
-//dislike a forum
+//dislike / undislike a forum
 export const dislikeForum = async (user, id, checkStatus) => {
   const res = await axios.post(
     `${BASE_URL}/dislike/${id}`,
-    {
-      user: {
-        _id: user._id,
-        username: user.username,
-      },
-      forum: {},
-    },
-    getconfig(user)
-  );
-
-  if (res.data) {
-    return res.data;
-  } else {
-    checkStatus(res);
-    return null;
-  }
-};
-
-//undislike a forum
-export const undislikeForum = async (user, id, checkStatus) => {
-  const res = await axios.post(
-    `${BASE_URL}/undislike/${id}`,
     {
       user: {
         _id: user._id,
@@ -349,7 +305,7 @@ export const editReply = async (user, id, replyID, reply, checkStatus) => {
   }
 };
 
-//like reply
+//like / unlike a reply
 export const likeReply = async (user, id, replyID, checkStatus) => {
   const res = await axios.post(
     `${BASE_URL}/reply/like/${id}/${replyID}`,
@@ -371,54 +327,10 @@ export const likeReply = async (user, id, replyID, checkStatus) => {
   }
 };
 
-//unlike reply
-export const unlikeReply = async (user, id, replyID, checkStatus) => {
-  const res = await axios.post(
-    `${BASE_URL}/reply/unlike/${id}/${replyID}`,
-    {
-      user: {
-        _id: user._id,
-        username: user.username,
-      },
-      content: {},
-    },
-    getconfig(user)
-  );
-
-  if (res.data) {
-    return res.data;
-  } else {
-    checkStatus(res);
-    return null;
-  }
-};
-
-//dislike reply
+//dislike / undislike a reply
 export const dislikeReply = async (user, id, replyID, checkStatus) => {
   const res = await axios.post(
     `${BASE_URL}/reply/dislike/${id}/${replyID}`,
-    {
-      user: {
-        _id: user._id,
-        username: user.username,
-      },
-      content: {},
-    },
-    getconfig(user)
-  );
-
-  if (res.data) {
-    return res.data;
-  } else {
-    checkStatus(res);
-    return null;
-  }
-};
-
-//undislike reply
-export const undislikeReply = async (user, id, replyID, checkStatus) => {
-  const res = await axios.post(
-    `${BASE_URL}/reply/undislike/${id}/${replyID}`,
     {
       user: {
         _id: user._id,
@@ -499,18 +411,14 @@ export const Forum = {
   unsubscribeFromForum,
   getSubscribedForumsByUser,
   likeForum,
-  unlikeForum,
   getLikedForumsByUser,
   dislikeForum,
-  undislikeForum,
   getDislikedForumsByUser,
   replyToForum,
   deleteReply,
   editReply,
   likeReply,
-  unlikeReply,
   dislikeReply,
-  undislikeReply,
   acceptReply,
   markResolved,
   getForumsByUser,
