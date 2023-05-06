@@ -146,13 +146,13 @@ const updateCropDisease = asyncHandler(async (req, res) => {
 });
 
 //@desc     search crop disease
-//@route    GET /api/cropDiseases/search/:keyword
+//@route    GET /api/cropDiseases/search/:searchTerm
 //@access   Public
 const searchCropDisease = asyncHandler(async (req, res) => {
   try {
-    const keyword = req.params.keyword;
+    const searchTerm = req.params.q;
     const cropDiseases = await CropDisease.find({
-      diseaseName: { $regex: keyword, $options: 'i' },
+      diseaseName: { $regex: new RegExp(`^${searchTerm}`, 'i') },
     });
     if (cropDiseases) {
       res.json(cropDiseases);
@@ -222,8 +222,6 @@ const getDiseasesByAuthor = asyncHandler(async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 });
-
-
 
 export {
   getCropDiseases,

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   FaHome,
   FaBookOpen,
@@ -24,12 +24,23 @@ const Navbar = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isProfilePopupOpen, setIsProfilePopupOpen] = useState(false);
   const [isLogged, setIsLogged] = useState(false);
+  const [search, setSearch] = useState('');
 
   const { user } = useGlobalContext();
   const isAccess = user && (user.role === 'admin' || user.role === 'moderator');
   const isContributor = user && user.role === 'contributor';
 
   const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (search.trim()) {
+      navigate(`/search/${search}`);
+    } else {
+      navigate('/home');
+    }
+  };
 
   const navigation = [
     {
@@ -182,13 +193,17 @@ const Navbar = () => {
                     aria-hidden="true"
                   />
                 </div>
-                <input
-                  type="text"
-                  name="search"
-                  id="search"
-                  className="bg-secondary rounded-full w-full px-4 pl-10 py-2 focus:outline-none focus:shadow-outline focus:bg-primarydark focus:ring-2 focus:ring-primarylight placeholder:text-gray-200 focus:text-white"
-                  placeholder="Search"
-                />
+                <form onChange={handleSearch}>
+                  <input
+                    type="text"
+                    name="search"
+                    id="search"
+                    className="bg-secondary rounded-full w-full px-4 pl-10 py-2 focus:outline-none focus:shadow-outline focus:bg-primarydark focus:ring-2 focus:ring-primarylight placeholder:text-gray-200 focus:text-white"
+                    placeholder="Search"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                  />
+                </form>
               </div>
             </div>
 

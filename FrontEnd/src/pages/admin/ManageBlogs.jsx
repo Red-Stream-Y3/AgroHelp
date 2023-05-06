@@ -220,7 +220,7 @@ const ManageBlogs = () => {
                               STATUS
                             </th>
                             <th className={`text-center ${theadClass}`}>
-                              MANAGE
+                              ACTIONS
                             </th>
                           </tr>
                         </thead>

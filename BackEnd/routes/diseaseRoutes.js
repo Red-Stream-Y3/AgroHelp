@@ -13,26 +13,15 @@ import {
 
 const diseaseRoutes = express.Router();
 
-diseaseRoutes
-  .route('/')
-  .get(getCropDiseases)
-  .post(createCropDisease);
-diseaseRoutes
-  .route('/random')
-  .get(getRandomCropDiseases);
+diseaseRoutes.route('/').get(getCropDiseases).post(createCropDisease);
+diseaseRoutes.route('/random').get(getRandomCropDiseases);
 diseaseRoutes
   .route('/:id')
   .get(getCropDiseaseById)
   .delete(deleteCropDisease)
   .put(updateCropDisease);
-diseaseRoutes
-  .route('/:id/accept')
-  .put(updateDiseaseAccept);
-diseaseRoutes
-  .route('/search/:cropDiseaseName')
-  .get(searchCropDisease);
-diseaseRoutes
-  .route('/author/:id')
-  .get(getDiseasesByAuthor);
+diseaseRoutes.route('/:id/accept').put(updateDiseaseAccept);
+diseaseRoutes.route('/search/q=:q').get(searchCropDisease);
+diseaseRoutes.route('/author/:id').get(getDiseasesByAuthor);
 
 export default diseaseRoutes;

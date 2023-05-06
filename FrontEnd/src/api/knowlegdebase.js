@@ -83,10 +83,10 @@ export const deleteCrop = async (id) => {
 export const searchCrop = async (name) => {
   try {
     const response = await axios.get(
-      `http://localhost:9120/api/crops/search/${name}`
+      `http://localhost:9120/api/crops/search/q=${name}`
     );
-    console.log('crop', response.data);
-    return response.data;
+
+    return response;
   } catch (error) {
     console.log(error);
     return [];
@@ -109,7 +109,9 @@ export const updateCropAccept = async (id, crop) => {
 // get crops by author
 export const getCropsByAuthor = async (id) => {
   try {
-    const response = await axios.get('http://localhost:9120/api/crops/author/' + id);
+    const response = await axios.get(
+      'http://localhost:9120/api/crops/author/' + id
+    );
     console.log('crop', response.data);
     return response.data;
   } catch (error) {
@@ -206,10 +208,9 @@ export const deleteDisease = async (id) => {
 export const searchDisease = async (name) => {
   try {
     const response = await axios.get(
-      `http://localhost:9120/api/diseases/search/${name}`
+      `http://localhost:9120/api/diseases/search/q=${name}`
     );
-    console.log('disease', response.data);
-    return response.data;
+    return response;
   } catch (error) {
     console.log(error);
     return [];
@@ -232,7 +233,9 @@ export const updateDiseaseAccept = async (id, crop) => {
 // get diseases by author
 export const getDiseasesByAuthor = async (id) => {
   try {
-    const response = await axios.get('http://localhost:9120/api/diseases/author/' + id);
+    const response = await axios.get(
+      'http://localhost:9120/api/diseases/author/' + id
+    );
     console.log('disease', response.data);
     return response.data;
   } catch (error) {
