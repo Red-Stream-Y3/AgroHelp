@@ -149,12 +149,39 @@ export const updateBlogAccept = async (id, blog) => {
 
 //get blogs by author
 export const getBlogsByAuthor = async (authorId) => {
-    try {
-        const response = await axios.get(`http://localhost:9120/api/blog/author/${authorId}`);
-        console.log('blog', response.data);
-        return response.data;
-    } catch(error) {
-        console.log(error);
-        return [];
-    }
-}
+  try {
+    const response = await axios.get(
+      `http://localhost:9120/api/blog/author/${authorId}`
+    );
+    console.log('blog', response.data);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+};
+
+// update blog comment status
+export const blogCommentAccept = async (id, blog) => {
+  try {
+    const response = await axios.put(
+      `http://localhost:9120/api/blog/${id}/comment`,
+      blog
+    );
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// delete blog comment
+export const deleteBlogComment = async (id, commentId) => {
+  try {
+    const response = await axios.delete(
+      `http://localhost:9120/api/blog/comment/${id}/${commentId}`
+    );
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};

@@ -116,12 +116,18 @@ const deleteBlogComment = asyncHandler(async (req, res) => {
   const blog = await Blog.findById(req.params.id);
 
   if (blog) {
-    blog.comments.pull(req.params.commentId);
-    blog.save();
-    res.json({ message: 'Comment removed' });
-  } else {
-    res.status(404);
-    throw new Error('Blog not found');
+    const commentIndex = blog.comments.findIndex(
+      (comment) => comment._id.toString() === req.params.commentId
+    );
+
+    if (commentIndex !== -1) {
+      blog.comments.splice(commentIndex, 1);
+      const updatedBlog = await blog.save();
+      res.json(updatedBlog);
+    } else {
+      res.status(404);
+      throw new Error('Comment not found');
+    }
   }
 });
 
@@ -220,15 +226,44 @@ const updateBlogAccept = asyncHandler(async (req, res) => {
 // @access  Public
 const getBlogsByAuthor = asyncHandler(async (req, res) => {
   try {
-    const blogs = await Blog.find({ author: req.params.id }).populate("author" , 'firstName lastName profilePic');
-    if(blogs){
+    const blogs = await Blog.find({ author: req.params.id }).populate(
+      'author',
+      'firstName lastName profilePic'
+    );
+    if (blogs) {
       res.json(blogs);
-    }else{
-      res.status(404).json({ message: "No blogs found" });
+    } else {
+      res.status(404).json({ message: 'No blogs found' });
     }
   } catch (error) {
     console.log(error);
-    res.status(404).json({ message: "Blog not found" });
+    res.status(404).json({ message: 'Blog not found' });
+  }
+});
+
+// @desc    Update Blog Comment accept
+// @route   PUT /api/blog/comment/:id/accept
+// @access  Private/Admin
+const blogCommentAccept = asyncHandler(async (req, res) => {
+  const blog = await Blog.findById(req.params.id);
+
+  if (blog) {
+    const comment = blog.comments.find(
+      (comment) => comment._id.toString() === req.body._id
+    );
+
+    if (comment) {
+      comment.isPosted = req.body.isPosted || comment.isPosted;
+      await blog.save();
+
+      res.json(blog);
+    } else {
+      res.status(404);
+      throw new Error('Comment not found');
+    }
+  } else {
+    res.status(404);
+    throw new Error('Blog not found');
   }
 });
 
@@ -244,5 +279,6 @@ export {
   likeBlog,
   dislikeBlog,
   updateBlogAccept,
-  getBlogsByAuthor
+  getBlogsByAuthor,
+  blogCommentAccept,
 };
