@@ -147,16 +147,6 @@ export const updateBlogAccept = async (id, blog) => {
   }
 };
 
-    try {
-        const response = await axios.post(`http://localhost:9120/api/blog/dislike/${id}`, user);
-        console.log('blog', response.data);
-        return response.data;
-    } catch(error) {
-        console.log(error);
-        return [];
-    }
-}
-
 //get blogs by author
 export const getBlogsByAuthor = async (authorId) => {
     try {
