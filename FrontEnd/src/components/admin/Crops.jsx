@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 const Crops = ({
   theadClass,
@@ -60,10 +61,11 @@ const Crops = ({
               <i className="fa-solid fa-circle-check"></i>
             </button>
 
-            {/* TODO:  add onClick to redirect to edit page */}
-            <button className="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md sm:w-auto gap-x-2 hover:bg-gray-100 dark:bg-primary dark:text-gray-200 dark:border-gray-700 dark:hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed">
-              <i className="fa-solid fa-pen-to-square"></i>
-            </button>
+            <Link to={`/update/crop/${crop._id}`}>
+              <button className="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md sm:w-auto gap-x-2 hover:bg-gray-100 dark:bg-primary dark:text-gray-200 dark:border-gray-700 dark:hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed">
+                <i className="fa-solid fa-pen-to-square"></i>
+              </button>
+            </Link>
 
             <button
               className="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md sm:w-auto gap-x-2 hover:bg-gray-100 dark:bg-red-600 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-red-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
@@ -124,7 +126,7 @@ const Crops = ({
                     <th className={theadClass}>DETAILS</th>
                     <th className={theadClass}>AUTHOR</th>
                     <th className={`text-center ${theadClass}`}>DATE</th>
-                    <th className={`text-center ${theadClass}`}>MANAGE</th>
+                    <th className={`text-center ${theadClass}`}>ACTIONS</th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">

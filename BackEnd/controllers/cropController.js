@@ -142,12 +142,13 @@ const updateCrop = asyncHandler(async (req, res) => {
 });
 
 // @desc    search crops
-// @route   GET /api/crops/search
+// @route   GET /api/crops/search/:searchTerm
 // @access  Public
 const searchCrops = asyncHandler(async (req, res) => {
   try {
+    const searchTerm = req.params.q;
     const crops = await Crop.find({
-      cropName: { $regex: req.query.q, $options: 'i' },
+      cropName: { $regex: new RegExp(`^${searchTerm}`, 'i') },
     });
     res.json(crops);
   } catch (error) {
@@ -204,7 +205,6 @@ const getCropsByAuthor = asyncHandler(async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 });
-
 
 export {
   getCrops,

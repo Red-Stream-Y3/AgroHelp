@@ -3,6 +3,7 @@ export { default as Login } from './common/Login';
 export { default as Register } from './common/Register';
 export { default as Profile } from './common/Profile';
 export { default as AccountSettings } from './common/AccountSettings';
+export { default as Search } from './common/Search';
 
 export { default as KnowledgeBase } from './knowledgebase/KnowledgeBase';
 export { default as Crop } from './knowledgebase/Crop';

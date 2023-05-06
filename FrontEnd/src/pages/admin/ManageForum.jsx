@@ -130,12 +130,12 @@ const ManageForum = () => {
       <tr key={forum._id}>
         <td className="px-4 py-4 text-sm font-medium whitespace-nowrap">
           <h2 className="font-medium text-gray-800 dark:text-white capitalize">
-            {forum.title.split(' ').slice(0, 8).join(' ')}
+            {forum.title.split(' ').slice(0, 5).join(' ')} ...
           </h2>
         </td>
         <td className="py-4 text-sm whitespace-nowrap">
           <h2 className="font-medium text-gray-800 dark:text-white capitalize">
-            {forum.content.split(' ').slice(0, 8).join(' ')} ...
+            {forum.content.split(' ').slice(0, 6).join(' ')} ...
           </h2>
         </td>
         <td className="py-4 text-sm whitespace-nowrap">
@@ -243,7 +243,7 @@ const ManageForum = () => {
                               STATUS
                             </th>
                             <th className={`text-center ${theadClass}`}>
-                              MANAGE
+                              ACTIONS
                             </th>
                           </tr>
                         </thead>
