@@ -64,6 +64,7 @@ const createCrop = asyncHandler(async (req, res) => {
       cropImage,
       cropInfo,
       otherInfo,
+      author,
     } = req.body;
 
     // check scientific name
@@ -72,11 +73,12 @@ const createCrop = asyncHandler(async (req, res) => {
       res.status(400);
       throw new Error('Crop already exists');
     }
+    const authorId = req.body.author;
 
-    let authorId = null;
-    if (req.user && req.user._id) {
-      authorId = req.user._id;
-    }
+    // let authorId = null;
+    // if (req.user && req.user._id) {
+    //   authorId = req.user._id;
+    // }
 
     const crop = new Crop({
       cropName,
@@ -87,7 +89,7 @@ const createCrop = asyncHandler(async (req, res) => {
       cropImage,
       cropInfo,
       otherInfo,
-      author: authorId,
+      author,
     });
 
     const createdCrop = await crop.save();
@@ -185,6 +187,25 @@ const updateCropAccept = asyncHandler(async (req, res) => {
   }
 });
 
+//@desc     Get crops by author
+//@route    GET /api/crops/author/:id
+//@access   Public
+const getCropsByAuthor = asyncHandler(async (req, res) => {
+  try {
+    const crops = await Crop.find({ author: req.params.id });
+    if (crops) {
+      res.json(crops);
+    } else {
+      res.status(404);
+      throw new Error('Crops not found');
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ message: error.message });
+  }
+});
+
+
 export {
   getCrops,
   getCropById,
@@ -194,4 +215,5 @@ export {
   searchCrops,
   getShortCrops,
   updateCropAccept,
+  getCropsByAuthor,
 };
