@@ -1,6 +1,6 @@
 /** @format */
 
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const blogSchema = new mongoose.Schema({
   title: {
@@ -13,7 +13,7 @@ const blogSchema = new mongoose.Schema({
   },
   author: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
+    ref: 'User',
     required: true,
   },
   tags: {
@@ -29,24 +29,22 @@ const blogSchema = new mongoose.Schema({
   likes: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: 'User',
       required: true,
     },
   ],
   dislikes: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: 'User',
       required: true,
     },
   ],
-  Bookmarked: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
-    },
-  ],
+  Bookmarked: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  }],
   comments: [
     {
       text: {
@@ -55,7 +53,7 @@ const blogSchema = new mongoose.Schema({
       },
       postedBy: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
+        ref: 'User',
         required: true,
       },
       userName: {
@@ -66,6 +64,10 @@ const blogSchema = new mongoose.Schema({
         type: Date,
         default: Date.now,
       },
+      isPosted: {
+        type: Boolean,
+        default: true,
+      },
     },
   ],
 
@@ -75,6 +77,6 @@ const blogSchema = new mongoose.Schema({
   },
 });
 
-const Blog = mongoose.model("Blog", blogSchema);
+const Blog = mongoose.model('Blog', blogSchema);
 
 export default Blog;

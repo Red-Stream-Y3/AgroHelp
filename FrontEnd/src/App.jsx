@@ -14,6 +14,7 @@ import {
   Login,
   Register,
   Profile,
+  AccountSettings,
   Crop,
   Disease,
   KnowledgeBase,
@@ -46,6 +47,7 @@ function App() {
             <Route path="/home" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/settings" element={<AccountSettings />} />
             <Route path="/profile" element={<Profile />} />
 
             <Route path="/admin/*" element={<AdminHome />}>
@@ -64,7 +66,7 @@ function App() {
             <Route path="create/disease" element={<CreateDisease />} />
             <Route path="update/crop/:id" element={<UpdateCrop />} />
             <Route path="update/disease/:id" element={<UpdateDisease />} />
-            <Route path="my/articles" element={<MyArticles />} />
+            <Route path="contributor/dashboard" element={<MyArticles />} />
             <Route path="/forum" element={<ForumDashboard />} />
 
             <Route path="/blog" element={<BlogDashboard />} />
