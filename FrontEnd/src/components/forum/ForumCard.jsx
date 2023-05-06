@@ -6,13 +6,19 @@ import { Forum } from "../../api/forum.js";
 import Skeleton from "../common/Skeleton";
 import Popup from "../common/Popup";
 
-const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
-
+const ForumCard = ({
+    forum,
+    checkRes,
+    notify,
+    refreshAll,
+    setSelectedForum,
+    setShowSelectedForum,
+}) => {
     //forum object
     const [forumObj, setForumObj] = useState(forum);
 
     //status
-    const [Loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [liked, setLiked] = useState(false);
     const [disliked, setDisliked] = useState(false);
     const [showReplies, setShowReplies] = useState(false);
@@ -98,10 +104,10 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
 
     //action handlers
     const handleLike = async () => {
-        if(user === null || user === undefined){
+        if (user === null || user === undefined) {
             notify("info", "Please login to like a forum");
             return;
-        };
+        }
 
         let res = await Forum.likeForum(user, forum._id, checkRes);
         if (res.message === "Unliked forum") {
@@ -116,7 +122,7 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
     };
 
     const handleDislike = async () => {
-        if(user === null || user === undefined){
+        if (user === null || user === undefined) {
             notify("info", "Please login to dislike a forum");
             return;
         }
@@ -134,7 +140,7 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
     };
 
     const handleReplySubmit = async () => {
-        if(user === null || user === undefined){
+        if (user === null || user === undefined) {
             notify("info", "Please login to reply to a forum");
             return;
         }
@@ -159,14 +165,14 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
         }
         await refreshForum();
         setLoading(false);
-        refreshAll(true);
+        await refreshAll(true);
     };
 
     const handleReplyLike = async (replyId) => {
-        if(user === null || user === undefined){
+        if (user === null || user === undefined) {
             notify("info", "Please login to like a reply");
             return;
-        };
+        }
 
         let res = await Forum.likeReply(user, forum._id, replyId, checkRes);
         if (res.message === "Removed like") {
@@ -177,14 +183,14 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
             setDisliked(false);
         }
         await refreshForum();
-        refreshAll(true);
+        await refreshAll(true);
     };
 
     const handleReplyDislike = async (replyId) => {
-        if(user === null || user === undefined){
+        if (user === null || user === undefined) {
             notify("info", "Please login to dislike a reply");
             return;
-        };
+        }
 
         let res = await Forum.dislikeReply(user, forum._id, replyId, checkRes);
         if (res.message === "Removed dislike") {
@@ -195,7 +201,7 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
             setDisliked(true);
         }
         await refreshForum();
-        refreshAll(true);
+        await refreshAll(true);
     };
 
     const handleEditReplySubmit = async () => {
@@ -207,8 +213,14 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
             return;
         }
 
-        let res = await Forum.editReply(user, forum._id, replyEditId, replyEditInput, checkRes);
-        if (res.message === "Reply edited") {
+        let res = await Forum.editReply(
+            user,
+            forum._id,
+            replyEditId,
+            replyEditInput,
+            checkRes
+        );
+        if (res.message === "Edited reply") {
             setReplyEditInput("");
             setReplyEditId("");
             setShowEditReplyPopup(false);
@@ -216,13 +228,18 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
         }
         await refreshForum();
         setLoading(false);
-        refreshAll(true);
+        await refreshAll(true);
     };
 
     const handleDeleteReply = async () => {
         setLoading(true);
 
-        let res = await Forum.deleteReply(user, forum._id, replyDeleteId, checkRes);
+        let res = await Forum.deleteReply(
+            user,
+            forum._id,
+            replyDeleteId,
+            checkRes
+        );
         if (res.message === "Deleted reply from forum") {
             setReplyDeleteId("");
             setShowDeleteReplyPopup(false);
@@ -230,21 +247,21 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
         }
         await refreshForum();
         setLoading(false);
-        refreshAll(true);
+        await refreshAll(true);
     };
 
     const handleSubscribe = async () => {
-        if(user === null || user === undefined){
+        if (user === null || user === undefined) {
             notify("info", "Please login to subscribe to forum");
             return;
-        };
+        }
 
         let res = await Forum.subscribeToForum(user, forum._id, checkRes);
         if (res.message === "Subscribed to forum") {
             notify("success", "Subscribed to forum");
         }
         await refreshForum();
-        refreshAll(true);
+        await refreshAll(true);
     };
 
     const handleUnsubscribe = async () => {
@@ -253,7 +270,7 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
             notify("success", "Unsubscribed from forum");
         }
         await refreshForum();
-        refreshAll();
+        await refreshAll();
     };
 
     const handleDeleteForum = async () => {
@@ -266,7 +283,7 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
         }
 
         setLoading(false);
-        refreshAll();
+        await refreshAll();
     };
 
     const handleEditForum = async () => {
@@ -289,20 +306,25 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
         }
 
         setLoading(false);
-        refreshAll(true);
+        await refreshAll(true);
     };
 
     const handleAcceptReply = async () => {
         setLoading(true);
 
-        let res = await Forum.acceptReply(user, forumObj._id, replyAcceptId, checkRes);
+        let res = await Forum.acceptReply(
+            user,
+            forumObj._id,
+            replyAcceptId,
+            checkRes
+        );
         if (res.message === "Accepted reply as answer") {
             setReplyAcceptId("");
             setShowAcceptReplyPopup(false);
             notify("success", "Accepted reply as answer");
         }
 
-        if(!forumObj.resolved) {
+        if (!forumObj.resolved) {
             let res = await Forum.markResolved(user, forumObj._id, checkRes);
             if (res.message === "Forum Resolved") {
                 notify("success", "Marked forum as resolved");
@@ -310,12 +332,12 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
         }
 
         setLoading(false);
-        refreshAll(true);
+        await refreshAll(true);
     };
 
     return (
         <div className="rounded-md bg-darkbg p-3 mt-2 w-full sm:max-w-4xl text-sm sm:text-base">
-            {!Loading ? (
+            {!loading ? (
                 <div>
                     <div className="flex justify-between">
                         {/* username and date */}
@@ -377,7 +399,12 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
                     </div>
 
                     {/* title */}
-                    <div className="font-bold">
+                    <div
+                        onClick={() => {
+                            setSelectedForum(forumObj);
+                            setShowSelectedForum(true);
+                        }}
+                        className="font-bold cursor-pointer hover:underline">
                         {forumObj.title +
                             (forumObj.resolved ? " (Solved)" : "")}
                     </div>
@@ -746,8 +773,6 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
                     </button>
                 </div>
             </Popup>
-
-            {/* TODO:report forum popup */}
 
             {/* accept reply popup */}
             <Popup

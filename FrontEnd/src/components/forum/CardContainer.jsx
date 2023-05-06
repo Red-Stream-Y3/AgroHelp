@@ -13,6 +13,8 @@ const CardContainer = (props) => {
                         checkRes={props.checkStatus}
                         notify={props.notify}
                         refreshAll={props.refreshAll}
+                        setSelectedForum={props.setSelectedForum}
+                        setShowSelectedForum={props.setShowSelectedForum}
                     />
                 );
             })}
