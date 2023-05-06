@@ -29,6 +29,12 @@ const Card = ({
 
   //console.log(isAuthor);
 
+    //date formatter
+    function formatDate(dateString) {
+      const date = new Date(dateString);
+      return date.toLocaleDateString("en-US");
+    }
+
   return (
     <div
       className="bg-white shadow-lg rounded-lg px-4 py-6 sm:flex sm:flex-col sm:justify-between sm:items-start sm:px-6 sm:py-8 transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-20 hover:bg-green-200 cursor-pointer"
@@ -47,9 +53,10 @@ const Card = ({
       <div className="text-2xl font-bold mb-2">{title}</div>
       <hr className="my-2" />
       <div className="text-gray-500 text-sm mb-2 flex items-center">
-        <span className="mr-2">{author}</span>
+        <Link to={`/blogAuthor/${authorID}`} className="mr-2">
+        <span className="mr-2 hover:text-blue-800 hover:underline cursor-pointer">{author}</span></Link>
         <span>|</span>
-        <span className="ml-2 mr-2">{date}</span>
+        <span className="ml-2 mr-2">{formatDate(date)}</span>
         <span>|</span>
         <span className="ml-2">{tags}</span>
       </div>

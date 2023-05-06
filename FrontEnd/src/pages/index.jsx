@@ -25,7 +25,7 @@ export { default as BlogDashboard } from './blog/BlogDashboard';
 export { default as BlogView } from './blog/BlogView';
 export { default as BlogCreate } from './blog/BlogCreate';
 export { default as BlogUpdate } from './blog/BlogUpdate';
-
+export { default as BlogsbyAuthor } from './blog/BlogsbyAuthor';
 
 //forum related exports
 export { default as ForumDashboard } from './forum/ForumDashboard';

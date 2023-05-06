@@ -197,6 +197,23 @@ const dislikeBlog = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc    Fetch blogs by author
+// @route   GET /api/blog/author/:id
+// @access  Public
+const getBlogsByAuthor = asyncHandler(async (req, res) => {
+  try {
+    const blogs = await Blog.find({ author: req.params.id }).populate("author" , 'firstName lastName profilePic');
+    if(blogs){
+      res.json(blogs);
+    }else{
+      res.status(404).json({ message: "No blogs found" });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(404).json({ message: "Blog not found" });
+  }
+});
+
 export {
   getBlogs,
   getBlogById,
@@ -208,4 +225,5 @@ export {
   deleteBlogComment,
   likeBlog,
   dislikeBlog,
+  getBlogsByAuthor
 };

@@ -72,9 +72,11 @@ export default function BlogView() {
   const firstName = blog.author ? blog.author.firstName : "";
   const lastName = blog.author ? blog.author.lastName : "";
   const authorDP = blog.author ? blog.author.profilePic : "";
+  const authorID = blog.author ? blog.author._id : "";
   const body = blog.body ? blog.body : "";
   const tags = blog.tags ? blog.tags : [];
   const tagsAsString = tags.join(", ");
+
 
   //comments handler
   const [comment, setComment] = useState({
@@ -175,6 +177,7 @@ export default function BlogView() {
           authorDP={authorDP}
           date={formatDate(blog.createdAt)}
           tags={tagsAsString}
+          authorId={authorID}
         />
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div dangerouslySetInnerHTML={{ __html: body }} />
