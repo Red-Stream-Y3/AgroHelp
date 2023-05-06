@@ -31,6 +31,7 @@ import {
   BlogView,
   BlogUpdate,
   BlogsbyAuthor,
+  MyBlogPosts
 } from './pages';
 import './App.css';
 import { ToastContainer } from 'react-toastify';
@@ -81,6 +82,7 @@ function App() {
             <Route path="/viewblog/:id" element={<BlogView />} />
             <Route path="/editblog/:id" element={<BlogUpdate />} />
             <Route path="/blogAuthor/:id" element={<BlogsbyAuthor />} />
+            <Route path="/myblogs/:id" element={<MyBlogPosts />} />
           </Routes>
 
           <Footer />
