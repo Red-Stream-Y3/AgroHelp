@@ -13,8 +13,8 @@ beforeAll(async () => {
     await mongoose.connect(process.env.MONGO_URI);
 
     await request(app).post("/api/users/login").send({
-        email: "admin@admin.com",
-        password: "admin123",
+        email: "sophia@hotmal.com",
+        password: "user123",
     }).then((res) => {
         user.token = res.body.token;
         user._id = res.body._id.toString();
