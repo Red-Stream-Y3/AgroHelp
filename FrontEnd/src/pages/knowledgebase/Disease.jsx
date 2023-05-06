@@ -1,17 +1,19 @@
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { getDiseaseById } from '../../api/knowlegdebase'
+import { Loader } from '../../components'
 
 const Disease = () => {
   const { id } = useParams()
   const [disease, setDisease] = useState({})
+  const [isLoading, setIsLoading ] = useState(true)
 
   useEffect(() => {
     try {
         const fetchDisease = async () => {
             const disease = await getDiseaseById(id)
             setDisease(disease)
-            console.log("disease by id", disease)
+            setIsLoading(false)
         }
         fetchDisease()
     } catch (error) {
@@ -19,7 +21,13 @@ const Disease = () => {
     }
   }, [id])
 
-  console.log('disease', disease)
+  if (isLoading) {
+    return (
+      <div className="flex flex-col items-center justify-center h-screen">
+        <Loader />
+      </div>
+    )
+  }
 
   return (
     <div>

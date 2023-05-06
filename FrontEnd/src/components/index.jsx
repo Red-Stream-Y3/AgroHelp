@@ -6,6 +6,8 @@ export { default as Popup } from './common/Popup';
 
 export { default as CropCard } from './knowledgebase/CropCard';
 export { default as DiseaseCard } from './knowledgebase/DiseaseCard';
+export { default as CropTable } from './knowledgebase/CropTable';
+export { default as DiseaseTable } from './knowledgebase/DiseaseTable';
 
 //admin components
 export { default as AdminSideBar } from './admin/AdminSideBar';

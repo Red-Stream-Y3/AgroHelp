@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { getAllCropsShort, getRandomDiseases } from '../../api/knowlegdebase'
-import { CropCard, DiseaseCard } from '../../components'
+import { CropCard, DiseaseCard, Loader } from '../../components'
 
 const Home = () => {
 
@@ -30,7 +30,11 @@ const Home = () => {
   }, [])
 
   if (isLoading) {
-    return <div>Loading...</div>
+    return (
+      <div className="flex flex-col items-center justify-center h-screen">
+        <Loader />
+      </div>
+    )
   }
 
   return (

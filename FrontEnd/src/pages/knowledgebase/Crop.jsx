@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react'
 import { getCropById } from '../../api/knowlegdebase'
 import { useParams } from 'react-router-dom'
+import { Loader } from '../../components'
 
 
 const Crop = () => {
   const { id } = useParams()
   const [crop, setCrop] = useState({})
+  const [isLoading, setIsLoading ] = useState(true)
 
   console.log("id", id)
 
@@ -14,7 +16,7 @@ const Crop = () => {
       const fetchCrop = async () => {
         const crop = await getCropById(id)
         setCrop(crop)
-        console.log("crop by id", crop)
+        setIsLoading(false)
       }
       fetchCrop()
     } catch (error) {
@@ -22,7 +24,13 @@ const Crop = () => {
     }
   }, [id])
 
-  console.log('crop', crop)
+  if (isLoading) {
+    return (
+      <div className="flex flex-col items-center justify-center h-screen">
+        <Loader />
+      </div>
+    )
+  }
 
   return (
     <div>
