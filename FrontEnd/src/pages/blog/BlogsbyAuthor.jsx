@@ -4,16 +4,22 @@ import React from "react";
 import { useParams, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { getBlogsByAuthor } from "../../api/blog";
-import { BlogContainer, BlogCard } from "../../components";
+import { BlogContainer, PublicBlogCard } from "../../components";
 
 export default function BlogsbyAuthor() {
   const { id } = useParams();
   const [blogs, setBlogs] = useState([]);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [profilePic, setProfilePic] = useState("");
 
   useEffect(() => {
     const fetchBlogsByAuthor = async () => {
       const blogs = await getBlogsByAuthor(id);
       setBlogs(blogs);
+      setFirstName(blogs[0].author.firstName);
+      setLastName(blogs[0].author.lastName);
+      setProfilePic(blogs[0].author.profilePic);
     };
     fetchBlogsByAuthor();
   }, [id]);
@@ -29,21 +35,24 @@ export default function BlogsbyAuthor() {
     <div className="my-8">
       <BlogContainer>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-4 mt-4">
-          {blogs.map((blog) => (
-            <div key={blog.id}>
-              <div className="flex flex-row items-center justify-center">
+
+        <div className="flex flex-row items-center justify-center">
                 <img
-                  src={blog.author.profilePic}
+                  src={profilePic}
                   alt="blog"
                   className="w-12 h-12 object-cover rounded-full"
                 />
                 <h1 className="ml-4 text-2xl font-bold text-gray-800 md:text-3xl">
-                  {blog.author.firstName + " " + blog.author.lastName}
+                  {firstName + " " + lastName}
                 </h1>
               </div>
               <hr className="border-gray-500 border-1 w-full mt-4 mb-8" />
+
+          {blogs.map((blog) => (
+            <div key={blog.id}>
+              
               <Link to={`/viewblog/${blog._id}`}>
-                <BlogCard
+                <PublicBlogCard
                   blogID={blog._id}
                   title={blog.title}
                   author={blog.author.firstName + " " + blog.author.lastName}

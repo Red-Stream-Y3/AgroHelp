@@ -20,8 +20,9 @@ import {
 } from "react-icons/ai";
 
 export default function BlogView() {
-  const [blog, setBlog] = React.useState({});
   const { id } = useParams();
+  const [blog, setBlog] = React.useState({});
+  const [isLogged, setIsLogged] = useState(false);
   const [loading, setLoading] = useState(false);
 
   //likes handler
@@ -32,12 +33,20 @@ export default function BlogView() {
   const [numDislikes, setNumDislikes] = useState(0);
 
   //get user info
-  const userDetails = JSON.parse(localStorage.getItem("userInfo"));
-  const userId = userDetails._id;
-  const userName = userDetails.username;
+  let userId;
+  let userName;
 
-  const { user } = useGlobalContext();
-  const isLogged = user; // Check if user exists
+  const userDetails = JSON.parse(localStorage.getItem("userInfo"));
+  if (userDetails) {
+    userId = userDetails._id;
+    userName = userDetails.username;
+  }
+
+  useEffect(() => {
+    if (userDetails) {
+      setIsLogged(true);
+    }
+  }, []);
 
   //get blog by id
   useEffect(() => {
@@ -76,7 +85,6 @@ export default function BlogView() {
   const body = blog.body ? blog.body : "";
   const tags = blog.tags ? blog.tags : [];
   const tagsAsString = tags.join(", ");
-
 
   //comments handler
   const [comment, setComment] = useState({
@@ -162,12 +170,6 @@ export default function BlogView() {
     refreshBlog();
   };
 
-  useEffect(() => {
-    if (!user || !isLogged) {
-      window.location.href = "/login";
-    }
-  }, [isLogged, user]);
-
   return (
     <div className="my-4">
       <BlogContainer>
@@ -228,22 +230,25 @@ export default function BlogView() {
         {/* Comment Section */}
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 p-4">
           <h2 className="text-2xl font-bold mb-4">Comments</h2>
-          <form onSubmit={handleCommentSubmit}>
-            <input
-              type="text"
-              className="border border-gray-400 rounded py-2 px-3 mb-2 w-full"
-              name="text"
-              placeholder="Write a comment..."
-              value={comment.text}
-              onChange={handleCommentChange}
-            />
-            <button
-              type="submit"
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            >
-              Post Comment
-            </button>
-          </form>
+
+          {isLogged && (
+            <form onSubmit={handleCommentSubmit}>
+              <input
+                type="text"
+                className="border border-gray-400 rounded py-2 px-3 mb-2 w-full"
+                name="text"
+                placeholder="Write a comment..."
+                value={comment.text}
+                onChange={handleCommentChange}
+              />
+              <button
+                type="submit"
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              >
+                Post Comment
+              </button>
+            </form>
+          )}
 
           <div className="mt-4">
             {blog.comments &&
