@@ -1,31 +1,58 @@
 import { useState, useEffect } from 'react';
-import { getAllBlogs } from '../../api/blog';
+import { getForums, deleteForum, markResolved } from '../../api/forum';
 import { useGlobalContext } from '../../context/ContextProvider';
 import { Loader } from '../../components';
 import { toast } from 'react-toastify';
 
-const ManageBlogs = () => {
-  const { user } = useGlobalContext();
-  const [blogs, setBlogs] = useState([]);
+const ManageForum = () => {
+  const { user, notify } = useGlobalContext();
+  const [forum, setForum] = useState([]);
   const [value, setValue] = useState('');
   const [tableFilter, setTableFilter] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const getBlogs = async () => {
-    const data = await getAllBlogs();
-    setBlogs(data);
+  //function to check status and create a toast notification
+  const checkStatus = (res) => {
+    switch (res.status) {
+      case 255:
+        notify('success', res.data.message);
+        break;
+      case 256:
+        notify('success', 'Forum created successfully');
+        break;
+      case 404:
+        if (res.data.message) {
+          notify('error', res.data.message);
+        } else {
+          notify('error', 'Error! Forum not found');
+        }
+        break;
+      case 401:
+        notify('error', 'Unauthorized');
+        break;
+      case 500:
+        notify('error', 'Server error');
+        break;
+      default:
+        notify('error', 'Error getting forum');
+        break;
+    }
+  };
+  const getAllForums = async () => {
+    const data = await getForums(checkStatus);
+    setForum(data);
     setLoading(false);
   };
 
   useEffect(() => {
-    getBlogs();
+    getAllForums();
   }, []);
 
   const filterData = (e) => {
     if (e.target.value !== '') {
       setValue(e.target.value);
 
-      const filterTable = blogs.filter((o) =>
+      const filterTable = forum.filter((o) =>
         Object.keys(o).some((k) =>
           String(o[k]).toLowerCase().includes(e.target.value.toLowerCase())
         )
@@ -36,35 +63,35 @@ const ManageBlogs = () => {
     }
   };
 
-  // const handleDelete = async (id) => {
-  //   const data = await deleteBlog(user, id);
-  //   if (data) {
-  //     toast.success(`Blog Deleted Successfully`, {
-  //       hideProgressBar: false,
-  //       closeOnClick: true,
-  //       autoClose: 1500,
-  //       pauseOnHover: true,
-  //       draggable: true,
-  //       progress: undefined,
-  //     });
-  //     getAllBlogs();
-  //   }
-  // };
+  const handleDelete = async (id) => {
+    const data = await deleteForum(user, id, checkStatus);
+    if (data) {
+      toast.success(`Forum  Deleted Successfully`, {
+        hideProgressBar: false,
+        closeOnClick: true,
+        autoClose: 1500,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      getAllForums();
+    }
+  };
 
-  // const handleAccept = async (id) => {
-  //   const data = await markBlogAccept(user, id);
-  //   if (data) {
-  //     toast.success(`Blog accepted to publish`, {
-  //       hideProgressBar: false,
-  //       closeOnClick: true,
-  //       autoClose: 1500,
-  //       pauseOnHover: true,
-  //       draggable: true,
-  //       progress: undefined,
-  //     });
-  //     getAllBlogs();
-  //   }
-  // };
+  const handleResolve = async (id) => {
+    const data = await markResolved(user, id, checkStatus);
+    if (data) {
+      toast.success(`Forum Resolved Successfully`, {
+        hideProgressBar: false,
+        closeOnClick: true,
+        autoClose: 1500,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      getAllForums();
+    }
+  };
 
   // format date function
   const formatDate = (dateString) => {
@@ -79,50 +106,59 @@ const ManageBlogs = () => {
   const theadClass =
     'py-3.5 text-sm font-semibold text-left rtl:text-right text-gray-500 dark:text-white';
 
-  const blogRow = (blog) => {
+  const forumRow = (forum) => {
     return (
-      <tr key={blog._id}>
+      <tr key={forum._id}>
         <td className="px-4 py-4 text-sm font-medium whitespace-nowrap">
           <h2 className="font-medium text-gray-800 dark:text-white capitalize">
-            {blog.title}
+            {forum.title.split(' ').slice(0, 8).join(' ')}
           </h2>
         </td>
         <td className="py-4 text-sm whitespace-nowrap">
           <h2 className="font-medium text-gray-800 dark:text-white capitalize">
-            {blog.body[0].content.split(' ').slice(0, 8).join(' ')} ...
+            {forum.resolved === true ? (
+              <span>✅ Resolved </span>
+            ) : (
+              <span>❌ Not Resolved </span>
+            )}
           </h2>
         </td>
         <td className="py-4 text-sm whitespace-nowrap">
           <h2 className="font-medium text-gray-800 dark:text-white capitalize">
-            {blog.author.firstName}
+            {forum.content.split(' ').slice(0, 8).join(' ')} ...
           </h2>
         </td>
         <td className="py-4 text-sm whitespace-nowrap">
           <h2 className="font-medium text-gray-800 dark:text-white capitalize">
-            <span>{formatDate(blog.createdAt)}</span>
+            {forum.userID.firstName}
+          </h2>
+        </td>
+        <td className="py-4 text-sm whitespace-nowrap">
+          <h2 className="font-medium text-gray-800 dark:text-white capitalize">
+            <span>{formatDate(forum.createdAt)}</span>
           </h2>
         </td>
         <td className="py-4 text-sm whitespace-nowrap">
           <div className="flex items-center mt-4 gap-x-4 sm:mt-0 justify-center">
-            {/* <button
+            <button
               className="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md sm:w-auto gap-x-2 hover:bg-gray-100 dark:bg-blue-500 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-blue-700 disabled:bg-gray-500 disabled:hover:bg-gray-500 disabled:text-white disabled:cursor-not-allowed"
-              disabled={blog.isAccepted === true}
-              onClick={() => handleResolve(blog._id)}
+              disabled={forum.resolved === true}
+              onClick={() => handleResolve(forum._id)}
             >
               <i className="fa-solid fa-circle-check"></i>
-            </button> */}
+            </button>
 
             {/* TODO:  add onClick to redirect to edit page */}
             <button className="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md sm:w-auto gap-x-2 hover:bg-gray-100 dark:bg-primary dark:text-gray-200 dark:border-gray-700 dark:hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed">
               <i className="fa-solid fa-pen-to-square"></i>
             </button>
 
-            {/* <button
+            <button
               className="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md sm:w-auto gap-x-2 hover:bg-gray-100 dark:bg-red-600 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-red-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
-              onClick={() => handleDelete(blog._id)}
+              onClick={() => handleDelete(forum._id)}
             >
               <i className="fa-solid fa-trash"></i>
-            </button> */}
+            </button>
           </div>
         </td>
       </tr>
@@ -140,7 +176,7 @@ const ManageBlogs = () => {
               <div className="mt-6 md:flex md:items-center md:justify-between">
                 <div>
                   <h2 className="text-lg font-semibold text-gray-800 dark:text-white">
-                    BLOGS
+                    FORUM
                   </h2>
                 </div>
                 <div className="flex items-center mt-4 md:mt-0">
@@ -178,11 +214,10 @@ const ManageBlogs = () => {
                         <thead className="bg-gray-50 dark:bg-gray-800">
                           <tr>
                             <th className={`px-4 ${theadClass}`}>TITLE</th>
+                            <th className={theadClass}>STATUS</th>
                             <th className={theadClass}>CONTENT</th>
-                            <th className={theadClass}>AUTHOR</th>
-                            <th className={`text-center ${theadClass}`}>
-                              DATE
-                            </th>
+                            <th className={theadClass}>USER</th>
+                            <th className={theadClass}>DATE</th>
                             <th className={`text-center ${theadClass}`}>
                               MANAGE
                             </th>
@@ -190,8 +225,8 @@ const ManageBlogs = () => {
                         </thead>
                         <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
                           {value.length > 0
-                            ? tableFilter.map((blog) => blogRow(blog))
-                            : blogs.map((blog) => blogRow(blog))}
+                            ? tableFilter.map((forum) => forumRow(forum))
+                            : forum.map((forum) => forumRow(forum))}
                         </tbody>
                       </table>
                     </div>
@@ -206,4 +241,4 @@ const ManageBlogs = () => {
   );
 };
 
-export default ManageBlogs;
+export default ManageForum;

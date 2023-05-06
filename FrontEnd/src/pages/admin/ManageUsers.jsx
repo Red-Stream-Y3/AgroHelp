@@ -11,6 +11,9 @@ const ManageUsers = () => {
   const [tableFilter, setTableFilter] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const isAdmin = user && user.role === 'admin';
+  const isMod = user && user.role === 'moderator';
+
   const getAllUsers = async () => {
     const { data } = await getUsers(user.token);
     const filteredUsers = data.filter((u) => u._id !== user._id); // exclude current user
@@ -100,49 +103,102 @@ const ManageUsers = () => {
         </td>
         <td className="py-4 text-sm whitespace-nowrap">
           <div className="flex items-center mt-4 gap-x-4 sm:mt-0 justify-center">
-            <button
-              className={privilegeBtn}
-              disabled={user.role === 'admin'}
-              onClick={() => {
-                if (user.role === 'regular') {
-                  handleRole(user._id, 'contributor', 'promote');
-                } else if (user.role === 'contributor') {
-                  handleRole(user._id, 'moderator', 'promote');
-                } else if (user.role === 'moderator') {
-                  handleRole(user._id, 'admin', 'promote');
-                }
-              }}
-            >
-              <span>Promote</span>
-            </button>
+            {isAdmin && (
+              <button
+                className={privilegeBtn}
+                disabled={user.role === 'admin'}
+                onClick={() => {
+                  if (user.role === 'regular') {
+                    handleRole(user._id, 'contributor', 'promote');
+                  } else if (user.role === 'contributor') {
+                    handleRole(user._id, 'moderator', 'promote');
+                  } else if (user.role === 'moderator') {
+                    handleRole(user._id, 'admin', 'promote');
+                  }
+                }}
+              >
+                <span>Promote</span>
+              </button>
+            )}
+            {isMod && (
+              <button
+                className={privilegeBtn}
+                disabled={user.role === 'admin' || user.role === 'moderator'}
+                onClick={() => {
+                  if (user.role === 'regular') {
+                    handleRole(user._id, 'contributor', 'promote');
+                  } else if (user.role === 'contributor') {
+                    handleRole(user._id, 'moderator', 'promote');
+                  }
+                }}
+              >
+                <span>Promote</span>
+              </button>
+            )}
 
-            <button
-              className={privilegeBtn}
-              disabled={user.role === 'regular'}
-              onClick={() => {
-                if (user.role === 'contributor') {
-                  handleRole(user._id, 'regular', 'demote');
-                } else if (user.role === 'moderator') {
-                  handleRole(user._id, 'contributor', 'demote');
-                } else if (user.role === 'admin') {
-                  handleRole(user._id, 'moderator', 'demote');
-                }
-              }}
-            >
-              <span>Demote</span>
-            </button>
+            {isAdmin && (
+              <button
+                className={privilegeBtn}
+                disabled={user.role === 'regular'}
+                onClick={() => {
+                  if (user.role === 'contributor') {
+                    handleRole(user._id, 'regular', 'demote');
+                  } else if (user.role === 'moderator') {
+                    handleRole(user._id, 'contributor', 'demote');
+                  } else if (user.role === 'admin') {
+                    handleRole(user._id, 'moderator', 'demote');
+                  }
+                }}
+              >
+                <span>Demote</span>
+              </button>
+            )}
+
+            {isMod && (
+              <button
+                className={privilegeBtn}
+                disabled={user.role === 'regular' || user.role === 'admin'}
+                onClick={() => {
+                  if (user.role === 'contributor') {
+                    handleRole(user._id, 'regular', 'demote');
+                  } else if (user.role === 'moderator') {
+                    handleRole(user._id, 'contributor', 'demote');
+                  }
+                }}
+              >
+                <span>Demote</span>
+              </button>
+            )}
           </div>
         </td>
+
         <td className="py-4 text-sm whitespace-nowrap">
-          <div className="flex items-center mt-4 gap-x-4 sm:mt-0 justify-center">
-            <button
-              className="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md sm:w-auto gap-x-2 hover:bg-gray-100 dark:bg-red-600 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-red-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
-              onClick={() => handleDelete(user._id)}
-            >
-              <i className="fa-solid fa-user-slash"></i>
-            </button>
-          </div>
+          <h2 className="font-medium text-gray-800 dark:text-white capitalize text-center">
+            {user.request ? (
+              user.request === user.role ? (
+                <i className="fa-solid fa-circle-check text-xl text-green-500"></i>
+              ) : (
+                user.request
+              )
+            ) : (
+              <i className="fa-solid fa-bell-slash text-lg text-yellow-400"></i>
+            )}
+          </h2>
         </td>
+
+        {isAdmin && (
+          <td className="py-4 text-sm whitespace-nowrap">
+            <div className="flex items-center mt-4 gap-x-4 sm:mt-0 justify-center">
+              <button
+                className="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md sm:w-auto gap-x-2 hover:bg-gray-100 dark:bg-red-600 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-red-700 disabled:bg-gray-500 disabled:hover:bg-gray-500 disabled:text-white disabled:cursor-not-allowed"
+                disabled={user.email === 'admin@admin.com'}
+                onClick={() => handleDelete(user._id)}
+              >
+                <i className="fa-solid fa-user-slash"></i>
+              </button>
+            </div>
+          </td>
+        )}
       </tr>
     );
   };
@@ -204,8 +260,13 @@ const ManageUsers = () => {
                             PRIVILEGES
                           </th>
                           <th className={`text-center ${theadClass}`}>
-                            MANAGE
+                            REQUEST
                           </th>
+                          {isAdmin && (
+                            <th className={`text-center ${theadClass}`}>
+                              MANAGE
+                            </th>
+                          )}
                         </tr>
                       </thead>
                       <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">

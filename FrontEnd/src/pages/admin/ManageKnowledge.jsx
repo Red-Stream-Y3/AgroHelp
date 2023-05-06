@@ -65,7 +65,7 @@ const ManageKnowledge = () => {
       await updateCropAccept(id, { _id: id, isAccepted: true });
       const data = await getAllCrops();
       setCrops(data);
-      toast.success(`Crop Accepted Successfully`, {
+      toast.success(`Crop accepted to  publish`, {
         hideProgressBar: false,
         closeOnClick: true,
         autoClose: 1500,
@@ -77,7 +77,7 @@ const ManageKnowledge = () => {
       await updateDiseaseAccept(id, { _id: id, isAccepted: true });
       const data = await getAllDiseases();
       setDiseases(data);
-      toast.success(`Disease Accepted Successfully`, {
+      toast.success(`Disease accepted to  publish`, {
         hideProgressBar: false,
         closeOnClick: true,
         autoClose: 1500,

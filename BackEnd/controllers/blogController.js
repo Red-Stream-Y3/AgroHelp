@@ -1,13 +1,15 @@
-import Blog from '../models/blogModel.js';
-import asyncHandler from 'express-async-handler';
+/** @format */
+
+import Blog from "../models/blogModel.js";
+import asyncHandler from "express-async-handler";
 
 // @desc    Fetch all blog blogs
 // @route   GET /api/blog
 // @access  Public
 const getBlogs = asyncHandler(async (req, res) => {
   const blogs = await Blog.find({}).populate(
-    'author',
-    'username firstName lastName'
+    "author",
+    "username firstName lastName"
   );
   res.json(blogs);
 });
@@ -17,14 +19,14 @@ const getBlogs = asyncHandler(async (req, res) => {
 // @access  Public
 const getBlogById = asyncHandler(async (req, res) => {
   const blog = await Blog.findById(req.params.id).populate(
-    'author',
-    'username firstName lastName'
+    "author",
+    "username firstName lastName profilePic"
   );
   if (blog) {
     res.json(blog);
   } else {
     res.status(404);
-    throw new Error('Blog not found');
+    throw new Error("Blog not found");
   }
 });
 
@@ -34,10 +36,10 @@ const getBlogById = asyncHandler(async (req, res) => {
 const deleteBlog = asyncHandler(async (req, res) => {
   const blog = await Blog.findByIdAndDelete(req.params.id);
   if (blog) {
-    res.json({ message: 'Blog removed' });
+    res.json({ message: "Blog removed" });
   } else {
     res.status(404);
-    throw new Error('Blog not found');
+    throw new Error("Blog not found");
   }
 });
 
@@ -45,7 +47,10 @@ const deleteBlog = asyncHandler(async (req, res) => {
 // @route   POST /api/blog
 // @access  Private/Admin
 const createBlog = asyncHandler(async (req, res) => {
-  const { title, body, author, tags } = req.body;
+  const { title, body, author } = req.body;
+
+  const tags = req.body.tags.split(",").map((tag) => tag.trim());
+
   const blog = new Blog({
     title,
     body,
@@ -61,7 +66,7 @@ const createBlog = asyncHandler(async (req, res) => {
 // @route   PUT /api/blog/:id
 // @access  Private/Admin
 const updateBlog = asyncHandler(async (req, res) => {
-  const { title, body, author, tags, isAccepted } = req.body;
+  const { title, body, author, tags, isAccepted, likesCount } = req.body;
   const blog = await Blog.findById(req.params.id);
 
   if (blog) {
@@ -71,27 +76,28 @@ const updateBlog = asyncHandler(async (req, res) => {
     blog.tags = tags;
     blog.updatedAt = Date.now();
     blog.isAccepted = isAccepted;
+    blog.likesCount = likesCount;
 
     const updatedBlog = await blog.save();
     res.json(updatedBlog);
   } else {
     res.status(404);
-    throw new Error('Blog not found');
+    throw new Error("Blog not found");
   }
 });
 
 // @desc    Create new comment
-// @route   POST /api/blog/:id/comment
+// @route   POST /api/blog/comment/:id
 // @access  Private
 const createBlogComment = asyncHandler(async (req, res) => {
-  const { comment, postedAs, postedBy } = req.body;
+  const { text, postedBy, userName } = req.body;
   const blog = await Blog.findById(req.params.id);
 
   if (blog) {
     const newComment = {
-      comment,
-      postedAs,
+      text,
       postedBy,
+      userName,
     };
 
     blog.comments.push(newComment);
@@ -100,7 +106,95 @@ const createBlogComment = asyncHandler(async (req, res) => {
     res.status(201).json(updatedBlog);
   } else {
     res.status(404);
-    throw new Error('Blog not found');
+    throw new Error("Blog not found");
+  }
+});
+
+// @desc    Delete a blog comment
+// @route   DELETE /api/blog/comment/:id/:commentId
+// @access  Private
+const deleteBlogComment = asyncHandler(async (req, res) => {
+  const blog = await Blog.findById(req.params.id);
+
+  if (blog) {
+    blog.comments.pull(req.params.commentId);
+    blog.save();
+    res.json({ message: "Comment removed" });
+  } else {
+    res.status(404);
+    throw new Error("Blog not found");
+  }
+});
+
+// @desc    Search blogs
+// @route   GET /api/blog/search
+// @access  Public
+const searchBlogs = asyncHandler(async (req, res) => {
+  try {
+    const blog = await Blog.find({
+      blogTitle: { $regex: req.query.q, $options: "i" },
+    });
+    res.json(blog);
+  } catch (error) {
+    console.log(error);
+    res.status(404).json({ message: "Blog not found" });
+  }
+});
+
+// @desc    Like a blog
+// @route   PUT /api/blog/like/:id
+// @access  Private
+const likeBlog = asyncHandler(async (req, res) => {
+  const { userId } = req.body;
+  const blog = await Blog.findById(req.params.id);
+  let message = "";
+
+  if (blog) {
+    //if user already liked the blog remove like
+    if (blog.likes.includes(userId)) {
+      blog.likes.pull(userId);
+      message = "Unliked Blog";
+    } else {
+      //if user has disliked the blog remove dislike
+      if (blog.dislikes.includes(userId)) {
+        blog.dislikes.pull(userId);
+      }
+      blog.likes.push(userId);
+      message = "Liked Blog";
+    }
+    blog.save();
+    res.status(255).json({ message: message });
+  } else {
+    res.status(404).send({ message: "Blog not found" });
+  }
+});
+
+// @desc dislike a blog
+// @route PUT /api/blog/dislike/:id
+// @access Private
+const dislikeBlog = asyncHandler(async (req, res) => {
+  const { userId } = req.body;
+  const blog = await Blog.findById(req.params.id);
+  let message = "";
+
+  if (blog) {
+    //if user already disliked the blog remove dislike
+    if (blog.dislikes.includes(userId)) {
+      blog.dislikes.pull(userId);
+      message = "Removed Dislike";
+    } else {
+      //if user has liked the blog remove like
+      if (blog.likes.includes(userId)) {
+        blog.likes.pull(userId);
+      }
+
+      blog.dislikes.push(userId);
+      message = "Disliked Blog";
+    }
+    blog.save();
+    res.status(255).json({ message: message });
+  } else {
+    res.status(404).send({ message: "Blog not found" });
   }
 });
 
@@ -111,4 +205,8 @@ export {
   createBlog,
   updateBlog,
   createBlogComment,
+  searchBlogs,
+  deleteBlogComment,
+  likeBlog,
+  dislikeBlog,
 };
