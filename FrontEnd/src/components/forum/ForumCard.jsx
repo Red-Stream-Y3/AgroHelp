@@ -112,7 +112,7 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
             setDisliked(false);
         }
         await refreshForum();
-        refreshAll();
+        refreshAll(true);
     };
 
     const handleDislike = async () => {
@@ -130,7 +130,7 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
             setDisliked(true);
         }
         await refreshForum();
-        refreshAll();
+        refreshAll(true);
     };
 
     const handleReplySubmit = async () => {
@@ -159,7 +159,7 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
         }
         await refreshForum();
         setLoading(false);
-        refreshAll();
+        refreshAll(true);
     };
 
     const handleReplyLike = async (replyId) => {
@@ -177,7 +177,7 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
             setDisliked(false);
         }
         await refreshForum();
-        refreshAll();
+        refreshAll(true);
     };
 
     const handleReplyDislike = async (replyId) => {
@@ -195,7 +195,7 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
             setDisliked(true);
         }
         await refreshForum();
-        refreshAll();
+        refreshAll(true);
     };
 
     const handleEditReplySubmit = async () => {
@@ -216,7 +216,7 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
         }
         await refreshForum();
         setLoading(false);
-        refreshAll();
+        refreshAll(true);
     };
 
     const handleDeleteReply = async () => {
@@ -230,7 +230,7 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
         }
         await refreshForum();
         setLoading(false);
-        refreshAll();
+        refreshAll(true);
     };
 
     const handleSubscribe = async () => {
@@ -244,7 +244,7 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
             notify("success", "Subscribed to forum");
         }
         await refreshForum();
-        refreshAll();
+        refreshAll(true);
     };
 
     const handleUnsubscribe = async () => {
@@ -289,7 +289,7 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
         }
 
         setLoading(false);
-        refreshAll();
+        refreshAll(true);
     };
 
     const handleAcceptReply = async () => {
@@ -310,7 +310,7 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
         }
 
         setLoading(false);
-        refreshAll();
+        refreshAll(true);
     };
 
     return (

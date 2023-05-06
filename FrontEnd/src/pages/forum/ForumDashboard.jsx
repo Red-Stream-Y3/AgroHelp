@@ -153,10 +153,30 @@ const ForumDashboard = (props) => {
 	}, [subLoaded, tab]);
 
     //refresh all forums
-    const refreshAllForums = async () => {
-        setDashLoaded(false);
-		setMyLoaded(false);
-		setSubLoaded(false);
+    const refreshAllForums = async (keepCurrent) => {
+        if (keepCurrent!==null && keepCurrent!==undefined && keepCurrent===true) {
+            //refresh other tabs except current tab
+            switch (tab) {
+                case "dashboard":
+                    setMyLoaded(false);
+                    setSubLoaded(false);
+                    break;
+                case "myForums":
+                    setDashLoaded(false);
+                    setSubLoaded(false);
+                    break;
+                case "subscribed":
+                    setDashLoaded(false);
+                    setMyLoaded(false);
+                    break;
+                default:
+                    break;
+            }
+        } else {
+            setDashLoaded(false);
+            setMyLoaded(false);
+            setSubLoaded(false);
+        }
     };
 
 	//create a forum
