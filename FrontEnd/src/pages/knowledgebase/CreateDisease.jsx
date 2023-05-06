@@ -5,6 +5,7 @@ const CreateDisease = () => {
 
   const user = JSON.parse(localStorage.getItem('userInfo'))
   const userId = user._id
+  console.log("user", user)
 
   const [disease, setDisease] = useState({
     diseaseName: '',
