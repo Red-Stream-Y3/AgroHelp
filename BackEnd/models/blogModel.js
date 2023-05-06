@@ -29,8 +29,8 @@ const blogSchema = new mongoose.Schema({
   likes: [
     {
       type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    required: true,
+      ref: "User",
+      required: true,
     },
   ],
   dislikes: [
@@ -40,11 +40,13 @@ const blogSchema = new mongoose.Schema({
       required: true,
     },
   ],
-  Bookmarked: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    required: true,
-  }],
+  Bookmarked: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+  ],
   comments: [
     {
       text: {
@@ -58,7 +60,7 @@ const blogSchema = new mongoose.Schema({
       },
       userName: {
         type: String,
-        required: false,
+        required: true,
       },
       postedAt: {
         type: Date,

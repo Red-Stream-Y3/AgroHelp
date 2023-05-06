@@ -23,7 +23,7 @@ const getBlogById = asyncHandler(async (req, res) => {
     'username firstName lastName profilePic'
   );
   if (blog) {
-    res.json(blog);
+    res.status(200).json(blog);
   } else {
     res.status(404);
     throw new Error('Blog not found');
@@ -36,7 +36,7 @@ const getBlogById = asyncHandler(async (req, res) => {
 const deleteBlog = asyncHandler(async (req, res) => {
   const blog = await Blog.findByIdAndDelete(req.params.id);
   if (blog) {
-    res.json({ message: 'Blog removed' });
+    res.status(200).json({ message: 'Blog removed' });
   } else {
     res.status(404);
     throw new Error('Blog not found');
@@ -78,7 +78,7 @@ const updateBlog = asyncHandler(async (req, res) => {
     //blog.isAccepted = isAccepted;
 
     const updatedBlog = await blog.save();
-    res.json(updatedBlog);
+    res.status(200).json(updatedBlog);
   } else {
     res.status(404);
     throw new Error('Blog not found');
@@ -162,7 +162,7 @@ const likeBlog = asyncHandler(async (req, res) => {
       message = 'Liked Blog';
     }
     blog.save();
-    res.status(255).json({ message: message });
+    res.status(200).json({ message: message });
   } else {
     res.status(404).send({ message: 'Blog not found' });
   }
@@ -191,7 +191,7 @@ const dislikeBlog = asyncHandler(async (req, res) => {
       message = 'Disliked Blog';
     }
     blog.save();
-    res.status(255).json({ message: message });
+    res.status(200).json({ message: message });
   } else {
     res.status(404).send({ message: 'Blog not found' });
   }
