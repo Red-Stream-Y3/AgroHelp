@@ -1,34 +1,24 @@
 /** @format */
 
 import React from "react";
+import { useParams, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { getAllBlogs, getAcceptedBlogs } from "../../api/blog";
-import {
-  BlogContainer,
-  BlogBanner,
-  BlogCard,
-  BlogSearchBar,
-} from "../../components";
-import { Link } from "react-router-dom";
+import { getBlogsByAuthor } from "../../api/blog";
+import { BlogContainer, BlogCard } from "../../components";
 
-export default function BlogDashboard() {
+export default function BlogsbyAuthor() {
+  const { id } = useParams();
   const [blogs, setBlogs] = useState([]);
 
-  const user = JSON.parse(localStorage.getItem("userInfo"));
-
   useEffect(() => {
-    try {
-      const fetchAcceptedBlogs = async () => {
-        const blogs = await getAcceptedBlogs();
-        setBlogs(blogs);
-        //console.log(blogs);
-      };
-      fetchAcceptedBlogs();
-    } catch (error) {
-      console.log("error", error);
-    }
-  }, []);
+    const fetchBlogsByAuthor = async () => {
+      const blogs = await getBlogsByAuthor(id);
+      setBlogs(blogs);
+    };
+    fetchBlogsByAuthor();
+  }, [id]);
 
+  const user = JSON.parse(localStorage.getItem("userInfo"));
   let userID;
 
   if (user && blogs) {
@@ -36,19 +26,22 @@ export default function BlogDashboard() {
   }
 
   return (
-    <div>
-      <BlogBanner />
+    <div className="my-8">
       <BlogContainer>
-        <div className="flex justify-end">
-          <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-0 md:mr-8">
-            <Link to="/createblog">Start Your Blog</Link>
-          </button>
-          <BlogSearchBar />
-        </div>
-
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-4 mt-4">
           {blogs.map((blog) => (
             <div key={blog.id}>
+              <div className="flex flex-row items-center justify-center">
+                <img
+                  src={blog.author.profilePic}
+                  alt="blog"
+                  className="w-12 h-12 object-cover rounded-full"
+                />
+                <h1 className="ml-4 text-2xl font-bold text-gray-800 md:text-3xl">
+                  {blog.author.firstName + " " + blog.author.lastName}
+                </h1>
+              </div>
+              <hr className="border-gray-500 border-1 w-full mt-4 mb-8" />
               <Link to={`/viewblog/${blog._id}`}>
                 <BlogCard
                   blogID={blog._id}

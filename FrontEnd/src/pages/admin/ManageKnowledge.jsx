@@ -10,6 +10,7 @@ import {
 import { Loader } from '../../components';
 import { toast } from 'react-toastify';
 import { Crops, CropDiseases } from '../../components';
+import Swal from 'sweetalert2';
 
 const ManageKnowledge = () => {
   const [crops, setCrops] = useState([]);
@@ -90,32 +91,38 @@ const ManageKnowledge = () => {
 
   const handleDelete = async (id, type) => {
     if (type === 'crop') {
-      const data = await deleteCrop(id);
-      if (data) {
-        toast.success(`Crop Deleted Successfully`, {
-          hideProgressBar: false,
-          closeOnClick: true,
-          autoClose: 1500,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-        getCrops();
-      }
+      await deleteCrop(id);
+      getCrops();
     } else {
-      const data = await deleteDisease(id);
-      if (data) {
-        toast.success(`Disease Deleted Successfully`, {
-          hideProgressBar: false,
-          closeOnClick: true,
-          autoClose: 1500,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-        getDiseases();
-      }
+      await deleteDisease(id);
+      getDiseases();
     }
+  };
+
+  const confirmDelete = (id, type) => {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      color: '#f8f9fa',
+      background: '#1F2937',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, remove it!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        handleDelete(id, type);
+        Swal.fire({
+          icon: 'success',
+          title: `${type} removed successfully`,
+          color: '#f8f9fa',
+          background: '#1F2937',
+          showConfirmButton: false,
+          timer: 2000,
+        });
+      }
+    });
   };
 
   // format date function
@@ -149,7 +156,7 @@ const ManageKnowledge = () => {
                   tableFilter={tableFilter}
                   crops={crops}
                   handleAccept={handleAccept}
-                  handleDelete={handleDelete}
+                  handleDelete={confirmDelete}
                 />
               ) : (
                 <CropDiseases
@@ -161,7 +168,7 @@ const ManageKnowledge = () => {
                   tableFilter={tableFilter}
                   diseases={diseases}
                   handleAccept={handleAccept}
-                  handleDelete={handleDelete}
+                  handleDelete={confirmDelete}
                 />
               )}
             </section>

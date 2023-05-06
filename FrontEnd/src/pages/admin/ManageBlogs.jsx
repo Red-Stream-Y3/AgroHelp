@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
-import { getAllBlogs } from '../../api/blog';
+import { getAllBlogs, deleteBlog, updateBlogAccept } from '../../api/blog';
 import { useGlobalContext } from '../../context/ContextProvider';
 import { Loader } from '../../components';
 import { toast } from 'react-toastify';
+import Swal from 'sweetalert2';
+import { Link } from 'react-router-dom';
 
 const ManageBlogs = () => {
   const { user } = useGlobalContext();
@@ -36,35 +38,52 @@ const ManageBlogs = () => {
     }
   };
 
-  // const handleDelete = async (id) => {
-  //   const data = await deleteBlog(user, id);
-  //   if (data) {
-  //     toast.success(`Blog Deleted Successfully`, {
-  //       hideProgressBar: false,
-  //       closeOnClick: true,
-  //       autoClose: 1500,
-  //       pauseOnHover: true,
-  //       draggable: true,
-  //       progress: undefined,
-  //     });
-  //     getAllBlogs();
-  //   }
-  // };
+  const handleDelete = async (id) => {
+    await deleteBlog(id);
 
-  // const handleAccept = async (id) => {
-  //   const data = await markBlogAccept(user, id);
-  //   if (data) {
-  //     toast.success(`Blog accepted to publish`, {
-  //       hideProgressBar: false,
-  //       closeOnClick: true,
-  //       autoClose: 1500,
-  //       pauseOnHover: true,
-  //       draggable: true,
-  //       progress: undefined,
-  //     });
-  //     getAllBlogs();
-  //   }
-  // };
+    getBlogs();
+  };
+
+  const confirmDelete = (id) => {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      color: '#f8f9fa',
+      background: '#1F2937',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, remove it!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        handleDelete(id);
+        Swal.fire({
+          icon: 'success',
+          title: 'Blog deleted successfully',
+          color: '#f8f9fa',
+          background: '#1F2937',
+          showConfirmButton: false,
+          timer: 2000,
+        });
+      }
+    });
+  };
+
+  const handleAccept = async (id) => {
+    const data = await updateBlogAccept(id, { _id: id, isAccepted: true });
+    if (data) {
+      toast.success(`Blog accepted to publish`, {
+        hideProgressBar: false,
+        closeOnClick: true,
+        autoClose: 1500,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      getBlogs();
+    }
+  };
 
   // format date function
   const formatDate = (dateString) => {
@@ -84,12 +103,16 @@ const ManageBlogs = () => {
       <tr key={blog._id}>
         <td className="px-4 py-4 text-sm font-medium whitespace-nowrap">
           <h2 className="font-medium text-gray-800 dark:text-white capitalize">
-            {blog.title}
+            {blog.title.split(' ').slice(0, 5).join(' ')} ...
           </h2>
         </td>
         <td className="py-4 text-sm whitespace-nowrap">
           <h2 className="font-medium text-gray-800 dark:text-white capitalize">
-            {blog.body[0].content.split(' ').slice(0, 8).join(' ')} ...
+            <div
+              dangerouslySetInnerHTML={{
+                __html: blog.body.split(' ').slice(0, 8).join(' ') + ' ...',
+              }}
+            />
           </h2>
         </td>
         <td className="py-4 text-sm whitespace-nowrap">
@@ -98,31 +121,41 @@ const ManageBlogs = () => {
           </h2>
         </td>
         <td className="py-4 text-sm whitespace-nowrap">
-          <h2 className="font-medium text-gray-800 dark:text-white capitalize">
+          <h2 className="text-center font-medium text-gray-800 dark:text-white capitalize">
             <span>{formatDate(blog.createdAt)}</span>
           </h2>
         </td>
         <td className="py-4 text-sm whitespace-nowrap">
+          <h2 className="text-center font-medium text-gray-800 dark:text-white capitalize">
+            {blog.isAccepted === true ? (
+              <span>✅ Accepted </span>
+            ) : (
+              <span>❌ Not Accepted </span>
+            )}
+          </h2>
+        </td>
+        <td className="py-4 text-sm whitespace-nowrap">
           <div className="flex items-center mt-4 gap-x-4 sm:mt-0 justify-center">
-            {/* <button
+            <button
               className="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md sm:w-auto gap-x-2 hover:bg-gray-100 dark:bg-blue-500 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-blue-700 disabled:bg-gray-500 disabled:hover:bg-gray-500 disabled:text-white disabled:cursor-not-allowed"
               disabled={blog.isAccepted === true}
-              onClick={() => handleResolve(blog._id)}
+              onClick={() => handleAccept(blog._id)}
             >
               <i className="fa-solid fa-circle-check"></i>
-            </button> */}
-
-            {/* TODO:  add onClick to redirect to edit page */}
-            <button className="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md sm:w-auto gap-x-2 hover:bg-gray-100 dark:bg-primary dark:text-gray-200 dark:border-gray-700 dark:hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed">
-              <i className="fa-solid fa-pen-to-square"></i>
             </button>
 
-            {/* <button
+            <Link to={`/editblog/${blog._id}`}>
+              <button className="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md sm:w-auto gap-x-2 hover:bg-gray-100 dark:bg-primary dark:text-gray-200 dark:border-gray-700 dark:hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed">
+                <i className="fa-solid fa-pen-to-square"></i>
+              </button>
+            </Link>
+
+            <button
               className="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md sm:w-auto gap-x-2 hover:bg-gray-100 dark:bg-red-600 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-red-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
-              onClick={() => handleDelete(blog._id)}
+              onClick={() => confirmDelete(blog._id)}
             >
               <i className="fa-solid fa-trash"></i>
-            </button> */}
+            </button>
           </div>
         </td>
       </tr>
@@ -182,6 +215,9 @@ const ManageBlogs = () => {
                             <th className={theadClass}>AUTHOR</th>
                             <th className={`text-center ${theadClass}`}>
                               DATE
+                            </th>
+                            <th className={`text-center ${theadClass}`}>
+                              STATUS
                             </th>
                             <th className={`text-center ${theadClass}`}>
                               MANAGE
