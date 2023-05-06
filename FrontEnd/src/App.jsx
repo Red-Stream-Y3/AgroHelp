@@ -14,6 +14,7 @@ import {
   Login,
   Register,
   Profile,
+  AccountSettings,
   Crop,
   Disease,
   KnowledgeBase,
@@ -46,6 +47,7 @@ function App() {
             <Route path="/home" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/settings" element={<AccountSettings />} />
             <Route path="/profile" element={<Profile />} />
 
             <Route path="/admin/*" element={<AdminHome />}>
