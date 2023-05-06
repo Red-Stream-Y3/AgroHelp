@@ -4,7 +4,7 @@ import ForumCard from "./ForumCard";
 
 const CardContainer = (props) => {
     return (
-        <div>
+        <div className="flex flex-col w-full items-center">
             {props.forums.map((forum) => {
                 return (
                     <ForumCard

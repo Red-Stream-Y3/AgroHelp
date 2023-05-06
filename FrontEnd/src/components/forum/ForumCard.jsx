@@ -27,6 +27,10 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
     const [numLikes, setNumLikes] = useState(0);
     const [numDislikes, setNumDislikes] = useState(0);
 
+    //show hidden long content
+    const [showLongContent, setShowLongContent] = useState(false);
+    const longLimit = 100;
+
     //edit reply
     const [showEditReplyPopup, setShowEditReplyPopup] = useState(false);
     const [replyEditInput, setReplyEditInput] = useState("");
@@ -80,6 +84,15 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
             setDisliked(true);
         } else {
             setDisliked(false);
+        }
+    }, [forumObj]);
+
+    //check if content is too long
+    useEffect(() => {
+        if (forumObj.content.length > longLimit) {
+            setShowLongContent(true);
+        } else {
+            setShowLongContent(false);
         }
     }, [forumObj]);
 
@@ -301,7 +314,7 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
     };
 
     return (
-        <div className="rounded-md bg-darkbg p-3 mt-2 sm:max-w-4xl text-sm sm:text-base">
+        <div className="rounded-md bg-darkbg p-3 mt-2 w-full sm:max-w-4xl text-sm sm:text-base">
             {!Loading ? (
                 <div>
                     <div className="flex justify-between">
@@ -311,7 +324,8 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
                                 @
                                 {forumObj.username +
                                     " " +
-                                    ((user !== null && user !== undefined) &&
+                                    (user !== null &&
+                                    user !== undefined &&
                                     forumObj.userID === user._id
                                         ? "(me)"
                                         : "")}
@@ -320,7 +334,8 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
                                 {forumObj.createdAt.toString().split("T")[0]}
                             </div>
                             <div className="ml-3">
-                                {(user !== null && user !== undefined) &&
+                                {user !== null &&
+                                user !== undefined &&
                                 forumObj.subscribers.includes(user._id) ? (
                                     <button
                                         onClick={handleUnsubscribe}
@@ -338,7 +353,8 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
                         </div>
 
                         {/* forum delete and edit buttons */}
-                        {(user !== null && user !== undefined) &&
+                        {user !== null &&
+                        user !== undefined &&
                         forum.userID === user._id ? (
                             <div className="w-fit">
                                 <button
@@ -368,10 +384,32 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
 
                     {/* content */}
                     <div>
-                        {forumObj.content.length > 100 ? (
-                            <>{forumObj.content.substring(0, 100) + "..."}</>
+                        {showLongContent ? (
+                            <>
+                                {forumObj.content.substring(0, 100) + "..."}
+                                <button
+                                    onClick={() => {
+                                        setShowLongContent(!showLongContent);
+                                    }}
+                                    className="ml-2 text-xs text-gray-500">
+                                    Show More
+                                </button>
+                            </>
                         ) : (
-                            <>{forumObj.content}</>
+                            <>
+                                {forumObj.content}
+                                {forumObj.content.length > longLimit ? (
+                                    <button
+                                        onClick={() => {
+                                            setShowLongContent(
+                                                !showLongContent
+                                            );
+                                        }}
+                                        className="ml-2 text-xs text-gray-500">
+                                        Hide
+                                    </button>
+                                ) : null}
+                            </>
                         )}
                     </div>
 
@@ -580,7 +618,6 @@ const ForumCard = ({ forum, checkRes, notify, refreshAll }) => {
                         <textarea
                             placeholder="Reply"
                             value={replyInput}
-                            autoFocus={true}
                             autoCapitalize="on"
                             spellCheck={true}
                             onChange={({ target }) =>
