@@ -12,6 +12,7 @@ import {
   FaSignInAlt,
   FaUserPlus,
   FaLock,
+  FaPen,
 } from 'react-icons/fa';
 import { ImLeaf } from 'react-icons/im';
 import { HiMenu, HiOutlineX } from 'react-icons/hi';
@@ -26,6 +27,7 @@ const Navbar = () => {
 
   const { user } = useGlobalContext();
   const isAccess = user && (user.role === 'admin' || user.role === 'moderator');
+  const isContributor = user && user.role === 'contributor';
 
   const location = useLocation();
 
@@ -320,6 +322,16 @@ const Navbar = () => {
               >
                 <FaLock className="h-6 w-6" />
                 <span className="ml-2">Admin Panel</span>
+              </Link>
+            )}
+            {isAccess && (
+              <Link
+                to="/contributor/dashboard"
+                className="flex px-3 py-2 text-base font-medium text-white hover:bg-secondary rounded-md items-center"
+                onClick={() => setIsProfilePopupOpen(false)}
+              >
+                <FaPen className="h-6 w-6" />
+                <span className="ml-2">Creator Panel</span>
               </Link>
             )}
             <Link
