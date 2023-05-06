@@ -106,6 +106,18 @@ export const updateCropAccept = async (id, crop) => {
   }
 };
 
+// get crops by author
+export const getCropsByAuthor = async (id) => {
+  try {
+    const response = await axios.get('http://localhost:9120/api/crops/author/' + id);
+    console.log('crop', response.data);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+};
+
 // get all diseases
 export const getAllDiseases = async () => {
   try {
@@ -214,5 +226,17 @@ export const updateDiseaseAccept = async (id, crop) => {
     return response;
   } catch (error) {
     console.log(error);
+  }
+};
+
+// get diseases by author
+export const getDiseasesByAuthor = async (id) => {
+  try {
+    const response = await axios.get('http://localhost:9120/api/diseases/author/' + id);
+    console.log('disease', response.data);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    return [];
   }
 };
