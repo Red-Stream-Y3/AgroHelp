@@ -68,6 +68,7 @@ const createCropDisease = asyncHandler(async (req, res) => {
       diseaseCrops,
       diseaseType,
       diseaseStatus,
+      author,
     } = req.body;
 
     // check disease
@@ -77,10 +78,10 @@ const createCropDisease = asyncHandler(async (req, res) => {
       throw new Error('Disease already exists');
     }
 
-    let authorId = null;
-    if (req.user && req.user._id) {
-      authorId = req.user._id;
-    }
+    // let authorId = null;
+    // if (req.user && req.user._id) {
+    //   authorId = req.user._id;
+    // }
 
     const cropDisease = new CropDisease({
       diseaseName,
@@ -92,7 +93,7 @@ const createCropDisease = asyncHandler(async (req, res) => {
       diseaseCrops,
       diseaseType,
       diseaseStatus,
-      author: authorId,
+      author,
     });
     const createdCropDisease = await cropDisease.save();
     res.status(201).json(createdCropDisease);
@@ -203,6 +204,27 @@ const updateDiseaseAccept = asyncHandler(async (req, res) => {
   }
 });
 
+//@desc    get diseases by author
+//@route   GET /api/diseases/author/:id
+//@access  Public
+
+const getDiseasesByAuthor = asyncHandler(async (req, res) => {
+  try {
+    const diseases = await CropDisease.find({ author: req.params.id });
+    if (diseases) {
+      res.json(diseases);
+    } else {
+      res.status(404);
+      throw new Error('Diseases not found');
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ message: error.message });
+  }
+});
+
+
+
 export {
   getCropDiseases,
   getCropDiseaseById,
@@ -212,4 +234,5 @@ export {
   updateDiseaseAccept,
   searchCropDisease,
   getRandomCropDiseases,
+  getDiseasesByAuthor,
 };
