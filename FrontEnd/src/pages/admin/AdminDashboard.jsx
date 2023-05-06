@@ -3,6 +3,7 @@ import { BoxWidget, Loader, LineChart } from '../../components';
 import { useGlobalContext } from '../../context/ContextProvider';
 import { logout, getSiteVisits, getUsers } from '../../api/user';
 import { getAllBlogs } from '../../api/blog';
+import { getAllCrops, getAllDiseases } from '../../api/knowlegdebase';
 
 const AdminDashboard = () => {
   const { user } = useGlobalContext();
@@ -10,15 +11,21 @@ const AdminDashboard = () => {
   const [siteVisits, setSiteVisits] = useState([]);
   const [users, setUsers] = useState([]);
   const [blogs, setBlogs] = useState([]);
+  const [crops, setCrops] = useState([]);
+  const [diseases, setDiseases] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const fetchSite = async () => {
     const visits = await getSiteVisits(user.token);
     const users = await getUsers(user.token);
     const blogs = await getAllBlogs();
+    const crops = await getAllCrops();
+    const diseases = await getAllDiseases();
     setSiteVisits(visits.data);
     setUsers(users.data);
     setBlogs(blogs);
+    setCrops(crops);
+    setDiseases(diseases);
     setLoading(false);
   };
 
@@ -48,12 +55,19 @@ const AdminDashboard = () => {
         <Loader />
       ) : (
         <>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8 mt-8 px-4 md:px-10">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-8 mt-8 px-4 md:px-10">
             <div className="w-full md:w-auto">
               <BoxWidget
                 heading={'Traffic'}
                 value={formatVisits}
                 icon={'fa-solid fa-arrow-trend-up'}
+              />
+            </div>
+            <div className="w-full md:w-auto">
+              <BoxWidget
+                heading={'Articles'}
+                value={crops.length + diseases.length}
+                icon={'fa-solid fa-book-open'}
               />
             </div>
             <div className="w-full md:w-auto">

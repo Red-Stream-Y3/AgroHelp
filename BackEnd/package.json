@@ -5,10 +5,10 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "jest",
+    "test": "jest --watchAll --verbose",
     "start": "nodemon src/index.js"
   },
-  "author": "",
+  "author": "RedStream",
   "license": "ISC",
   "dependencies": {
     "@babel/core": "^7.21.8",

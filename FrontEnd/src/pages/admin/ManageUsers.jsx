@@ -3,6 +3,7 @@ import { useGlobalContext } from '../../context/ContextProvider';
 import { getUsers, updateUser, deleteUser } from '../../api/user';
 import { toast } from 'react-toastify';
 import { Loader } from '../../components';
+import Swal from 'sweetalert2';
 
 const ManageUsers = () => {
   const { user } = useGlobalContext();
@@ -27,15 +28,34 @@ const ManageUsers = () => {
 
   const handleDelete = async (id) => {
     await deleteUser(id, user.token);
-    toast.success('User removed successfully', {
-      hideProgressBar: false,
-      closeOnClick: true,
-      autoClose: 1500,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
+
     getAllUsers();
+  };
+
+  const confirmDelete = (id) => {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      color: '#f8f9fa',
+      background: '#1F2937',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, remove it!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        handleDelete(id);
+        Swal.fire({
+          icon: 'success',
+          title: 'User removed successfully',
+          color: '#f8f9fa',
+          background: '#1F2937',
+          showConfirmButton: false,
+          timer: 2000,
+        });
+      }
+    });
   };
 
   const filterData = (e) => {
@@ -192,7 +212,7 @@ const ManageUsers = () => {
               <button
                 className="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md sm:w-auto gap-x-2 hover:bg-gray-100 dark:bg-red-600 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-red-700 disabled:bg-gray-500 disabled:hover:bg-gray-500 disabled:text-white disabled:cursor-not-allowed"
                 disabled={user.email === 'admin@admin.com'}
-                onClick={() => handleDelete(user._id)}
+                onClick={() => confirmDelete(user._id)}
               >
                 <i className="fa-solid fa-user-slash"></i>
               </button>
