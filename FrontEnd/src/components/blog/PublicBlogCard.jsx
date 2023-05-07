@@ -19,14 +19,22 @@ const PublicBlogCrad = ({
   bookmarked,
   user,
   handleBookmark,
+  logged
 }) => {
   const [isBookmarked, setIsBookmarked] = useState(false);
+  const [isLogged, setIsLogged] = useState(false);
 
   useEffect(() => {
     if (user && user == bookmarked) {
       setIsBookmarked(true);
     }
   }, [bookmarked, user]);
+
+  useEffect(() => {
+    if (logged) {
+      setIsLogged(true);
+    }
+  })
 
   //date formatter
   function formatDate(dateString) {
@@ -53,13 +61,17 @@ const PublicBlogCrad = ({
       <div className="fixed bottom-0 right-0 flex items-center justify-end mr-2 mb-2 text-gray-300">
         <div className="flex items-center mx-2">
           <div className="">
-            <button onClick={handleBookmark}>
+            
+              {isLogged && (
+                <button onClick={handleBookmark}>
               {isBookmarked ? (
                 <BsBookmarkCheckFill className=" text-yellow-300" />
               ) : (
                 <FiBookmark className="text-gray-100 text-xl" />
               )}
             </button>
+              )}
+              
           </div>
         </div>
 
