@@ -97,6 +97,12 @@ const cropSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    bookmarkedBy: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: User,
+      },
+    ],
   },
   {
     timestamps: true,

@@ -20,8 +20,9 @@ import {
 } from "react-icons/ai";
 
 export default function BlogView() {
-  const [blog, setBlog] = React.useState({});
   const { id } = useParams();
+  const [blog, setBlog] = React.useState({});
+  const [isLogged, setIsLogged] = useState(false);
   const [loading, setLoading] = useState(false);
 
   //likes handler
@@ -32,12 +33,20 @@ export default function BlogView() {
   const [numDislikes, setNumDislikes] = useState(0);
 
   //get user info
-  const userDetails = JSON.parse(localStorage.getItem("userInfo"));
-  const userId = userDetails._id;
-  const userName = userDetails.username;
+  let userId;
+  let userName;
 
-  const { user } = useGlobalContext();
-  const isLogged = user; // Check if user exists
+  const userDetails = JSON.parse(localStorage.getItem("userInfo"));
+  if (userDetails) {
+    userId = userDetails._id;
+    userName = userDetails.username;
+  }
+
+  useEffect(() => {
+    if (userDetails) {
+      setIsLogged(true);
+    }
+  }, []);
 
   //get blog by id
   useEffect(() => {
@@ -72,6 +81,7 @@ export default function BlogView() {
   const firstName = blog.author ? blog.author.firstName : "";
   const lastName = blog.author ? blog.author.lastName : "";
   const authorDP = blog.author ? blog.author.profilePic : "";
+  const authorID = blog.author ? blog.author._id : "";
   const body = blog.body ? blog.body : "";
   const tags = blog.tags ? blog.tags : [];
   const tagsAsString = tags.join(", ");
@@ -160,12 +170,6 @@ export default function BlogView() {
     refreshBlog();
   };
 
-  useEffect(() => {
-    if (!user || !isLogged) {
-      window.location.href = "/login";
-    }
-  }, [isLogged, user]);
-
   return (
     <div className="my-4">
       <BlogContainer>
@@ -175,29 +179,31 @@ export default function BlogView() {
           authorDP={authorDP}
           date={formatDate(blog.createdAt)}
           tags={tagsAsString}
+          authorId={authorID}
         />
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-white">
           <div dangerouslySetInnerHTML={{ __html: body }} />
         </div>
         <br />
         <br />
+        <hr className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4 border-green-300" />
 
         {/* Likes and Bookmarks */}
         <div className="flex justify-center max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-x-8">
           <div className="flex items-center space-x-2">
             <button
               onClick={handleLike}
-              className="transition-all ease-in-out active:scale-110 hover:bg-blue-800 rounded-full px-2 py-2"
+              className="transition-all text-blue-400 ease-in-out active:scale-110 hover:bg-blue-100 rounded-full px-2 py-2"
             >
               {liked ? <AiFillLike size={24} /> : <AiOutlineLike size={24} />}
             </button>
-            <div className="text-sm font-bold">{numLikes} Likes</div>
+            <div className="text-sm font-bold text-gray-200">{numLikes}</div>
           </div>
 
           <div className="flex items-center space-x-2">
             <button
               onClick={handleDisLike}
-              className="transition-all ease-in-out active:scale-110 hover:bg-red-500 rounded-full px-2 py-2"
+              className="transition-all text-red-400 ease-in-out active:scale-110 hover:bg-red-200 rounded-full px-2 py-2"
             >
               {disLiked ? (
                 <AiFillDislike size={24} />
@@ -205,15 +211,15 @@ export default function BlogView() {
                 <AiOutlineDislike size={24} />
               )}
             </button>
-            <div className="text-sm font-bold">{numDislikes} Dislikes</div>
+            <div className="text-gray-200 text-sm font-bald">{numDislikes}</div>
           </div>
 
           <div className="flex items-center">
             <button onClick={handleBookmark}>
               {bookmarked ? (
-                <BsBookmarkCheckFill size={24} className="text-gray-700" />
+                <BsBookmarkCheckFill size={24} className="text-yellow-500" />
               ) : (
-                <BsBookmarkPlus size={24} className="text-gray-700" />
+                <BsBookmarkPlus size={24} className="text-gray-100" />
               )}
             </button>
           </div>
@@ -224,28 +230,31 @@ export default function BlogView() {
 
         {/* Comment Section */}
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 p-4">
-          <h2 className="text-2xl font-bold mb-4">Comments</h2>
-          <form onSubmit={handleCommentSubmit}>
-            <input
-              type="text"
-              className="border border-gray-400 rounded py-2 px-3 mb-2 w-full"
-              name="text"
-              placeholder="Write a comment..."
-              value={comment.text}
-              onChange={handleCommentChange}
-            />
-            <button
-              type="submit"
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            >
-              Post Comment
-            </button>
-          </form>
+          <h2 className="text-2xl font-bold mb-4 text-white">Comments</h2>
+
+          {isLogged && (
+            <form onSubmit={handleCommentSubmit}>
+              <input
+                type="text"
+                className="border border-gray-400 rounded py-2 px-3 mb-2 w-full"
+                name="text"
+                placeholder="Write a comment..."
+                value={comment.text}
+                onChange={handleCommentChange}
+              />
+              <button
+                type="submit"
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              >
+                Post Comment
+              </button>
+            </form>
+          )}
 
           <div className="mt-4">
             {blog.comments &&
               blog.comments.map((comment, index) => (
-                <div key={index} className="bg-gray-200 p-2 rounded mb-2">
+                <div key={index} className="bg-white p-2 rounded mb-2">
                   <div className="font-bold mb-1">@{comment.userName}</div>
                   <div>{comment.text}</div>
                 </div>

@@ -1,17 +1,17 @@
 import { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   FaHome,
   FaBookOpen,
   FaQuestion,
   FaPenNib,
   FaSearch,
-  FaUser,
   FaSignOutAlt,
   FaCog,
   FaSignInAlt,
   FaUserPlus,
   FaLock,
+  FaPen,
 } from 'react-icons/fa';
 import { ImLeaf } from 'react-icons/im';
 import { HiMenu, HiOutlineX } from 'react-icons/hi';
@@ -23,11 +23,25 @@ const Navbar = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isProfilePopupOpen, setIsProfilePopupOpen] = useState(false);
   const [isLogged, setIsLogged] = useState(false);
+  const [search, setSearch] = useState('');
 
   const { user } = useGlobalContext();
   const isAccess = user && (user.role === 'admin' || user.role === 'moderator');
+  const isContributor = user && user.role === 'contributor';
+  const isAdmin = user && user.role === 'admin';
+  const userImage = user && user.profilePic;
 
   const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (search.trim()) {
+      navigate(`/search/${search}`);
+    } else {
+      navigate('/home');
+    }
+  };
 
   const navigation = [
     {
@@ -118,7 +132,11 @@ const Navbar = () => {
                   {isProfilePopupOpen ? (
                     <HiOutlineX className="h-6 w-6 text-white" />
                   ) : (
-                    <FaUser className="h-6 w-6 text-white" />
+                    <img
+                      className="h-8 w-8 rounded-full object-cover"
+                      src={userImage}
+                      alt="Profile"
+                    />
                   )}
                 </button>
               </div>
@@ -180,13 +198,17 @@ const Navbar = () => {
                     aria-hidden="true"
                   />
                 </div>
-                <input
-                  type="text"
-                  name="search"
-                  id="search"
-                  className="bg-secondary rounded-full w-full px-4 pl-10 py-2 focus:outline-none focus:shadow-outline focus:bg-primarydark focus:ring-2 focus:ring-primarylight placeholder:text-gray-200 focus:text-white"
-                  placeholder="Search"
-                />
+                <form onChange={handleSearch}>
+                  <input
+                    type="text"
+                    name="search"
+                    id="search"
+                    className="bg-secondary rounded-full w-full px-4 pl-10 py-2 focus:outline-none focus:shadow-outline focus:bg-primarydark focus:ring-2 focus:ring-primarylight placeholder:text-gray-200 focus:text-white"
+                    placeholder="Search"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                  />
+                </form>
               </div>
             </div>
 
@@ -201,7 +223,11 @@ const Navbar = () => {
                   {isProfilePopupOpen ? (
                     <HiOutlineX className="h-6 w-6 text-white" />
                   ) : (
-                    <FaUser className="h-6 w-6 text-white" />
+                    <img
+                      className="h-8 w-8 rounded-full object-cover"
+                      src={userImage}
+                      alt="Profile"
+                    />
                   )}
                 </button>
               </div>
@@ -302,14 +328,18 @@ const Navbar = () => {
       )}
 
       {isProfilePopupOpen && (
-        <div className="lg w-50 absolute right-0 rounded-xl">
+        <div className="lg w-56 absolute right-0 rounded-xl">
           <div className="px-2 pt-2 pb-3 space-y-1 bg-primarydark rounded-b-xl">
             <Link
               to="/profile"
               className="flex px-3 py-2 text-base font-medium text-white hover:bg-secondary rounded-md items-center"
               onClick={() => setIsProfilePopupOpen(false)}
             >
-              <FaUser className="h-6 w-6" />
+              <img
+                className="h-6 w-6 rounded-full object-cover"
+                src = {userImage}
+                alt="Profile"
+              />
               <span className="ml-2">Profile</span>
             </Link>
             {isAccess && (
@@ -320,6 +350,16 @@ const Navbar = () => {
               >
                 <FaLock className="h-6 w-6" />
                 <span className="ml-2">Admin Panel</span>
+              </Link>
+            )}
+            {(isAdmin || isModerator) && (
+              <Link
+                to="/contributor/dashboard"
+                className="flex px-3 py-2 text-base font-medium text-white hover:bg-secondary rounded-md items-center"
+                onClick={() => setIsProfilePopupOpen(false)}
+              >
+                <FaPen className="h-6 w-6" />
+                <span className="ml-2">Contributor Panel</span>
               </Link>
             )}
             <Link

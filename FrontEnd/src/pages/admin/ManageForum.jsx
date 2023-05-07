@@ -3,6 +3,8 @@ import { getForums, deleteForum, markResolved } from '../../api/forum';
 import { useGlobalContext } from '../../context/ContextProvider';
 import { Loader } from '../../components';
 import { toast } from 'react-toastify';
+import Swal from 'sweetalert2';
+import { Link } from 'react-router-dom';
 
 const ManageForum = () => {
   const { user, notify } = useGlobalContext();
@@ -64,18 +66,35 @@ const ManageForum = () => {
   };
 
   const handleDelete = async (id) => {
-    const data = await deleteForum(user, id, checkStatus);
-    if (data) {
-      toast.success(`Forum  Deleted Successfully`, {
-        hideProgressBar: false,
-        closeOnClick: true,
-        autoClose: 1500,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-      getAllForums();
-    }
+    await deleteForum(user, id, checkStatus);
+
+    getAllForums();
+  };
+
+  const confirmDelete = (id) => {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      color: '#f8f9fa',
+      background: '#1F2937',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, remove it!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        handleDelete(id);
+        Swal.fire({
+          icon: 'success',
+          title: 'Forum removed successfully',
+          color: '#f8f9fa',
+          background: '#1F2937',
+          showConfirmButton: false,
+          timer: 2000,
+        });
+      }
+    });
   };
 
   const handleResolve = async (id) => {
@@ -111,21 +130,12 @@ const ManageForum = () => {
       <tr key={forum._id}>
         <td className="px-4 py-4 text-sm font-medium whitespace-nowrap">
           <h2 className="font-medium text-gray-800 dark:text-white capitalize">
-            {forum.title.split(' ').slice(0, 8).join(' ')}
+            {forum.title.split(' ').slice(0, 5).join(' ')} ...
           </h2>
         </td>
         <td className="py-4 text-sm whitespace-nowrap">
           <h2 className="font-medium text-gray-800 dark:text-white capitalize">
-            {forum.resolved === true ? (
-              <span>✅ Resolved </span>
-            ) : (
-              <span>❌ Not Resolved </span>
-            )}
-          </h2>
-        </td>
-        <td className="py-4 text-sm whitespace-nowrap">
-          <h2 className="font-medium text-gray-800 dark:text-white capitalize">
-            {forum.content.split(' ').slice(0, 8).join(' ')} ...
+            {forum.content.split(' ').slice(0, 6).join(' ')} ...
           </h2>
         </td>
         <td className="py-4 text-sm whitespace-nowrap">
@@ -134,8 +144,17 @@ const ManageForum = () => {
           </h2>
         </td>
         <td className="py-4 text-sm whitespace-nowrap">
-          <h2 className="font-medium text-gray-800 dark:text-white capitalize">
+          <h2 className="text-center font-medium text-gray-800 dark:text-white capitalize">
             <span>{formatDate(forum.createdAt)}</span>
+          </h2>
+        </td>
+        <td className="py-4 text-sm whitespace-nowrap">
+          <h2 className="text-center font-medium text-gray-800 dark:text-white capitalize">
+            {forum.resolved === true ? (
+              <span>✅ Resolved </span>
+            ) : (
+              <span>❌ Not Resolved </span>
+            )}
           </h2>
         </td>
         <td className="py-4 text-sm whitespace-nowrap">
@@ -148,14 +167,15 @@ const ManageForum = () => {
               <i className="fa-solid fa-circle-check"></i>
             </button>
 
-            {/* TODO:  add onClick to redirect to edit page */}
-            <button className="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md sm:w-auto gap-x-2 hover:bg-gray-100 dark:bg-primary dark:text-gray-200 dark:border-gray-700 dark:hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed">
-              <i className="fa-solid fa-pen-to-square"></i>
-            </button>
+            <Link to={`/forum`}>
+              <button className="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md sm:w-auto gap-x-2 hover:bg-gray-100 dark:bg-primary dark:text-gray-200 dark:border-gray-700 dark:hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed">
+                <i className="fa-solid fa-pen-to-square"></i>
+              </button>
+            </Link>
 
             <button
               className="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md sm:w-auto gap-x-2 hover:bg-gray-100 dark:bg-red-600 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-red-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
-              onClick={() => handleDelete(forum._id)}
+              onClick={() => confirmDelete(forum._id)}
             >
               <i className="fa-solid fa-trash"></i>
             </button>
@@ -214,12 +234,16 @@ const ManageForum = () => {
                         <thead className="bg-gray-50 dark:bg-gray-800">
                           <tr>
                             <th className={`px-4 ${theadClass}`}>TITLE</th>
-                            <th className={theadClass}>STATUS</th>
                             <th className={theadClass}>CONTENT</th>
-                            <th className={theadClass}>USER</th>
-                            <th className={theadClass}>DATE</th>
+                            <th className={`pl-2 ${theadClass}`}>USER</th>
                             <th className={`text-center ${theadClass}`}>
-                              MANAGE
+                              DATE
+                            </th>
+                            <th className={`text-center ${theadClass}`}>
+                              STATUS
+                            </th>
+                            <th className={`text-center ${theadClass}`}>
+                              ACTIONS
                             </th>
                           </tr>
                         </thead>

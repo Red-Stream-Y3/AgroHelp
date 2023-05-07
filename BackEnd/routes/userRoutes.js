@@ -9,6 +9,7 @@ import {
   getUserById,
   updateUser,
   requestRole,
+  getAuthorInfoById,
 } from '../controllers/userController.js';
 import { protect, admin, adminMod } from '../middleware/authMiddleware.js';
 
@@ -26,5 +27,6 @@ router
   .get(protect, adminMod, getUserById)
   .put(protect, adminMod, updateUser);
 router.route('/:id/request').put(protect, requestRole);
+router.route('/:id/author').get(getAuthorInfoById);
 
 export default router;

@@ -68,6 +68,7 @@ const createCropDisease = asyncHandler(async (req, res) => {
       diseaseCrops,
       diseaseType,
       diseaseStatus,
+      author,
     } = req.body;
 
     // check disease
@@ -77,10 +78,10 @@ const createCropDisease = asyncHandler(async (req, res) => {
       throw new Error('Disease already exists');
     }
 
-    let authorId = null;
-    if (req.user && req.user._id) {
-      authorId = req.user._id;
-    }
+    // let authorId = null;
+    // if (req.user && req.user._id) {
+    //   authorId = req.user._id;
+    // }
 
     const cropDisease = new CropDisease({
       diseaseName,
@@ -92,7 +93,7 @@ const createCropDisease = asyncHandler(async (req, res) => {
       diseaseCrops,
       diseaseType,
       diseaseStatus,
-      author: authorId,
+      author,
     });
     const createdCropDisease = await cropDisease.save();
     res.status(201).json(createdCropDisease);
@@ -145,13 +146,13 @@ const updateCropDisease = asyncHandler(async (req, res) => {
 });
 
 //@desc     search crop disease
-//@route    GET /api/cropDiseases/search/:keyword
+//@route    GET /api/cropDiseases/search/:searchTerm
 //@access   Public
 const searchCropDisease = asyncHandler(async (req, res) => {
   try {
-    const keyword = req.params.keyword;
+    const searchTerm = req.params.q;
     const cropDiseases = await CropDisease.find({
-      diseaseName: { $regex: keyword, $options: 'i' },
+      diseaseName: { $regex: new RegExp(`^${searchTerm}`, 'i') },
     });
     if (cropDiseases) {
       res.json(cropDiseases);
@@ -203,6 +204,61 @@ const updateDiseaseAccept = asyncHandler(async (req, res) => {
   }
 });
 
+//@desc    get diseases by author
+//@route   GET /api/diseases/author/:id
+//@access  Public
+
+const getDiseasesByAuthor = asyncHandler(async (req, res) => {
+  try {
+    const diseases = await CropDisease.find({ author: req.params.id });
+    if (diseases) {
+      res.json(diseases);
+    } else {
+      res.status(404);
+      throw new Error('Diseases not found');
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ message: error.message });
+  }
+});
+
+const addRemoveDiseaseBookmark = asyncHandler(async (req, res) => {
+  try {
+    const disease = await CropDisease.findById(req.params.id);
+    if (disease) {
+      if(disease.bookmarkedBy.includes(req.user._id)){
+        disease.bookmarkedBy.pull(req.user._id);
+      }else{
+        disease.bookmarkedBy.push(req.user._id);
+      }
+      const updatedDisease = await disease.save();
+      res.json(updatedDisease);
+    } else {
+      res.status(404);
+      throw new Error('Disease not found');
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ message: error.message });
+  }
+});
+
+const getDiseaseBookmarksByUser = asyncHandler(async (req, res) => {
+  try {
+    const diseases = await CropDisease.find({ bookmarkedBy: req.user._id });
+    if (diseases) {
+      res.json(diseases);
+    } else {
+      res.status(404);
+      throw new Error('Diseases not found');
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ message: error.message });
+  }
+});
+
 export {
   getCropDiseases,
   getCropDiseaseById,
@@ -212,4 +268,7 @@ export {
   updateDiseaseAccept,
   searchCropDisease,
   getRandomCropDiseases,
+  getDiseasesByAuthor,
+  addRemoveDiseaseBookmark,
+  getDiseaseBookmarksByUser,
 };

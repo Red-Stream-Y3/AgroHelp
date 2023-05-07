@@ -64,6 +64,7 @@ const createCrop = asyncHandler(async (req, res) => {
       cropImage,
       cropInfo,
       otherInfo,
+      author,
     } = req.body;
 
     // check scientific name
@@ -72,11 +73,12 @@ const createCrop = asyncHandler(async (req, res) => {
       res.status(400);
       throw new Error('Crop already exists');
     }
+    const authorId = req.body.author;
 
-    let authorId = null;
-    if (req.user && req.user._id) {
-      authorId = req.user._id;
-    }
+    // let authorId = null;
+    // if (req.user && req.user._id) {
+    //   authorId = req.user._id;
+    // }
 
     const crop = new Crop({
       cropName,
@@ -87,7 +89,7 @@ const createCrop = asyncHandler(async (req, res) => {
       cropImage,
       cropInfo,
       otherInfo,
-      author: authorId,
+      author,
     });
 
     const createdCrop = await crop.save();
@@ -140,12 +142,13 @@ const updateCrop = asyncHandler(async (req, res) => {
 });
 
 // @desc    search crops
-// @route   GET /api/crops/search
+// @route   GET /api/crops/search/:searchTerm
 // @access  Public
 const searchCrops = asyncHandler(async (req, res) => {
   try {
+    const searchTerm = req.params.q;
     const crops = await Crop.find({
-      cropName: { $regex: req.query.q, $options: 'i' },
+      cropName: { $regex: new RegExp(`^${searchTerm}`, 'i') },
     });
     res.json(crops);
   } catch (error) {
@@ -185,6 +188,67 @@ const updateCropAccept = asyncHandler(async (req, res) => {
   }
 });
 
+//@desc     Get crops by author
+//@route    GET /api/crops/author/:id
+//@access   Public
+const getCropsByAuthor = asyncHandler(async (req, res) => {
+  try {
+    const crops = await Crop.find({ author: req.params.id });
+    if (crops) {
+      res.json(crops);
+    } else {
+      res.status(404);
+      throw new Error('Crops not found');
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ message: error.message });
+  }
+});
+
+//@desc     ADD/REMOVE crop bookmark
+//@route    PUT /api/crops/:id/bookmark
+//@access   Private
+
+const addRemoveCropBookmark = asyncHandler(async (req, res) => {
+  try {
+    const crop = await Crop.findById(req.params.id);
+    if (crop) {
+      if (crop.bookmarkedBy.includes(req.body.userId)) {
+        crop.bookmarkedBy.pull(req.body.userId);
+        console.log('unbookmarked');
+      } else {
+        crop.bookmarkedBy.push(req.body.userId);
+        console.log('bookmarked');
+      }
+      const updatedCrop = await crop.save();
+      res.json(updatedCrop);
+    } else {
+      res.status(404);
+      throw new Error('Crop not found');
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ message: error.message });
+  }
+});
+
+
+const getCropBookmarksByUser = asyncHandler(async (req, res) => {
+  try {
+    const crops = await Crop.find({ bookmarkedBy: req.params.id });
+    if (crops) {
+      res.json(crops);
+    } else {
+      res.status(404);
+      throw new Error('Crops not found');
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ message: error.message });
+  }
+});
+
 export {
   getCrops,
   getCropById,
@@ -194,4 +258,7 @@ export {
   searchCrops,
   getShortCrops,
   updateCropAccept,
+  getCropsByAuthor,
+  addRemoveCropBookmark,
+  getCropBookmarksByUser,
 };

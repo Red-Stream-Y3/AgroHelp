@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { createDisease } from '../../api/knowlegdebase'
+import { FaCross } from 'react-icons/fa'
 
 const CreateDisease = () => {
 
@@ -8,7 +9,7 @@ const CreateDisease = () => {
 
   const [disease, setDisease] = useState({
     diseaseName: '',
-    // diseaseImage: [],
+    diseaseImage: [],
     diseaseSymptoms: '',
     diseaseCause: '',
     diseasePrevention: '',
@@ -30,7 +31,6 @@ const CreateDisease = () => {
     e.preventDefault()
     try {
       const data = await createDisease(disease)
-      console.log(data)
     } catch (error) {
       console.log(error)
     }
@@ -39,7 +39,7 @@ const CreateDisease = () => {
   const handleCancel = () => {
     setDisease({
       diseaseName: '',
-      // diseaseImage: [],
+      diseaseImage: [],
       diseaseSymptoms: '',
       diseaseCause: '',
       diseasePrevention: '',
@@ -50,6 +50,35 @@ const CreateDisease = () => {
 
     })
   }
+
+  const handleOpenWidget = () => {
+    var myWidget = window.cloudinary.createUploadWidget(
+      {
+        cloudName: 'dqyue23nj',
+        uploadPreset: 'agrohelp',
+        upload_single: true,
+      },
+      (error, result) => {
+        if (!error && result && result.event === 'success') {
+          console.log('Done! Here is the image info: ', result.info.url)
+          setDisease({
+            ...disease,
+            diseaseImage: [...disease.diseaseImage, result.info.url]
+          })
+        }
+      }
+    )
+    myWidget.open()
+  }
+
+  const handleDeleteImage = (index) => {
+    const newImages = disease.diseaseImage.filter((image, i) => i !== index)
+    setDisease({
+      ...disease,
+      diseaseImage: newImages
+    })
+  }
+    
 
   return (
     <div>
@@ -72,17 +101,32 @@ const CreateDisease = () => {
               />
             </div>
 
-            {/* <div className="mb-3">
-              <label htmlFor="diseaseImage" className="form-label">Disease Image</label>
-              <input
-                type="file"
-                name="diseaseImage"
-                id="diseaseImage"
-                className="w-full p-2 border border-gray-300 rounded outline-none focus:ring-1 focus:ring-primarylight bg-lightbg text-white"
-                onChange={handleChange}
-                required
-              />
-            </div> */}
+            <div className="mb-3">
+              <label htmlFor="cropImage" className="block mb-1">Crop Image</label>
+              <button
+                type="button"
+                className="bg-primary hover:bg-secondary text-white px-3 py-1 rounded"
+                onClick={handleOpenWidget}
+              >
+                Upload Image
+              </button>
+              <br />
+              <div className="flex flex-wrap">
+                {disease.diseaseImage.map((image, index) => (
+                  <div key={index} className="relative">
+                    <img src={image} alt="crop" className="w-44 h-36 object-cover rounded-xl" />
+                    <button
+                      type="button"
+                      className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-6 h-6 flex justify-center items-center"
+                      onClick={() => handleDeleteImage(index)}
+                    >
+                      <FaCross />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+
 
             <div className="mb-3">
               <label htmlFor="diseaseSymptoms" className="form-label">Disease Symptoms</label>
