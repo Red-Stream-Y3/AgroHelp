@@ -27,12 +27,12 @@ const Crops = ({
             </h2>
           </div>
         </td>
-        <td className="py-4 text-sm whitespace-nowrap">
+        <td className="px-2 py-4 text-sm whitespace-nowrap">
           <h2 className="font-medium text-gray-800 dark:text-white capitalize">
             {crop.cropType}
           </h2>
         </td>
-        <td className="py-4 text-sm whitespace-nowrap">
+        <td className="px-2 py-4 text-sm whitespace-nowrap">
           <h2 className="font-medium text-gray-800 dark:text-white capitalize">
             {crop.cropIntro.split(' ').slice(0, 8).join(' ')} ...
           </h2>
@@ -122,8 +122,8 @@ const Crops = ({
                 <thead className="bg-gray-50 dark:bg-gray-800">
                   <tr>
                     <th className={`px-4 ${theadClass}`}>NAME</th>
-                    <th className={theadClass}>TYPE</th>
-                    <th className={theadClass}>DETAILS</th>
+                    <th className={`px-2 ${theadClass}`}>TYPE</th>
+                    <th className={`px-2 ${theadClass}`}>DETAILS</th>
                     <th className={theadClass}>AUTHOR</th>
                     <th className={`text-center ${theadClass}`}>DATE</th>
                     <th className={`text-center ${theadClass}`}>ACTIONS</th>
