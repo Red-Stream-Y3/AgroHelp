@@ -379,6 +379,7 @@ const ForumCard = ({
                         {/* forum delete and edit buttons */}
                         {user !== null &&
                         user !== undefined &&
+                        !forumObj.resolved && // if forum is resolved, no need to show edit and delete buttons
                         forum.userID === user._id ? (
                             <div className="w-fit">
                                 <button
