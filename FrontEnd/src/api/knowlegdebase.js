@@ -243,3 +243,49 @@ export const getDiseasesByAuthor = async (id) => {
     return [];
   }
 };
+
+export const addRemoveCropBookmarks = async (id, userId) => {
+  try {
+    const response = await axios.put(
+      `http://localhost:9120/api/crops/${id}/bookmark`,
+      userId
+    );
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export const addRemoveDiseaseBookmarks = async (id, userId) => {
+  try {
+    const response = await axios.put(
+      `http://localhost:9120/api/diseases/${id}/bookmark`,
+      userId
+    );
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export const getCropBookmarksByUser = async (id) => {
+  try {
+    const response = await axios.get('http://localhost:9120/api/crops/bookmarks/' + id);
+    console.log('crop', response.data);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+}
+
+export const getDiseaseBookmarksByUser = async (id) => {
+  try {
+    const response = await axios.get('http://localhost:9120/api/diseases/bookmarks/' + id);
+    console.log('disease', response.data);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+}

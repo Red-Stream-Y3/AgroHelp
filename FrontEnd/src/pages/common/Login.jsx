@@ -1,3 +1,4 @@
+import React from 'react';
 import { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useGlobalContext } from '../../context/ContextProvider';
@@ -34,7 +35,7 @@ const Login = () => {
   };
 
   return (
-    <body className="h-screen overflow-hidden flex items-center justify-center bg-lightbg">
+    <div className="h-screen overflow-hidden flex items-center justify-center bg-lightbg">
       <script
         src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.js"
         defer
@@ -272,7 +273,10 @@ const Login = () => {
                 <div>
                   <div className="flex -mx-3">
                     <div className="w-full px-3 mb-5">
-                      <label htmlFor="" className="text-s font-semibold px-1">
+                      <label
+                        htmlFor="Email"
+                        className="text-s font-semibold px-1"
+                      >
                         Email
                       </label>
                       <div className="flex">
@@ -286,13 +290,17 @@ const Login = () => {
                           required="required"
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
+                          data-testid="email-input"
                         />
                       </div>
                     </div>
                   </div>
                   <div className="flex -mx-3">
                     <div className="w-full px-3 mb-5">
-                      <label htmlFor="" className="text-s font-semibold px-1">
+                      <label
+                        htmlFor="Password"
+                        className="text-s font-semibold px-1"
+                      >
                         Password
                       </label>
                       <div className="flex">
@@ -306,6 +314,7 @@ const Login = () => {
                           required="required"
                           value={password}
                           onChange={(e) => setPassword(e.target.value)}
+                          data-testid="password-input"
                         />
                       </div>
                     </div>
@@ -342,7 +351,10 @@ const Login = () => {
                   </div>
                   <div className="flex -mx-3">
                     <div className="w-full px-3 mb-5">
-                      <button className="block w-full max-w-xs mx-auto bg-secondary text-white hover:bg-primarylight hover:text-darkbg rounded-lg px-3 py-3 font-semibold">
+                      <button
+                        className="block w-full max-w-xs mx-auto bg-secondary text-white hover:bg-primarylight hover:text-darkbg rounded-lg px-3 py-3 font-semibold"
+                        data-testid="login"
+                      >
                         Login
                       </button>
                     </div>
@@ -363,7 +375,7 @@ const Login = () => {
         </div>
       </div>
       <div className="flex items-end justify-end fixed bottom-0 right-0 mb-4 mr-4 z-10" />
-    </body>
+    </div>
   );
 };
 
