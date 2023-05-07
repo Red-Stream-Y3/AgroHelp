@@ -3,7 +3,7 @@ import { Forum } from "../../api/forum.js";
 import { FaSpinner } from "react-icons/fa";
 import { useGlobalContext } from "../../context/ContextProvider";
 import { ForumCard, ForumCardContainer, ForumSearch, ForumSearchResults } from "../../components";
-import { toast, ToastContainer } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { MdOutlineAdd } from "react-icons/md";
 import { Popup } from "../../components";
@@ -87,53 +87,42 @@ const ForumDashboard = (props) => {
     };
 
     //refresh dashboard forums
-	useEffect(() => {
-		if(dashLoaded) return;
-		
-		const refresh = async () => {
-			setLoading(true);
+    const refreshDashboardForums = async () => {
+        if(dashLoaded) return;
 
-			const recent = await Forum.getForums(checkStatus);
+        setLoading(true);
 
-            if (recent !== null && recent !== undefined) {
-                setRecentForums(recent);
-                setDashLoaded(true);
-            }
-			
-			setLoading(false);
-		};
+        const recent = await Forum.getForums(checkStatus);
 
-		refresh();
-
-	}, [tab]);
-
+        if (recent !== null && recent !== undefined) {
+            setRecentForums(recent);
+            setDashLoaded(true);
+        }
+        
+        setLoading(false);
+    };
+	
 	//refresh my forums
-	useEffect(() => {
-		if(myLoaded) return;
+    const refreshMyForums = async () => {
+        if (myLoaded) return;
 
-		const refresh = async () => {
-			setLoading(true);
+        setLoading(true);
 
-			const my = await Forum.getForumsByUser(user, checkStatus);
+        const my = await Forum.getForumsByUser(user, checkStatus);
 
-            if (my !== null && my !== undefined) {
-                setMyForums(my);
-                setMyLoaded(true);
-            }
-            
-			setLoading(false);
-		};
+        if (my !== null && my !== undefined) {
+            setMyForums(my);
+            setMyLoaded(true);
+        }
 
-		refresh();
-
-	}, [tab]);
+        setLoading(false);
+    };
 
 	//refresh subscribed forums
-	useEffect(() => {
-		if(subLoaded) return;
+    const refreshSubscribedForums = async () => {
+        if(subLoaded) return;
 
-		const refresh = async () => {
-			setLoading(true);
+        setLoading(true);
 
 			const sub = await Forum.getSubscribedForumsByUser(
 				user,
@@ -146,11 +135,14 @@ const ForumDashboard = (props) => {
             }
 			
 			setLoading(false);
-		};
+    };
 
-		refresh();
-
-	}, [tab]);
+    //initial forum loading
+    useEffect(() => {
+        refreshDashboardForums();
+        refreshMyForums();
+        refreshSubscribedForums();
+    }, []);
 
     //refresh all forums
     const refreshAllForums = async (keepCurrent) => {
@@ -324,6 +316,9 @@ const ForumDashboard = (props) => {
                                         forums={recentForums}
                                         checkStatus={checkStatus}
                                         notify={notify}
+                                        tab={tab}
+                                        loaded={dashLoaded}
+                                        refresh={refreshDashboardForums}
                                         refreshAll={refreshAllForums}
                                         setSelectedForum={setSelectedForum}
                                         setShowSelectedForum={setShowSelectedForum}
@@ -358,6 +353,9 @@ const ForumDashboard = (props) => {
                                                 forums={myForums}
                                                 checkStatus={checkStatus}
                                                 notify={notify}
+                                                tab={tab}
+                                                loaded={myLoaded}
+                                                refresh={refreshMyForums}
                                                 refreshAll={refreshAllForums}
                                                 setSelectedForum={setSelectedForum}
                                                 setShowSelectedForum={setShowSelectedForum}
@@ -386,6 +384,9 @@ const ForumDashboard = (props) => {
                                                 forums={subscribedForums}
                                                 checkStatus={checkStatus}
                                                 notify={notify}
+                                                tab={tab}
+                                                loaded={subLoaded}
+                                                refresh={refreshSubscribedForums}
                                                 refreshAll={refreshAllForums}
                                                 setSelectedForum={setSelectedForum}
                                                 setShowSelectedForum={setShowSelectedForum}

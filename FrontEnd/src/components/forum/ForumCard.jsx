@@ -93,7 +93,7 @@ const ForumCard = ({
         } else {
             setDisliked(false);
         }
-    }, [forumObj]);
+    }, [forumObj, user]);
 
     //check if content is too long
     useEffect(() => {
@@ -120,7 +120,7 @@ const ForumCard = ({
             setDisliked(false);
         }
         await refreshForum();
-        refreshAll(true);
+        await refreshAll(true);
     };
 
     const handleDislike = async () => {
