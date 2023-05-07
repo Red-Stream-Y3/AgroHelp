@@ -12,12 +12,14 @@ export default function BlogsbyAuthor() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [profilePic, setProfilePic] = useState("");
+  const [userName, setUserName] = useState("");
 
   useEffect(() => {
     const fetchBlogsByAuthor = async () => {
       const blogs = await getBlogsByAuthor(id);
       setBlogs(blogs);
       setFirstName(blogs[0].author.firstName);
+      setUserName(blogs[0].author.username);
       setLastName(blogs[0].author.lastName);
       setProfilePic(blogs[0].author.profilePic);
     };
@@ -42,11 +44,14 @@ export default function BlogsbyAuthor() {
                   alt="blog"
                   className="w-12 h-12 object-cover rounded-full"
                 />
-                <h1 className="ml-4 text-2xl font-bold text-gray-800 md:text-3xl">
+                <h1 className="ml-4 text-2xl font-bold text-white md:text-3xl">
                   {firstName + " " + lastName}
                 </h1>
+                
+                
               </div>
-              <hr className="border-gray-500 border-1 w-full mt-4 mb-8" />
+              <p className="flex flex-row items-center justify-center text-white ">@{userName}</p>
+              <hr className="border-gray-200 border-1 w-full mt-4 mb-8" />
 
           {blogs.map((blog) => (
             <div key={blog.id}>

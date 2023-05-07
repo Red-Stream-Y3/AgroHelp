@@ -153,10 +153,35 @@ const ForumDashboard = (props) => {
 	}, [subLoaded, tab]);
 
     //refresh all forums
-    const refreshAllForums = async () => {
-        setDashLoaded(false);
-		setMyLoaded(false);
-		setSubLoaded(false);
+    const refreshAllForums = async (keepCurrent) => {
+        const refresh = async () => {
+            if (
+                keepCurrent !== null &&
+                keepCurrent !== undefined &&
+                keepCurrent === true
+            ) {
+                //refresh other tabs except current tab
+                switch (tab) {
+                    case "dashboard":
+                        setMyLoaded(false);
+                        setSubLoaded(false);
+                        break;
+                    case "myForums":
+                        setDashLoaded(false);
+                        setSubLoaded(false);
+                        break;
+                    case "subscribed":
+                        setDashLoaded(false);
+                        setMyLoaded(false);
+                        break;
+                }
+            } else {
+                setDashLoaded(false);
+                setMyLoaded(false);
+                setSubLoaded(false);
+            }
+        };
+        await refresh();
     };
 
 	//create a forum
@@ -300,6 +325,8 @@ const ForumDashboard = (props) => {
                                         checkStatus={checkStatus}
                                         notify={notify}
                                         refreshAll={refreshAllForums}
+                                        setSelectedForum={setSelectedForum}
+                                        setShowSelectedForum={setShowSelectedForum}
                                     />
                                 ) : (
                                     <div className="m-auto w-fit mt-5 text-gray-500">
@@ -332,6 +359,8 @@ const ForumDashboard = (props) => {
                                                 checkStatus={checkStatus}
                                                 notify={notify}
                                                 refreshAll={refreshAllForums}
+                                                setSelectedForum={setSelectedForum}
+                                                setShowSelectedForum={setShowSelectedForum}
                                             />
                                         ) : (
                                             <div className="m-auto w-fit mt-5 text-gray-500">
@@ -358,6 +387,8 @@ const ForumDashboard = (props) => {
                                                 checkStatus={checkStatus}
                                                 notify={notify}
                                                 refreshAll={refreshAllForums}
+                                                setSelectedForum={setSelectedForum}
+                                                setShowSelectedForum={setShowSelectedForum}
                                             />
                                         ) : (
                                             <div className="m-auto w-fit mt-5 text-gray-500">
@@ -412,7 +443,7 @@ const ForumDashboard = (props) => {
                 show={showSelectedForum}
                 setShow={setShowSelectedForum}
                 ring={true}>
-                <div className="text-left max-w-sm sm:max-w-lg max-h-96 overflow-y-auto">
+                <div className="text-left w-screen max-w-sm sm:max-w-lg max-h-96 overflow-y-auto">
                     <ForumCard
                         forum={selectedForum}
                         checkRes={checkStatus}

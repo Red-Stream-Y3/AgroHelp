@@ -40,7 +40,7 @@ const blogSchema = new mongoose.Schema({
       required: true,
     },
   ],
-  Bookmarked: [{
+  bookmarked: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
     required: true,

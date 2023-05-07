@@ -181,28 +181,29 @@ export default function BlogView() {
           tags={tagsAsString}
           authorId={authorID}
         />
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-white">
           <div dangerouslySetInnerHTML={{ __html: body }} />
         </div>
         <br />
         <br />
+        <hr className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4 border-green-300" />
 
         {/* Likes and Bookmarks */}
         <div className="flex justify-center max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-x-8">
           <div className="flex items-center space-x-2">
             <button
               onClick={handleLike}
-              className="transition-all ease-in-out active:scale-110 hover:bg-blue-800 rounded-full px-2 py-2"
+              className="transition-all text-blue-400 ease-in-out active:scale-110 hover:bg-blue-100 rounded-full px-2 py-2"
             >
               {liked ? <AiFillLike size={24} /> : <AiOutlineLike size={24} />}
             </button>
-            <div className="text-sm font-bold">{numLikes} Likes</div>
+            <div className="text-sm font-bold text-gray-200">{numLikes}</div>
           </div>
 
           <div className="flex items-center space-x-2">
             <button
               onClick={handleDisLike}
-              className="transition-all ease-in-out active:scale-110 hover:bg-red-500 rounded-full px-2 py-2"
+              className="transition-all text-red-400 ease-in-out active:scale-110 hover:bg-red-200 rounded-full px-2 py-2"
             >
               {disLiked ? (
                 <AiFillDislike size={24} />
@@ -210,15 +211,15 @@ export default function BlogView() {
                 <AiOutlineDislike size={24} />
               )}
             </button>
-            <div className="text-sm font-bold">{numDislikes} Dislikes</div>
+            <div className="text-gray-200 text-sm font-bald">{numDislikes}</div>
           </div>
 
           <div className="flex items-center">
             <button onClick={handleBookmark}>
               {bookmarked ? (
-                <BsBookmarkCheckFill size={24} className="text-gray-700" />
+                <BsBookmarkCheckFill size={24} className="text-yellow-500" />
               ) : (
-                <BsBookmarkPlus size={24} className="text-gray-700" />
+                <BsBookmarkPlus size={24} className="text-gray-100" />
               )}
             </button>
           </div>
@@ -229,7 +230,7 @@ export default function BlogView() {
 
         {/* Comment Section */}
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 p-4">
-          <h2 className="text-2xl font-bold mb-4">Comments</h2>
+          <h2 className="text-2xl font-bold mb-4 text-white">Comments</h2>
 
           {isLogged && (
             <form onSubmit={handleCommentSubmit}>
@@ -253,7 +254,7 @@ export default function BlogView() {
           <div className="mt-4">
             {blog.comments &&
               blog.comments.map((comment, index) => (
-                <div key={index} className="bg-gray-200 p-2 rounded mb-2">
+                <div key={index} className="bg-white p-2 rounded mb-2">
                   <div className="font-bold mb-1">@{comment.userName}</div>
                   <div>{comment.text}</div>
                 </div>

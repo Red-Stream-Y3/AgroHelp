@@ -41,7 +41,7 @@ export default function BlogCreate() {
     e.preventDefault();
     try {
       const newBlog = await createBlog(blog);
-      toast.success("Blog created", {
+      toast.success("Blog Uploaded!", {
         hideProgressBar: false,
         closeOnClick: true,
         autoClose: 1500,
@@ -72,14 +72,14 @@ export default function BlogCreate() {
           <BlogContainer>
             <div className="flex items-center">
               <FaPenNib className="h-8 w-4 text-green-500" />
-              <span className="text-black font-extrabold ml-2 ">
+              <span className="text-white text-2xl font-extrabold ml-2 ">
                 Drafting as {user.username}
               </span>
             </div>
 
             <form onSubmit={handleSubmit} className="my-4">
               <div className="flex flex-col">
-                <label className="text-black font-extrabold">Title</label>
+                <label className="text-white text-xl font-bold my-4">Title</label>
                 <input
                   className="border-2 border-gray-300 p-2 rounded-lg"
                   type="text"
@@ -91,7 +91,7 @@ export default function BlogCreate() {
               </div>
 
               <div className="flex flex-col my-4">
-                <label className="text-black font-extrabold">Content</label>
+                <label className="text-white text-xl font-bold my-4">Content</label>
                 <Editor
                   apiKey="in0avjv2q4rxzz3r60yiu4b4m1uej22oxbuc8pohxxbj2npx"
                   value={blog.body}
@@ -157,7 +157,7 @@ export default function BlogCreate() {
               </div>
 
               <div className="flex flex-col my-4">
-                <label className="text-black font-extrabold">Tags</label>
+                <label className="text-white text-xl font-bold my-4">Tags</label>
                 <input
                   className="border-2 border-gray-300 p-2 rounded-lg"
                   type="text"
@@ -173,7 +173,7 @@ export default function BlogCreate() {
                 type="submit"
                 onClick={handleSubmit}
               >
-                Publish
+                Upload
               </button>
             </form>
 
