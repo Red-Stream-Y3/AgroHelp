@@ -55,18 +55,53 @@ export default function BlogDashboard() {
         <div>
           <BlogBanner />
           <BlogContainer>
-            <div className="flex flex-col md:flex-row justify-center md:justify-end items-center">
-              {isLogged && (
-                <div>
-                  <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-2 md:mt-0 md:mr-4">
-                    <Link to="/createblog">Start Your Blog</Link>
-                  </button>
-                  <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-2 md:mt-0 md:mr-4 ">
-                    <Link to={`/myblogs/${userID}`}>My Blog Posts</Link>
-                  </button>
-                </div>
-              )}
-              <div className="ml-4 mt-4 md:mt-0">
+            <div className="flex flex-col lg:flex-row items-center lg:justify-between">
+              <div className="flex flex-col lg:flex-row items-center">
+                {isLogged ? (
+                  <ul className="flex flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400">
+                    <li className="mr-2">
+                      <Link to="#">
+                        <div className="inline-block p-4 text-blue-600 bg-gray-100 rounded-t-lg active dark:bg-gray-800 dark:text-blue-500">
+                          Featured Blog Posts
+                        </div>
+                      </Link>
+                    </li>
+                    <li className="mr-2">
+                      <Link to="/createblog">
+                      <div className="inline-block p-4 rounded-t-lg hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300">
+                          Start Your Blog
+                        </div>
+                      </Link>
+                    </li>
+                    <li className="mr-2">
+                      <Link to={`/myblogs/${userID}`}>
+                        <div className="inline-block p-4 rounded-t-lg hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300">
+                          My Blogs
+                        </div>
+                      </Link>
+                    </li>
+                    <li className="mr-2">
+                      <Link to="#">
+                        <div className="inline-block p-4 rounded-t-lg hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300">
+                          Bookmarks
+                        </div>
+                      </Link>
+                    </li>
+                  </ul>
+                ) : (
+                  <div>
+                    <Link to="/login">
+                      <button
+                        type="button"
+                        className="text-green-700 hover:text-white border border-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-green-500 dark:text-green-500 dark:hover:text-white dark:hover:bg-green-600 dark:focus:ring-green-800"
+                      >
+                        Login to Start Your Blog
+                      </button>
+                    </Link>
+                  </div>
+                )}
+              </div>
+              <div className="ml-4 mt-4 lg:mt-0 justify-end lg:justify-end">
                 <BlogSearchBar />
               </div>
             </div>

@@ -228,7 +228,7 @@ const getBlogsByAuthor = asyncHandler(async (req, res) => {
   try {
     const blogs = await Blog.find({ author: req.params.id }).populate(
       'author',
-      'firstName lastName profilePic'
+      'firstName lastName profilePic username'
     );
     if (blogs) {
       res.json(blogs);
