@@ -228,6 +228,14 @@ const bookmarkBlog = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc    Get user's bookmarked blogs
+// @route   GET /api/blog/bookmark/:id
+// @access  Private
+const getBookmarkedBlogs = asyncHandler(async (req, res) => {
+  const blogs = await Blog.find({ bookmarked: req.params.id });
+  res.json(blogs);
+});
+
 // @desc    Update Blog accept
 // @route   PUT /api/blog/:id/accept
 // @access  Private/Admin
@@ -306,5 +314,6 @@ export {
   updateBlogAccept,
   getBlogsByAuthor,
   blogCommentAccept,
-  bookmarkBlog
+  bookmarkBlog,
+  getBookmarkedBlogs
 };

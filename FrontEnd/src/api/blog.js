@@ -197,3 +197,15 @@ export const handleBlogBookamrk = async (id, user) => {
   }
 };
 
+// get user's bookmarked blogs
+export const getBookmarkedBlogs = async (userId) => {
+  try {
+    const response = await axios.get(
+      `http://localhost:9120/api/blog/bookmark/${userId}`
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+};
