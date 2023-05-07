@@ -3,6 +3,7 @@ export { default as Login } from './common/Login';
 export { default as Register } from './common/Register';
 export { default as Profile } from './common/Profile';
 export { default as AccountSettings } from './common/AccountSettings';
+export { default as Search } from './common/Search';
 
 export { default as KnowledgeBase } from './knowledgebase/KnowledgeBase';
 export { default as Crop } from './knowledgebase/Crop';
@@ -27,6 +28,7 @@ export { default as BlogView } from './blog/BlogView';
 export { default as BlogCreate } from './blog/BlogCreate';
 export { default as BlogUpdate } from './blog/BlogUpdate';
 export { default as BlogsbyAuthor } from './blog/BlogsbyAuthor';
+export { default as MyBlogPosts } from './blog/MyBlogPosts';
 
 //forum related exports
 export { default as ForumDashboard } from './forum/ForumDashboard';

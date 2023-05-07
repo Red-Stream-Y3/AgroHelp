@@ -23,8 +23,16 @@ import {
   UpdateCrop,
   UpdateDisease,
   MyArticles,
+  Search,
 } from './pages';
-import { BlogDashboard, BlogCreate, BlogView, BlogUpdate, BlogsbyAuthor } from './pages';
+import {
+  BlogDashboard,
+  BlogCreate,
+  BlogView,
+  BlogUpdate,
+  BlogsbyAuthor,
+  MyBlogPosts
+} from './pages';
 import './App.css';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -49,6 +57,7 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/settings" element={<AccountSettings />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/search/:searchTerm" element={<Search />} />
 
             <Route path="/admin/*" element={<AdminHome />}>
               <Route path="dashboard" element={<AdminDashboard />} />
@@ -68,12 +77,12 @@ function App() {
             <Route path="update/disease/:id" element={<UpdateDisease />} />
             <Route path="contributor/dashboard" element={<MyArticles />} />
             <Route path="/forum" element={<ForumDashboard />} />
-
             <Route path="/blog" element={<BlogDashboard />} />
             <Route path="/createblog" element={<BlogCreate />} />
             <Route path="/viewblog/:id" element={<BlogView />} />
             <Route path="/editblog/:id" element={<BlogUpdate />} />
             <Route path="/blogAuthor/:id" element={<BlogsbyAuthor />} />
+            <Route path="/myblogs/:id" element={<MyBlogPosts />} />
           </Routes>
 
           <Footer />

@@ -16,13 +16,8 @@ import {
 
 const diseaseRoutes = express.Router();
 
-diseaseRoutes
-  .route('/')
-  .get(getCropDiseases)
-  .post(createCropDisease);
-diseaseRoutes
-  .route('/random')
-  .get(getRandomCropDiseases);
+diseaseRoutes.route('/').get(getCropDiseases).post(createCropDisease);
+diseaseRoutes.route('/random').get(getRandomCropDiseases);
 diseaseRoutes
   .route('/:id')
   .get(getCropDiseaseById)
@@ -43,6 +38,5 @@ diseaseRoutes
 diseaseRoutes
   .route('/bookmark')
   .get(getDiseaseBookmarksByUser);
-  
 
 export default diseaseRoutes;

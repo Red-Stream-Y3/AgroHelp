@@ -4,27 +4,26 @@ import { Loader } from '..';
 import PropTypes from 'prop-types';
 
 const LineChart = ({ siteVisits, loading }) => {
+  const labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
   const data = {
-    labels: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+    labels: labels.slice(-7),
     datasets: [
       {
         label: 'Traffic',
-        // data: siteVisits.map((visit) => {
-        //   const date = new Date(visit.date);
-        //   const dayOfWeek = date.toLocaleDateString('en-US', {
-        //     weekday: 'short',
-        //   });
-        //   index.indexOf(dayOfWeek);
-        //   return visit.count;
-        // }),
-        data: siteVisits.map((visit) => visit.count),
+        data: siteVisits.map((visit) => visit.count).slice(-7),
         fill: false,
         backgroundColor: 'rgb(81, 171, 240)',
         borderColor: 'rgb(54, 100, 227)',
-        // cubicInterpolationMode: 'monotone',
       },
     ],
   };
+
+  if (data.labels.length < siteVisits.length) {
+    const updatedLabels = labels.slice(-siteVisits.length);
+    updatedLabels.shift();
+    data.labels = updatedLabels;
+    data.datasets[0].data.shift();
+  }
 
   const options = {
     responsive: true,
@@ -52,11 +51,6 @@ const LineChart = ({ siteVisits, loading }) => {
           color: 'rgba(255,255,255,0.1)',
         },
       },
-      // elements: {
-      //   line: {
-      //     tension: 0.4,
-      //   },
-      // },
     },
   };
 
