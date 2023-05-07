@@ -204,6 +204,38 @@ const dislikeBlog = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc    Bookmark a blog
+// @route   PUT /api/blog/bookmark/:id
+// @access  Private
+const bookmarkBlog = asyncHandler(async (req, res) => {
+  const { userId } = req.body;
+  const blog = await Blog.findById(req.params.id);
+  let message = '';
+
+  if (blog) {
+    //if user already bookmarked the blog remove bookmark
+    if (blog.bookmarked.includes(userId)) {
+      blog.bookmarked.pull(userId);
+      message = 'Removed Bookmark';
+    } else {
+      blog.bookmarked.push(userId);
+      message = 'Bookmarked Blog';
+    }
+    blog.save();
+    res.status(200).json({ msg: message });
+  } else {
+    res.status(404).send({ message: 'Blog not found' });
+  }
+});
+
+// @desc    Get user's bookmarked blogs
+// @route   GET /api/blog/bookmark/:id
+// @access  Private
+const getBookmarkedBlogs = asyncHandler(async (req, res) => {
+  const blogs = await Blog.find({ bookmarked: req.params.id });
+  res.json(blogs);
+});
+
 // @desc    Update Blog accept
 // @route   PUT /api/blog/:id/accept
 // @access  Private/Admin
@@ -282,4 +314,6 @@ export {
   updateBlogAccept,
   getBlogsByAuthor,
   blogCommentAccept,
+  bookmarkBlog,
+  getBookmarkedBlogs
 };

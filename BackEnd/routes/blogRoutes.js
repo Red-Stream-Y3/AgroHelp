@@ -13,6 +13,8 @@ import {
   updateBlogAccept,
   blogCommentAccept,
   getBlogsByAuthor,
+  bookmarkBlog,
+  getBookmarkedBlogs
 } from '../controllers/blogController.js';
 
 const router = express.Router();
@@ -27,5 +29,7 @@ router.route('/comment/:id/:commentId').delete(deleteBlogComment);
 router.route('/like/:id').post(likeBlog);
 router.route('/dislike/:id').post(dislikeBlog);
 router.route('/author/:id').get(getBlogsByAuthor);
+router.route('/bookmark/:id').post(bookmarkBlog);
+router.route('/bookmark/:id').get(getBookmarkedBlogs);
 
 export default router;
