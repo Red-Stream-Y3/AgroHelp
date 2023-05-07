@@ -53,8 +53,13 @@ export default function BlogDashboard() {
         </div>
       ) : (
         <div>
-          <BlogBanner />
+          {/* <BlogBanner /> */}
           <BlogContainer>
+          <div className="flex flex-col items-start place-items-start pt-5 pb-10 w-full">
+            <h1 className="text-2xl text-white font-bold md:text-3xl">Blog Dashboard</h1>
+            <p className="text-gray-300 text-md md:text-lg">Everything about Agriculture</p>
+            <hr className="border-gray-500 border-1 w-full mt-4" />
+          </div>
             <div className="flex flex-col lg:flex-row items-center lg:justify-between">
               <div className="flex flex-col lg:flex-row items-center">
                 {isLogged ? (

@@ -22,7 +22,7 @@ const PublicBlogCrad = ({
   }
 
   return (
-    <div className="bg-gray-700 shadow rounded-lg px-4 py-6 sm:flex sm:flex-col sm:justify-between sm:items-start sm:px-6 sm:py-8 transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-20 hover:bg-gray-800 cursor-pointer">
+    <div className="bg-lightbg shadow rounded-lg px-4 py-6 sm:flex sm:flex-col sm:justify-between sm:items-start sm:px-6 sm:py-8 transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-20 hover:bg-gray-800 cursor-pointer">
       <div className="text-2xl font-bold mb-2 text-white">{title}</div>
       <hr className="my-2" />
       <div className="text-gray-400 text-sm mb-2 flex items-center">
@@ -37,7 +37,7 @@ const PublicBlogCrad = ({
         <span className="ml-2">{tags}</span>
       </div>
 
-      <div className="fixed bottom-0 right-0 flex items-center justify-end mr-2 mb-2 text-gray-500">
+      <div className="fixed bottom-0 right-0 flex items-center justify-end mr-2 mb-2 text-gray-300">
         <div className="flex items-center mx-2">
           <div className="text-xl text-blue-600">
             <AiFillLike />
@@ -51,7 +51,7 @@ const PublicBlogCrad = ({
           <span className="text-lg mx-2">{dislikes}</span>
         </div>
         <div className="flex items-center mx-2">
-          <div className="text-xl text-gray-600">
+          <div className="text-xl text-gray-400">
             <MdComment />
           </div>
           <span className="text-lg mx-2">{comments}</span>

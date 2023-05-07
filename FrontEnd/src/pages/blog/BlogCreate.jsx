@@ -71,11 +71,13 @@ export default function BlogCreate() {
         <div className="my-4">
           <BlogContainer>
             <div className="flex items-center">
-              <FaPenNib className="h-8 w-4 text-green-500" />
-              <span className="text-white text-2xl font-extrabold ml-2 ">
-                Drafting as {user.username}
+              <FaPenNib className="h-8 w-8 text-primarylight m-2" />
+              <span className="text-white text-2xl font-bold ml-2 ">
+                Drafting as
+                <span className="text-gray-300"> {user.firstName} {user.lastName} ({user.username})</span>
               </span>
             </div>
+            <hr className="border-gray-500 border-1 w-full mt-4" />
 
             <form onSubmit={handleSubmit} className="my-4">
               <div className="flex flex-col">

@@ -189,7 +189,7 @@ export default function BlogView() {
         <hr className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4 border-green-300" />
 
         {/* Likes and Bookmarks */}
-        <div className="flex justify-center max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-x-8">
+        <div className="flex items-center justify-center pb-6 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-x-8">
           <div className="flex items-center space-x-2">
             <button
               onClick={handleLike}
@@ -236,7 +236,7 @@ export default function BlogView() {
             <form onSubmit={handleCommentSubmit}>
               <input
                 type="text"
-                className="border border-gray-400 rounded py-2 px-3 mb-2 w-full"
+                className="border border-gray-400 rounded py-2 px-3 mb-2 w-full bg-lightbg text-white"
                 name="text"
                 placeholder="Write a comment..."
                 value={comment.text}
@@ -244,17 +244,18 @@ export default function BlogView() {
               />
               <button
                 type="submit"
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mt-1 rounded"
               >
                 Post Comment
               </button>
+              <hr className="my-5" />
             </form>
           )}
 
           <div className="mt-4">
             {blog.comments &&
               blog.comments.map((comment, index) => (
-                <div key={index} className="bg-white p-2 rounded mb-2">
+                <div key={index} className="bg-lightbg text-white p-2 rounded mb-2">
                   <div className="font-bold mb-1">@{comment.userName}</div>
                   <div>{comment.text}</div>
                 </div>
