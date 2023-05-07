@@ -105,7 +105,7 @@ const ForumDashboard = (props) => {
 
 		refresh();
 
-	}, [dashLoaded, tab]);
+	}, [tab]);
 
 	//refresh my forums
 	useEffect(() => {
@@ -126,7 +126,7 @@ const ForumDashboard = (props) => {
 
 		refresh();
 
-	}, [myLoaded, tab]);
+	}, [tab]);
 
 	//refresh subscribed forums
 	useEffect(() => {
@@ -150,7 +150,7 @@ const ForumDashboard = (props) => {
 
 		refresh();
 
-	}, [subLoaded, tab]);
+	}, [tab]);
 
     //refresh all forums
     const refreshAllForums = async (keepCurrent) => {

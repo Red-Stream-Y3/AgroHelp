@@ -22,7 +22,7 @@ router.route('/:id').get(getBlogById).put(updateBlog).delete(deleteBlog);
 router.route('/:id/accept').put(updateBlogAccept);
 router.route('/:id/comment').put(blogCommentAccept);
 router.route('/comment/:id').post(createBlogComment);
-router.route('/search/:blogTitle').get(searchBlogs);
+router.route('/search/q=:q').get(searchBlogs);
 router.route('/comment/:id/:commentId').delete(deleteBlogComment);
 router.route('/like/:id').post(likeBlog);
 router.route('/dislike/:id').post(dislikeBlog);
