@@ -1,8 +1,10 @@
 /** @format */
 
 import React, { useState, useEffect } from "react";
-import { AiFillLike, AiFillDislike, AiFillEdit } from "react-icons/ai";
+import { AiFillLike, AiFillDislike } from "react-icons/ai";
 import { MdComment } from "react-icons/md";
+import { BsBookmarkCheckFill } from "react-icons/bs";
+import { FiBookmark } from "react-icons/fi";
 import { Link } from "react-router-dom";
 
 const PublicBlogCrad = ({
@@ -14,7 +16,18 @@ const PublicBlogCrad = ({
   likes,
   dislikes,
   comments,
+  bookmarked,
+  user,
+  handleBookmark,
 }) => {
+  const [isBookmarked, setIsBookmarked] = useState(false);
+
+  useEffect(() => {
+    if (user && user == bookmarked) {
+      setIsBookmarked(true);
+    }
+  }, [bookmarked, user]);
+
   //date formatter
   function formatDate(dateString) {
     const date = new Date(dateString);
@@ -38,6 +51,18 @@ const PublicBlogCrad = ({
       </div>
 
       <div className="fixed bottom-0 right-0 flex items-center justify-end mr-2 mb-2 text-gray-300">
+        <div className="flex items-center mx-2">
+          <div className="">
+            <button onClick={handleBookmark}>
+              {isBookmarked ? (
+                <BsBookmarkCheckFill className=" text-yellow-300" />
+              ) : (
+                <FiBookmark className="text-gray-100 text-xl" />
+              )}
+            </button>
+          </div>
+        </div>
+
         <div className="flex items-center mx-2">
           <div className="text-xl text-blue-600">
             <AiFillLike />
