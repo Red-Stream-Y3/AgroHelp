@@ -209,7 +209,7 @@ const ManageComments = () => {
               <div className="mt-6 md:flex md:items-center md:justify-between">
                 <div>
                   <h2 className="text-lg font-semibold text-gray-800 dark:text-white">
-                    BLOGS
+                    COMMENTS
                   </h2>
                 </div>
                 <div className="flex items-center mt-4 md:mt-0">
