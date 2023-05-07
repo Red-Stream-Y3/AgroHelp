@@ -352,7 +352,7 @@ const Navbar = () => {
                 <span className="ml-2">Admin Panel</span>
               </Link>
             )}
-            {(isAdmin || isModerator) && (
+            {(isAdmin || isContributor) && (
               <Link
                 to="/contributor/dashboard"
                 className="flex px-3 py-2 text-base font-medium text-white hover:bg-secondary rounded-md items-center"
