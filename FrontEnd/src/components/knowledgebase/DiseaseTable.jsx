@@ -7,11 +7,12 @@ import { deleteDisease } from '../../api/knowlegdebase'
 const DiseaseTable = ({diseases}) => {
 
     const [diseaseFilter , setDiseaseFilter] = useState(diseases)
+    const user = JSON.parse(localStorage.getItem('userInfo'))
 
     const handleDeleteDisease = async (id) => {
         const confirm = window.confirm('Are you sure you want to delete this disease?')
         if (confirm) {
-            await deleteDisease(id)
+            await deleteDisease(id, user.token)
             window.location.reload()
         }
     }

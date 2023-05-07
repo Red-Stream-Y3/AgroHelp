@@ -29,6 +29,8 @@ export { default as BlogCreate } from './blog/BlogCreate';
 export { default as BlogUpdate } from './blog/BlogUpdate';
 export { default as BlogsbyAuthor } from './blog/BlogsbyAuthor';
 export { default as MyBlogPosts } from './blog/MyBlogPosts';
+//export { default as BlogSearch } from './blog/BlogSearch';
+export { default as BookmarkedBlogs } from './blog/BookmarkedBlogs';
 
 //forum related exports
 export { default as ForumDashboard } from './forum/ForumDashboard';

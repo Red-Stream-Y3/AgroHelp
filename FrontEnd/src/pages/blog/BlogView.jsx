@@ -11,6 +11,7 @@ import {
   commentonBlog,
   likeBlog,
   disLikeBlog,
+  handleBlogBookamrk,
 } from "../../api/blog";
 import {
   AiOutlineLike,
@@ -28,6 +29,7 @@ export default function BlogView() {
   //likes handler
   const [liked, setLiked] = useState(false);
   const [disLiked, setDisliked] = useState(false);
+  const [bookmarked, setBookmarked] = useState(false);
 
   const [numLikes, setNumLikes] = useState(0);
   const [numDislikes, setNumDislikes] = useState(0);
@@ -137,6 +139,7 @@ export default function BlogView() {
     }
   }, [blog]);
 
+  //like handler
   const handleLike = async () => {
     let res = await likeBlog(id, userId);
     if (res.message === "Unliked Blog") {
@@ -149,7 +152,7 @@ export default function BlogView() {
     await refreshBlog();
   };
 
-  ////dislike handler
+  //dislike handler
   const handleDisLike = async () => {
     let res = await disLikeBlog(id, userId);
     if (res.message === "Removed Dislike") {
@@ -162,12 +165,27 @@ export default function BlogView() {
     await refreshBlog();
   };
 
-  //handle bookmark
-  const [bookmarked, setBookmarked] = useState(false);
+  //check if user has bookmarked
+  useEffect(() => {
+    if (blog.bookmarked) {
+      if (blog.bookmarked.length > 0 && blog.bookmarked.includes(userId)) {
+        setBookmarked(true);
+        //console.log("bookmarked");
+      } else {
+        setBookmarked(false);
+        //console.log("not bookmarked");
+      }
+    }
+  }, [blog]);
 
-  const handleBookmark = () => {
-    setBookmarked(!bookmarked);
-    refreshBlog();
+  const handleBookmark = async () => {
+    let res = await handleBlogBookamrk(id, userId);
+    if (res.msg === "Removed Bookmark") {
+      setBookmarked(false);
+    } else if (res.msg === "Bookmarked Blog") {
+      setBookmarked(true);
+    }
+    await refreshBlog();
   };
 
   return (
@@ -217,7 +235,7 @@ export default function BlogView() {
           <div className="flex items-center">
             <button onClick={handleBookmark}>
               {bookmarked ? (
-                <BsBookmarkCheckFill size={24} className="text-yellow-500" />
+                <BsBookmarkCheckFill size={24} className="text-yellow-300" />
               ) : (
                 <BsBookmarkPlus size={24} className="text-gray-100" />
               )}
@@ -255,7 +273,10 @@ export default function BlogView() {
           <div className="mt-4">
             {blog.comments &&
               blog.comments.map((comment, index) => (
-                <div key={index} className="bg-lightbg text-white p-2 rounded mb-2">
+                <div
+                  key={index}
+                  className="bg-lightbg text-white p-2 rounded mb-2"
+                >
                   <div className="font-bold mb-1">@{comment.userName}</div>
                   <div>{comment.text}</div>
                 </div>

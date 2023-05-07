@@ -13,19 +13,20 @@ import {
   getDiseaseBookmarksByUser,
 
 } from '../controllers/diseaseController.js';
+import { protect, admin, adminContributor } from '../middleware/authMiddleware.js';
 
 const diseaseRoutes = express.Router();
 
-diseaseRoutes.route('/').get(getCropDiseases).post(createCropDisease);
+diseaseRoutes.route('/').get(getCropDiseases).post(protect, adminContributor, createCropDisease);
 diseaseRoutes.route('/random').get(getRandomCropDiseases);
 diseaseRoutes
   .route('/:id')
   .get(getCropDiseaseById)
-  .delete(deleteCropDisease)
-  .put(updateCropDisease);
+  .delete(protect, adminContributor, deleteCropDisease)
+  .put(protect, adminContributor, updateCropDisease);
 diseaseRoutes
   .route('/:id/accept')
-  .put(updateDiseaseAccept);
+  .put(protect, admin, updateDiseaseAccept);
 diseaseRoutes
   .route('/search/:cropDiseaseName')
   .get(searchCropDisease);
