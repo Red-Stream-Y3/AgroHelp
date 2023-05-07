@@ -30,7 +30,7 @@ const CreateDisease = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
-      const data = await createDisease(disease)
+      const data = await createDisease(disease, user.token)
     } catch (error) {
       console.log(error)
     }
