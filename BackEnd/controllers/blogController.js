@@ -132,12 +132,13 @@ const deleteBlogComment = asyncHandler(async (req, res) => {
 });
 
 // @desc    Search blogs
-// @route   GET /api/blog/search
+// @route   GET /api/blog/search/:blogTitle
 // @access  Public
 const searchBlogs = asyncHandler(async (req, res) => {
   try {
+    const searchTerm = req.params.q;
     const blog = await Blog.find({
-      blogTitle: { $regex: req.query.q, $options: 'i' },
+      title: { $regex: new RegExp(`^${searchTerm}`, 'i') },
     });
     res.json(blog);
   } catch (error) {
