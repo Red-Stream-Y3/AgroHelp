@@ -52,4 +52,18 @@ const adminMod = (req, res, next) => {
   }
 };
 
-export { protect, admin, adminMod };
+const adminContributor = (req, res, next) => {
+  if (
+    req.user &&
+    (req.user.role === 'admin' ||
+      req.user.role === 'contributor')
+  ) {
+    next();
+  } else {
+    res.status(401);
+    throw new Error(`Not authorized as an admin or contributor`);
+  }
+};
+
+
+export { protect, admin, adminMod, adminContributor };
