@@ -176,3 +176,15 @@ export const getSiteVisits = async (token) => {
     console.log(error);
   }
 };
+
+// get author info
+export const getAuthorInfo = async (id, token) => {
+  try {
+    const response = await axios.get(
+      `http://localhost:9120/api/users/${id}/author`
+    )
+    return response.data  
+  } catch (error) {
+    console.log(error)
+  }
+}

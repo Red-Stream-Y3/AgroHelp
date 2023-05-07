@@ -6,7 +6,6 @@ import {
   FaQuestion,
   FaPenNib,
   FaSearch,
-  FaUser,
   FaSignOutAlt,
   FaCog,
   FaSignInAlt,
@@ -29,6 +28,8 @@ const Navbar = () => {
   const { user } = useGlobalContext();
   const isAccess = user && (user.role === 'admin' || user.role === 'moderator');
   const isContributor = user && user.role === 'contributor';
+  const isAdmin = user && user.role === 'admin';
+  const userImage = user && user.profilePic;
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -131,7 +132,11 @@ const Navbar = () => {
                   {isProfilePopupOpen ? (
                     <HiOutlineX className="h-6 w-6 text-white" />
                   ) : (
-                    <FaUser className="h-6 w-6 text-white" />
+                    <img
+                      className="h-8 w-8 rounded-full object-cover"
+                      src={userImage}
+                      alt="Profile"
+                    />
                   )}
                 </button>
               </div>
@@ -218,7 +223,11 @@ const Navbar = () => {
                   {isProfilePopupOpen ? (
                     <HiOutlineX className="h-6 w-6 text-white" />
                   ) : (
-                    <FaUser className="h-6 w-6 text-white" />
+                    <img
+                      className="h-8 w-8 rounded-full object-cover"
+                      src={userImage}
+                      alt="Profile"
+                    />
                   )}
                 </button>
               </div>
@@ -319,14 +328,18 @@ const Navbar = () => {
       )}
 
       {isProfilePopupOpen && (
-        <div className="lg w-50 absolute right-0 rounded-xl">
+        <div className="lg w-56 absolute right-0 rounded-xl">
           <div className="px-2 pt-2 pb-3 space-y-1 bg-primarydark rounded-b-xl">
             <Link
               to="/profile"
               className="flex px-3 py-2 text-base font-medium text-white hover:bg-secondary rounded-md items-center"
               onClick={() => setIsProfilePopupOpen(false)}
             >
-              <FaUser className="h-6 w-6" />
+              <img
+                className="h-6 w-6 rounded-full object-cover"
+                src = {userImage}
+                alt="Profile"
+              />
               <span className="ml-2">Profile</span>
             </Link>
             {isAccess && (
@@ -339,14 +352,14 @@ const Navbar = () => {
                 <span className="ml-2">Admin Panel</span>
               </Link>
             )}
-            {isAccess && (
+            {(isAdmin || isModerator) && (
               <Link
                 to="/contributor/dashboard"
                 className="flex px-3 py-2 text-base font-medium text-white hover:bg-secondary rounded-md items-center"
                 onClick={() => setIsProfilePopupOpen(false)}
               >
                 <FaPen className="h-6 w-6" />
-                <span className="ml-2">Creator Panel</span>
+                <span className="ml-2">Contributor Panel</span>
               </Link>
             )}
             <Link

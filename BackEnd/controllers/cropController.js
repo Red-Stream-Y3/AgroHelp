@@ -206,6 +206,49 @@ const getCropsByAuthor = asyncHandler(async (req, res) => {
   }
 });
 
+//@desc     ADD/REMOVE crop bookmark
+//@route    PUT /api/crops/:id/bookmark
+//@access   Private
+
+const addRemoveCropBookmark = asyncHandler(async (req, res) => {
+  try {
+    const crop = await Crop.findById(req.params.id);
+    if (crop) {
+      if (crop.bookmarkedBy.includes(req.body.userId)) {
+        crop.bookmarkedBy.pull(req.body.userId);
+        console.log('unbookmarked');
+      } else {
+        crop.bookmarkedBy.push(req.body.userId);
+        console.log('bookmarked');
+      }
+      const updatedCrop = await crop.save();
+      res.json(updatedCrop);
+    } else {
+      res.status(404);
+      throw new Error('Crop not found');
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ message: error.message });
+  }
+});
+
+
+const getCropBookmarksByUser = asyncHandler(async (req, res) => {
+  try {
+    const crops = await Crop.find({ bookmarkedBy: req.params.id });
+    if (crops) {
+      res.json(crops);
+    } else {
+      res.status(404);
+      throw new Error('Crops not found');
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ message: error.message });
+  }
+});
+
 export {
   getCrops,
   getCropById,
@@ -216,4 +259,6 @@ export {
   getShortCrops,
   updateCropAccept,
   getCropsByAuthor,
+  addRemoveCropBookmark,
+  getCropBookmarksByUser,
 };

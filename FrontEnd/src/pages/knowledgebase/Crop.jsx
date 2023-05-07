@@ -1,28 +1,54 @@
 import { useState, useEffect } from 'react'
-import { getCropById } from '../../api/knowlegdebase'
+import { getCropById, addRemoveCropBookmarks } from '../../api/knowlegdebase'
+import { getAuthorInfo } from '../../api/user'
 import { useParams } from 'react-router-dom'
 import { Loader } from '../../components'
+import { FaBookmark, FaFlag } from 'react-icons/fa'
 
 
 const Crop = () => {
   const { id } = useParams()
   const [crop, setCrop] = useState({})
   const [isLoading, setIsLoading ] = useState(true)
+  const [authorId, setAuthorId] = useState('')
+  const [author, setAuthor] = useState({})
 
-  console.log("id", id)
+  const userId = JSON.parse(localStorage.getItem('userInfo'))._id
 
   useEffect(() => {
-    try{
-      const fetchCrop = async () => {
-        const crop = await getCropById(id)
-        setCrop(crop)
-        setIsLoading(false)
-      }
-      fetchCrop()
-    } catch (error) {
-      console.log('error', error)
+    const fetchCrop = async () => {
+      const crop = await getCropById(id);
+      setCrop(crop);
+      setAuthorId(crop.author);
+      setIsLoading(false);
+    };
+    fetchCrop();
+  }, [id]);
+  
+  console.log("authorId", authorId);
+  
+  useEffect(() => {
+    if (authorId) {
+      const fetchAuthor = async () => {
+        const author = await getAuthorInfo(authorId);
+        setAuthor(author);
+      };
+      fetchAuthor();
     }
-  }, [id])
+  }, [authorId]);
+
+  const handleBookmark = async (cropId) => {
+    const response = await addRemoveCropBookmarks(cropId, userId)
+    if (response) {
+      alert('Crop bookmarked')
+    }
+  }
+
+  // const handleReport = async (cropId) => {
+  //   const response = await reportCrop(cropId, userId)
+  //   console.log(response)
+  // }
+  
 
   if (isLoading) {
     return (
@@ -43,10 +69,44 @@ const Crop = () => {
         />
         <div className="py-4 px-6">
           <h1 className="text-3xl font-semibold mb-3">{crop.cropName}</h1>
-          <p className="text-gray-300 leading-relaxed mb-3">Scientific Name: {crop.scientificName}</p>
-          <p className="text-gray-300 leading-relaxed mb-3">Crop Family: {crop.cropFamily}</p>
-          <p className="text-gray-300 leading-relaxed mb-3">Crop Type: {crop.cropType}</p>
-          <p className="text-gray-300 leading-relaxed mb-3">Crop Introduction: {crop.cropIntro}</p>
+          <p className="text-gray-300 font-bold mb-3">Scientific Name:
+            <span className="text-gray-300 font-normal"> {crop.scientificName}</span>
+          </p>
+          <p className="text-gray-300 font-bold mb-3">Crop Family: 
+            <span className="text-gray-300 font-normal"> {crop.cropFamily}</span>
+          </p>
+          <p className="text-gray-300 font-bold mb-3">Crop Type: 
+            <span className="text-gray-300 font-normal"> {crop.cropType}</span>
+          </p>
+          <p className="text-gray-300 font-bold mb-3">Crop Introduction: 
+            <span className="text-gray-300 font-normal"> {crop.cropIntro}</span>
+          </p>
+        </div>
+        {/* author information */}
+        <div className="pb-6 px-6 flex items-center justify-start">
+          <img className="h-10 w-10 rounded-full object-cover object-center mr-2"
+            src={author.profilePic}
+            alt={author.firstName}
+          />
+          <p className="text-gray-300 mb-2 font-bold">Article By 
+            <span className="text-gray-400 font-normal"> {author.firstName} {author.lastName}</span>
+          </p>
+
+          {/* bookmark and report */}
+          <div className="flex ml-auto">
+            <button 
+              className="flex items-center justify-center bg-slate-500 text-white rounded-full h-10 w-10 mr-2"
+              onClick={() => handleBookmark(crop._id)}
+            >
+              <FaBookmark className="h-6 w-6" />
+            </button>
+            {/* <button 
+              className="flex items-center justify-center bg-red-500 text-white rounded-full h-10 w-10"
+              onClick={() => handleReport(crop._id)}
+            >
+              <FaFlag className="h-6 w-6" />
+            </button> */}
+          </div>
         </div>
       </div>
 
@@ -63,10 +123,45 @@ const Crop = () => {
           <div className="col-span-1">
             <div className="py-4 px-6 flex flex-col justify-center h-full">
               <h1 className="text-3xl font-semibold mb-3">{crop.cropName}</h1>
-              <p className="text-gray-300 leading-relaxed mb-3">Scientific Name: {crop.scientificName}</p>
-              <p className="text-gray-300 leading-relaxed mb-3">Crop Family: {crop.cropFamily}</p>
-              <p className="text-gray-300 leading-relaxed mb-3">Crop Type: {crop.cropType}</p>
-              <p className="text-gray-300 leading-relaxed mb-3">Crop Introduction: {crop.cropIntro}</p>
+              <p className="text-gray-300 font-bold mb-3">Scientific Name: 
+                <span className="text-gray-300 font-normal"> {crop.scientificName}</span>
+              </p>
+              <p className="text-gray-300 font-bold mb-3">Crop Family: 
+                <span className="text-gray-300 font-normal"> {crop.cropFamily}</span>
+              </p>
+              <p className="text-gray-300 font-bold mb-3">Crop Type: 
+                <span className="text-gray-300 font-normal"> {crop.cropType}</span>
+              </p>
+              <p className="text-gray-300 font-bold mb-3">Crop Introduction: 
+                <span className="text-gray-300 font-normal"> {crop.cropIntro}</span>
+              </p>
+              <div>
+                {/* author information */}
+                <div className="py-6 flex items-center justify-start">
+                  <img className="h-10 w-10 rounded-full object-cover object-center mr-2"
+                    src={author.profilePic}
+                    alt={author.firstName}
+                  />
+                  <p className="text-gray-300 mb-2 font-bold">Article By
+                    <span className="text-gray-400 font-normal"> {author.firstName} {author.lastName}</span>
+                  </p>
+                  {/* bookmark and report */}
+                  <div className="flex ml-auto">
+                    <button
+                      className="flex items-center justify-center bg-slate-500 text-white rounded-full h-10 w-10 mr-2"
+                      onClick={() => handleBookmark(crop._id)}
+                    >
+                      <FaBookmark className="h-6 w-6" />
+                    </button>
+                    {/* <button 
+                      className="flex items-center justify-center bg-red-500 text-white rounded-full h-10 w-10"
+                      onClick={() => handleReport(crop._id)}
+                    >
+                      <FaFlag className="h-6 w-6" />
+                    </button> */}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
