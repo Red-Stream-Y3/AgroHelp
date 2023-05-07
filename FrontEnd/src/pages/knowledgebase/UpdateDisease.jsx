@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import { useParams } from "react-router-dom"
 import { updateDisease, getDiseaseById } from "../../api/knowlegdebase"
-import { FaCross } from "react-icons/fa"
+import { AiFillCloseCircle } from "react-icons/ai"
 
 
 const UpdateDisease = () => {
@@ -123,14 +123,14 @@ const UpdateDisease = () => {
               <br />
               <div className="flex flex-wrap">
                 {disease.diseaseImage.map((image, index) => (
-                  <div key={index} className="relative">
+                  <div key={index} className="relative m-2">
                     <img src={image} alt="crop" className="w-44 h-36 object-cover rounded-xl" />
                     <button
                       type="button"
                       className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-6 h-6 flex justify-center items-center"
                       onClick={() => handleDeleteImage(index)}
                     >
-                      <FaCross />
+                      <AiFillCloseCircle />
                     </button>
                   </div>
                 ))}
