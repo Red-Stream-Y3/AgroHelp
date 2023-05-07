@@ -19,7 +19,7 @@ export default function BlogDashboard() {
 
   const user = JSON.parse(localStorage.getItem("userInfo"));
 
-  let userID;
+  let userID = "";
 
   if (user && blogs) {
     userID = user._id;
@@ -55,11 +55,15 @@ export default function BlogDashboard() {
         <div>
           {/* <BlogBanner /> */}
           <BlogContainer>
-          <div className="flex flex-col items-start place-items-start pt-5 pb-10 w-full">
-            <h1 className="text-2xl text-white font-bold md:text-3xl">Blog Dashboard</h1>
-            <p className="text-gray-300 text-md md:text-lg">Everything about Agriculture</p>
-            <hr className="border-gray-500 border-1 w-full mt-4" />
-          </div>
+            <div className="flex flex-col items-start place-items-start pt-5 pb-10 w-full">
+              <h1 className="text-2xl text-white font-bold md:text-3xl">
+                Blog Dashboard
+              </h1>
+              <p className="text-gray-300 text-md md:text-lg">
+                Everything about Agriculture
+              </p>
+              <hr className="border-gray-500 border-1 w-full mt-4" />
+            </div>
             <div className="flex flex-col lg:flex-row items-center lg:justify-between">
               <div className="flex flex-col lg:flex-row items-center">
                 {isLogged ? (
@@ -73,7 +77,7 @@ export default function BlogDashboard() {
                     </li>
                     <li className="mr-2">
                       <Link to="/createblog">
-                      <div className="inline-block p-4 rounded-t-lg hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300">
+                        <div className="inline-block p-4 rounded-t-lg hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300">
                           Start Your Blog
                         </div>
                       </Link>
@@ -126,6 +130,8 @@ export default function BlogDashboard() {
                       likes={blog.likes.length}
                       dislikes={blog.dislikes.length}
                       comments={blog.comments.length}
+                      bookmarked={blog.bookmarked}
+                      user={userID}
                     />
                   </Link>
                 </div>
