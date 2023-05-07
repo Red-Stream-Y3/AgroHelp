@@ -29,7 +29,6 @@ export const getAcceptedBlogs = async () => {
   try {
     const response = await axios.get('http://localhost:9120/api/blog');
     return response.data.filter((blog) => blog.isAccepted);
-    console.log('blog', response.data);
   } catch (error) {
     console.log(error);
     return [];
@@ -40,7 +39,6 @@ export const getAcceptedBlogs = async () => {
 export const createBlog = async (blog) => {
   try {
     const response = await axios.post('http://localhost:9120/api/blog', blog);
-    console.log('blog', response.data);
     return response.data;
   } catch (error) {
     console.log(error);
@@ -153,8 +151,7 @@ export const getBlogsByAuthor = async (authorId) => {
     const response = await axios.get(
       `http://localhost:9120/api/blog/author/${authorId}`
     );
-    console.log('blog', response.data);
-    return response.data;
+    return response.data.filter((blog) => blog.isAccepted);
   } catch (error) {
     console.log(error);
     return [];
