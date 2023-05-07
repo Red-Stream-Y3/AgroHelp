@@ -53,16 +53,14 @@ export default function MyBlogPosts() {
     }
   };
 
-  console.log(blogs.length);
-
   return (
     <div className="my-8">
       <BlogContainer>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-4 mt-4">
-          <h1 className="flex flex-row items-center justify-center ml-4 text-2xl font-bold text-gray-800 md:text-3xl">
+          <h1 className="flex flex-row items-center justify-center ml-4 text-2xl font-bold text-white md:text-3xl">
             My Blog Posts
           </h1>
-          <hr className="border-green-800 border-1 w-full mt-4 mb-8" />
+          <hr className="border-green-200 border-1 w-full mt-4 mb-8" />
 
           {blogs.map((blog) => (
             <div key={blog.id}>
@@ -78,6 +76,7 @@ export default function MyBlogPosts() {
                   dislikes={blog.dislikes.length}
                   comments={blog.comments.length}
                   user={userID}
+                  isAccepted={blog.isAccepted}
                   handleDelete={() => handleDeleteBlog(blog._id)}
                 />
               </Link>
