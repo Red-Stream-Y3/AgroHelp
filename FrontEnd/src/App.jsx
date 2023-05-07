@@ -31,7 +31,8 @@ import {
   BlogView,
   BlogUpdate,
   BlogsbyAuthor,
-  MyBlogPosts
+  MyBlogPosts,
+  BookmarkedBlogs,
 } from './pages';
 import './App.css';
 import { ToastContainer } from 'react-toastify';
@@ -77,12 +78,15 @@ function App() {
             <Route path="update/disease/:id" element={<UpdateDisease />} />
             <Route path="contributor/dashboard" element={<MyArticles />} />
             <Route path="/forum" element={<ForumDashboard />} />
+
             <Route path="/blog" element={<BlogDashboard />} />
             <Route path="/createblog" element={<BlogCreate />} />
             <Route path="/viewblog/:id" element={<BlogView />} />
             <Route path="/editblog/:id" element={<BlogUpdate />} />
             <Route path="/blogAuthor/:id" element={<BlogsbyAuthor />} />
             <Route path="/myblogs/:id" element={<MyBlogPosts />} />
+            {/* <Route path="/blogsearch/:searchTerm" element={<BlogSearch />} /> */}
+            <Route path="/savedBlogs/:id" element={<BookmarkedBlogs />} />
           </Routes>
 
           <Footer />

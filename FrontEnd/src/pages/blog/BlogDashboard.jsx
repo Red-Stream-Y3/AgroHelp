@@ -86,7 +86,7 @@ export default function BlogDashboard() {
                       </Link>
                     </li>
                     <li className="mr-2">
-                      <Link to="#">
+                      <Link to={`/savedBlogs/${userID}`}>
                         <div className="inline-block p-4 rounded-t-lg hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300">
                           Bookmarks
                         </div>
