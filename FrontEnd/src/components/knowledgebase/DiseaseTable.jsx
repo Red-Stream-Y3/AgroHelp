@@ -12,7 +12,7 @@ const DiseaseTable = ({diseases}) => {
         const confirm = window.confirm('Are you sure you want to delete this disease?')
         if (confirm) {
             await deleteDisease(id)
-            getDiseases()
+            window.location.reload()
         }
     }
 
@@ -31,7 +31,7 @@ const DiseaseTable = ({diseases}) => {
 
 
     return (
-        <div className="overflow-x-auto px-8 py-8">
+        <div className="overflow-x-auto px-8">
             <div className="w-full md:w-5/6 mx-auto bg-darkbg text-white p-5 flex">
                 <div className="flex flex-row w-full justify-between items-center">
                     <h1 className="text-2xl font-bold">Diseases</h1>

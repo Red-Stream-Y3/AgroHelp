@@ -216,6 +216,19 @@ const getUserById = asyncHandler(async (req, res) => {
   }
 });
 
+const getAuthorInfoById = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.params.id).select(
+    'firstName lastName profilePic'
+  );
+
+  if (user) {
+    res.json(user);
+  } else {
+    res.status(404);
+    throw new Error('User not found');
+  }
+});
+
 export {
   authUser,
   registerUser,
@@ -226,4 +239,5 @@ export {
   getUsers,
   updateUser,
   requestRole,
+  getAuthorInfoById,
 };

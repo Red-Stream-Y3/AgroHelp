@@ -1,25 +1,50 @@
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import { getDiseaseById } from '../../api/knowlegdebase'
+import { getDiseaseById, addRemoveCropBookmarks } from '../../api/knowlegdebase'
+import { getAuthorInfo } from '../../api/user'
 import { Loader } from '../../components'
+import { FaBookmark, FaFlag } from 'react-icons/fa'
 
 const Disease = () => {
   const { id } = useParams()
   const [disease, setDisease] = useState({})
   const [isLoading, setIsLoading ] = useState(true)
+  const [authorId, setAuthorId] = useState('')
+  const [author, setAuthor] = useState({})
+
+  useEffect(() => { 
+    const fetchDisease = async () => {
+        const disease = await getDiseaseById(id)
+        setDisease(disease)
+        setAuthorId(disease.author)
+        setIsLoading(false)
+    }
+    fetchDisease()
+  }, [id])
+
+  console.log('authorId', authorId)
 
   useEffect(() => {
-    try {
-        const fetchDisease = async () => {
-            const disease = await getDiseaseById(id)
-            setDisease(disease)
-            setIsLoading(false)
+    if (authorId) {
+        const fetchAuthor = async () => {
+            const author = await getAuthorInfo(authorId)
+            setAuthor(author)
         }
-        fetchDisease()
-    } catch (error) {
-        console.log('error', error)
+        fetchAuthor()
     }
-  }, [id])
+  }, [authorId])
+
+    const handleBookmark = async (diseaseId) => {
+        const response = await addRemoveCropBookmarks(diseaseId, userId)
+        if (response) {
+            alert('Disease bookmarked')
+        }
+    }
+    
+    // const handleReport = async (cropId) => {
+    //   const response = await reportCrop(cropId, userId)
+    //   console.log(response)
+    // }
 
   if (isLoading) {
     return (
@@ -59,6 +84,32 @@ const Disease = () => {
                     <span className="text-gray-400 font-normal"> {disease.diseaseStatus}</span>
                 </p>
             </div>
+            {/* author information */}
+            <div className="pb-6 px-6 flex items-center justify-start">
+                <img className="h-10 w-10 rounded-full object-cover object-center mr-2"
+                    src={author.profilePic}
+                    alt={author.firstName}
+                />
+                <p className="text-gray-300 mb-2 font-bold">Article By 
+                    <span className="text-gray-400 font-normal"> {author.firstName} {author.lastName}</span>
+                </p>
+
+                {/* bookmark and report */}
+                <div className="flex ml-auto">
+                    <button 
+                        className="flex items-center justify-center bg-slate-500 text-white rounded-full h-10 w-10 mr-2"
+                        onClick={() => handleBookmark(crop._id)}
+                    >
+                        <FaBookmark className="h-6 w-6" />
+                    </button>
+                    {/* <button 
+                        className="flex items-center justify-center bg-red-500 text-white rounded-full h-10 w-10"
+                        onClick={() => handleReport(crop._id)}
+                    >
+                        <FaFlag className="h-6 w-6" />
+                    </button> */}
+                </div>
+            </div>
         </div>
 
         {/* desktop view */}
@@ -91,6 +142,33 @@ const Disease = () => {
                         <p className="text-gray-300 font-bold mb-3">Disease Status: 
                             <span className="text-gray-400 font-normal"> {disease.diseaseStatus}</span>
                         </p>
+                        <div>
+                        {/* author information */}
+                        <div className="py-6 flex items-center justify-start">
+                            <img className="h-10 w-10 rounded-full object-cover object-center mr-2"
+                                src={author.profilePic}
+                                alt={author.firstName}
+                            />
+                            <p className="text-gray-300 mb-2 font-bold">Article By
+                                <span className="text-gray-400 font-normal"> {author.firstName} {author.lastName}</span>
+                            </p>
+                            {/* bookmark and report */}
+                            <div className="flex ml-auto">
+                                <button 
+                                    className="flex items-center justify-center bg-slate-500 text-white rounded-full h-10 w-10 mr-2"
+                                    onClick={() => handleBookmark(crop._id)}
+                                >
+                                    <FaBookmark className="h-6 w-6" />
+                                </button>
+                                {/* <button 
+                                    className="flex items-center justify-center bg-red-500 text-white rounded-full h-10 w-10"
+                                    onClick={() => handleReport(crop._id)}
+                                >
+                                    <FaFlag className="h-6 w-6" />
+                                </button> */}
+                            </div>
+                        </div>
+                    </div>
                     </div>
                 </div>
             </div>

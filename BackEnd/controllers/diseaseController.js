@@ -223,6 +223,42 @@ const getDiseasesByAuthor = asyncHandler(async (req, res) => {
   }
 });
 
+const addRemoveDiseaseBookmark = asyncHandler(async (req, res) => {
+  try {
+    const disease = await CropDisease.findById(req.params.id);
+    if (disease) {
+      if(disease.bookmarkedBy.includes(req.user._id)){
+        disease.bookmarkedBy.pull(req.user._id);
+      }else{
+        disease.bookmarkedBy.push(req.user._id);
+      }
+      const updatedDisease = await disease.save();
+      res.json(updatedDisease);
+    } else {
+      res.status(404);
+      throw new Error('Disease not found');
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ message: error.message });
+  }
+});
+
+const getDiseaseBookmarksByUser = asyncHandler(async (req, res) => {
+  try {
+    const diseases = await CropDisease.find({ bookmarkedBy: req.user._id });
+    if (diseases) {
+      res.json(diseases);
+    } else {
+      res.status(404);
+      throw new Error('Diseases not found');
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ message: error.message });
+  }
+});
+
 
 
 export {
@@ -235,4 +271,6 @@ export {
   searchCropDisease,
   getRandomCropDiseases,
   getDiseasesByAuthor,
+  addRemoveDiseaseBookmark,
+  getDiseaseBookmarksByUser,
 };

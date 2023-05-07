@@ -9,6 +9,9 @@ import {
   getRandomCropDiseases,
   updateDiseaseAccept,
   getDiseasesByAuthor,
+  addRemoveDiseaseBookmark,
+  getDiseaseBookmarksByUser,
+
 } from '../controllers/diseaseController.js';
 
 const diseaseRoutes = express.Router();
@@ -34,5 +37,12 @@ diseaseRoutes
 diseaseRoutes
   .route('/author/:id')
   .get(getDiseasesByAuthor);
+diseaseRoutes
+  .route('/bookmark/:id')
+  .put(addRemoveDiseaseBookmark);
+diseaseRoutes
+  .route('/bookmark')
+  .get(getDiseaseBookmarksByUser);
+  
 
 export default diseaseRoutes;
