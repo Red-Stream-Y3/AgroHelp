@@ -107,7 +107,7 @@ export const likeBlog = async (id, user) => {
   try {
     const response = await axios.post(
       `http://localhost:9120/api/blog/like/${id}`,
-      user
+      { userId: user }
     );
     console.log('blog', response.data);
     return response.data;
@@ -122,7 +122,7 @@ export const disLikeBlog = async (id, user) => {
   try {
     const response = await axios.post(
       `http://localhost:9120/api/blog/dislike/${id}`,
-      user
+      { userId: user }
     );
     console.log('blog', response.data);
     return response.data;
@@ -182,3 +182,18 @@ export const deleteBlogComment = async (id, commentId) => {
     console.log(error);
   }
 };
+
+// handle bookmark
+export const handleBlogBookamrk = async (id, user) => {
+  try {
+    const response = await axios.post(
+      `http://localhost:9120/api/blog/bookmark/${id}`,
+      { userId: user }
+    );
+    console.log('blog', response.data);
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
