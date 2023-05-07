@@ -73,12 +73,12 @@ const createCrop = asyncHandler(async (req, res) => {
       res.status(400);
       throw new Error('Crop already exists');
     }
-    const authorId = req.body.author;
+    // const authorId = req.body.author;
 
-    // let authorId = null;
-    // if (req.user && req.user._id) {
-    //   authorId = req.user._id;
-    // }
+    // // let authorId = null;
+    // // if (req.user && req.user._id) {
+    // //   authorId = req.user._id;
+    // // }
 
     const crop = new Crop({
       cropName,

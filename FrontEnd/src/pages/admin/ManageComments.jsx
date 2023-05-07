@@ -262,8 +262,12 @@ const ManageComments = () => {
                         </thead>
                         <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
                           {value.length > 0
-                            ? tableFilter.map((blog) => blogRow(blog))
-                            : blogs.map((blog) => blogRow(blog))}
+                            ? tableFilter.map((blog) =>
+                                blog.comments.length > 0 ? blogRow(blog) : null
+                              )
+                            : blogs.map((blog) =>
+                                blog.comments.length > 0 ? blogRow(blog) : null
+                              )}
                         </tbody>
                       </table>
                     </div>
