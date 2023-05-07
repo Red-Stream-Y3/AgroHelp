@@ -3,7 +3,7 @@ import { AiOutlineSearch } from "react-icons/ai";
 
 const ForumSearch = ({search, setSearch, handleSearchClick, setSearched}) => {
     return (
-        <div className="relative z-30">
+        <div className="relative z-10">
             <div className="flex sm:justify-center">
                 <div className="relative w-full sm:max-w-lg">
                     <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
