@@ -7,11 +7,12 @@ import { deleteCrop } from '../../api/knowlegdebase'
 const CropTable = ({crops}) => {
 
     const [cropFilter , setCropFilter] = useState([...crops])
+    const user = JSON.parse(localStorage.getItem('userInfo'))
 
     const handleDeleteCrop = async (id) => {
         const confirm = window.confirm('Are you sure you want to delete this crop?')
         if (confirm) {
-            await deleteCrop(id)
+            await deleteCrop(id, user.token)
             window.location.reload()
         }
     }

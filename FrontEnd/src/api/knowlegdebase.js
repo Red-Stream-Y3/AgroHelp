@@ -1,7 +1,5 @@
 import axios from 'axios';
 
-// full route
-
 // get all crops
 export const getAllCrops = async () => {
   try {
@@ -38,24 +36,39 @@ export const getCropById = async (id) => {
   }
 };
 
-// create crop
-export const createCrop = async (crop) => {
+// create crop 
+export const createCrop = async (crop,token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
   try {
-    const response = await axios.post('http://localhost:9120/api/crops', crop);
-    console.log('crop', response.data);
-    return response.data;
-  } catch (error) {
+    const response = await axios.post(
+      'http://localhost:9120/api/crops',
+      crop,
+      config
+    );
+    return response;
+  }
+  catch (error) {
     console.log(error);
-    return [];
   }
 };
 
 // update crop
-export const updateCrop = async (id, crop) => {
+export const updateCrop = async (id, crop, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
   try {
     const response = await axios.put(
       `http://localhost:9120/api/crops/${id}`,
-      crop
+      crop, config
     );
     console.log('crop', response.data);
     return response.data;
@@ -66,10 +79,17 @@ export const updateCrop = async (id, crop) => {
 };
 
 // delete crop
-export const deleteCrop = async (id) => {
+export const deleteCrop = async (id, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
   try {
     const response = await axios.delete(
-      `http://localhost:9120/api/crops/${id}`
+      `http://localhost:9120/api/crops/${id}`,
+      config
     );
     console.log('crop', response.data);
     return response.data;
@@ -94,11 +114,17 @@ export const searchCrop = async (name) => {
 };
 
 // update crop as accept
-export const updateCropAccept = async (id, crop) => {
+export const updateCropAccept = async (id, crop, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
   try {
     const response = await axios.put(
       `http://localhost:9120/api/crops/${id}/accept`,
-      crop
+      crop, config
     );
     return response;
   } catch (error) {
@@ -161,11 +187,17 @@ export const getDiseaseById = async (id) => {
 };
 
 // create disease
-export const createDisease = async (disease) => {
+export const createDisease = async (disease, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
   try {
     const response = await axios.post(
       'http://localhost:9120/api/diseases',
-      disease
+      disease, config
     );
     console.log('disease', response.data);
     return response.data;
@@ -176,11 +208,17 @@ export const createDisease = async (disease) => {
 };
 
 // update disease
-export const updateDisease = async (id, disease) => {
+export const updateDisease = async (id, disease, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
   try {
     const response = await axios.put(
       `http://localhost:9120/api/diseases/${id}`,
-      disease
+      disease, config
     );
     console.log('disease', response.data);
     return response.data;
@@ -191,10 +229,17 @@ export const updateDisease = async (id, disease) => {
 };
 
 // delete disease
-export const deleteDisease = async (id) => {
+export const deleteDisease = async (id, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
   try {
     const response = await axios.delete(
-      `http://localhost:9120/api/diseases/${id}`
+      `http://localhost:9120/api/diseases/${id}`,
+      config
     );
     console.log('disease', response.data);
     return response.data;
@@ -218,11 +263,17 @@ export const searchDisease = async (name) => {
 };
 
 // update disease as accept
-export const updateDiseaseAccept = async (id, crop) => {
+export const updateDiseaseAccept = async (id, crop, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
   try {
     const response = await axios.put(
       `http://localhost:9120/api/diseases/${id}/accept`,
-      crop
+      crop, config
     );
     return response;
   } catch (error) {

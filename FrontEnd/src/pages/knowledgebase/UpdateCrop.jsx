@@ -5,7 +5,7 @@ import { Loader } from "../../components"
 
 const UpdateCrop = () => {
   const { id } = useParams()
- 
+  const user = JSON.parse(localStorage.getItem('userInfo'))
   const [crop, setCrop] = useState({
     cropName: '',
     scientificName: '',
@@ -53,7 +53,7 @@ const UpdateCrop = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    const updated = await updateCrop(id, crop)
+    const updated = await updateCrop(id, crop, user.token)
     if (updated) {
       alert('Crop updated successfully')
     } else {

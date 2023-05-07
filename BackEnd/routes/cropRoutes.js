@@ -12,16 +12,17 @@ import {
   getCropBookmarksByUser, 
   addRemoveCropBookmark
 } from '../controllers/cropController.js';
+import { protect, adminContributor, admin } from '../middleware/authMiddleware.js';
 
 const cropRouter = express.Router();
 
-cropRouter.route('/').get(getCrops).post(createCrop);
+cropRouter.route('/').get(getCrops).post(protect, adminContributor, createCrop);
 cropRouter.route('/short').get(getShortCrops);
-cropRouter.route('/:id').get(getCropById).delete(deleteCrop).put(updateCrop);
-cropRouter.route('/:id/accept').put(updateCropAccept);
+cropRouter.route('/:id').get(getCropById).delete(protect, adminContributor, deleteCrop).put(protect, adminContributor, updateCrop);
+cropRouter.route('/:id/accept').put(protect, admin , updateCropAccept);
 cropRouter.route('/search/q=:q').get(searchCrops);
 cropRouter.route('/author/:id').get(getCropsByAuthor);
-cropRouter.route('/bookmark/:id').put(addRemoveCropBookmark);
+cropRouter.route('/bookmark/:id').put(protect, addRemoveCropBookmark);
 cropRouter.route('/bookmark').get(getCropBookmarksByUser);
 
 export default cropRouter;

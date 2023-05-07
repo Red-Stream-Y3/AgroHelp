@@ -45,7 +45,7 @@ const CreateCrop = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
-      const newCrop = await createCrop(crop)
+      const newCrop = await createCrop(crop, user.token)
       alert('Crop Created Successfully')
     } catch (error) {
       console.log('error', error)
@@ -79,6 +79,33 @@ const CreateCrop = () => {
     })
   }
 
+  const handleMock = () => {
+    setCrop({
+      cropName: 'Beetroot',
+      scientificName: 'Beta vulgaris',
+      cropFamily: 'Amaranthaceae',
+      cropType: 'Vegetable',
+      cropIntro: 'Beetroot is a root vegetable that grows primarily in the ground with a leafy top that grows aboveground. It is a cool-season crop that is grown in many countries around the world. It is a popular vegetable that is consumed in many ways. The root is eaten raw or cooked and the leaves are eaten as a salad or cooked. The root is also used to make sugar. The leaves are also used to make medicine.',
+      cropInfo: {
+        climate: 'Beetroot is a cool-season crop that grows best in temperatures between 15°C and 20°C. It can tolerate temperatures as low as 5°C and as high as 25°C. It grows best in areas with a long growing season of 150 to 180 days. It can be grown in areas with a short growing season of 100 to 120 days. It can be grown in areas with a short growing season of 100 to 120 days. It can be grown in areas with a short growing season of 100 to 120 days. It can be grown in areas with a short growing season of 100 to 120 days. It can be grown in areas with a short growing season of 100 to 120 days. It can be grown in areas with a short growing season of 100 to 120 days. It can be grown in areas with a short growing season of 100 to 120 days. It can be grown in areas with a short growing season of 100 to 120 days. It can be grown in areas with a short growing season of 100 to 120 days.',
+        season: 'Beetroot is a cool-season crop that grows best in temperatures between 15°C and 20°C. It can tolerate temperatures as low as 5°C and as high as 25°C. It grows best in areas with a long growing season of 150 to 180 days. It can be grown in areas with a short growing season of 100 to 120 days. It can be grown in areas with a short growing season of 100 to 120 days.',
+        seedType: 'Beetroot is a cool-season crop that grows best in temperatures between 15°C and 20°C. It can tolerate temperatures as low as 5°C and as high as 25°C. It grows best in areas with a long growing season of 150 to 180 days. It can be grown in areas with a short growing season of 100 to 120 days.',
+        soil: 'Beetroot is a cool-season crop that grows best in temperatures between 15°C and 20°C. It can tolerate temperatures as low as 5°C and as high as 25°C. It grows best in areas with a long growing season of 150 to 180 days. It can be grown in areas with a short growing season of 100 to 120 days.',
+        fieldPreparation: 'Beetroot is a cool-season crop that grows best in temperatures between 15°C and 20°C. It can tolerate temperatures as low as 5°C and as high as 25°C. It grows best in areas with a long growing season of 150 to 180 days. It can be grown in areas with a short growing season of 100 to 120 days.',
+        fertilizer: 'Beetroot is a cool-season crop that grows best in temperatures between 15°C and 20°C. It can tolerate temperatures as low as 5°C and as high as 25°C. It grows best in areas with a long growing season of 150 to 180 days. It can be grown in areas with a short growing season of 100 to 120 days.',
+        irrigation: 'Beetroot is a cool-season crop that grows best in temperatures between 15°C and 20°C. It can tolerate temperatures as low as 5°C and as high as 25°C. It grows best in areas with a long growing season of 150 to 180 days. It can be grown in areas with a short growing season of 100 to 120 days.',
+        weedControl: 'Beetroot is a cool-season crop that grows best in temperatures between 15°C and 20°C. It can tolerate temperatures as low as 5°C and as high as 25°C. It grows best in areas with a long growing season of 150 to 180 days.',
+        pestControl: 'Beetroot is a cool-season crop that grows best in temperatures between 15°C and 20°C. It can tolerate temperatures as low as 5°C and as high as 25°C.',
+        harvesting: 'Beetroot is a cool-season crop that grows best in temperatures between 15°C and 20°C.',
+        yield: 'Beetroot is a cool-season crop that grows best in temperatures between 15°C and 20°C.',
+        storage: 'Beetroot is a cool-season crop that grows best in temperatures between 15°C and 20°C.',
+      },
+      otherInfo: 'Beetroot is a cool-season crop that grows best in temperatures between 15°C and 20°C. It can tolerate temperatures as low as 5°C and as high as 25°C.',
+      author: userId,
+    })
+  }
+
+
   const handleOpenWidget = () => {
     var myWidget = window.cloudinary.createUploadWidget(
       {
@@ -106,6 +133,12 @@ const CreateCrop = () => {
         <div className="py-4 px-6">
           <h1 className="text-3xl font-semibold mb-3">Create Crop</h1>
           <hr className="border-gray-500 border-1 w-full mb-5" />
+          <button
+            className="bg-primarylight text-white px-4 py-2 rounded-md mb-5"
+            onClick={handleMock}
+          >
+            Mock Data
+          </button>
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
               <label htmlFor="cropName" className="block mb-1">Crop Name</label>

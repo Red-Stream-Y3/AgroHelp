@@ -7,6 +7,7 @@ import { AiFillCloseCircle } from "react-icons/ai"
 const UpdateDisease = () => {
 
   const { id } = useParams()
+  const user = JSON.parse(localStorage.getItem('userInfo'))
 
   const [disease, setDisease] = useState({
     diseaseName: '',
@@ -37,7 +38,7 @@ const UpdateDisease = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    const updated = await updateDisease(id, disease)
+    const updated = await updateDisease(id, disease, user.token)
     if (updated) {
       alert('Disease updated successfully')
     }
