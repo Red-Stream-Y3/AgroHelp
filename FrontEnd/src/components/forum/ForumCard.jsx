@@ -84,6 +84,8 @@ const ForumCard = ({
         }
 
         if (
+            user !== null &&
+            user !== undefined &&
             forumObj.dislikes.length > 0 &&
             forumObj.dislikes.includes(user._id)
         ) {
