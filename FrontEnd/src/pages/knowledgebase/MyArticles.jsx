@@ -67,17 +67,17 @@ const MyArticles = () => {
       </div>
       <div className="flex flex-col items-start place-items-start py-5 px-8 ml-0 mr-auto w-full">
         <h1 className="text-2xl text-white font-bold md:text-3xl">My Articles</h1>
-        <p className="text-gray-300 text-md md:text-lg">Your contributions to the knowledgebase</p>
+        <p className="text-gray-300 text-md md:text-lg">Your Contributions to the Knowledge Base </p>
         <hr className="border-gray-500 border-1 w-full mt-4" />
       </div>
 
       {/* table selection tab */}
-      <div className="overflow-x-auto px-6 md:w-5/6 mx-auto">
+      <div className="overflow-x-auto px-8 md:w-5/6 mx-auto">
         <div className="grid grid-cols-2">
-          <button className= {table === 'crop' ? "bg-primary hover:bg-secondary text-white font-bold py-2 px-4 rounded mx-1" : "bg-slate-600 hover:bg-slate-900 text-white font-bold py-2 px-4 rounded mx-1"} onClick={() => setTable('crop')}>
+          <button className= {table === 'crop' ? "bg-darkbg text-white font-bold py-2 px-4 rounded-tl-xl" : "bg-slate-600 hover:bg-slate-700 text-white font-bold py-2 px-4 rounded-tl-xl"} onClick={() => setTable('crop')}>
             Crops
           </button>
-          <button className= {table === 'disease' ? "bg-primary hover:bg-secondary text-white font-bold py-2 px-4 rounded mx-1" : "bg-slate-600 hover:bg-slate-900 text-white font-bold py-2 px-4 rounded mx-1"} onClick={() => setTable('disease')}>
+          <button className= {table === 'disease' ? "bg-darkbg text-white font-bold py-2 px-4 rounded-tr-xl" : "bg-slate-600 hover:bg-slate-700 text-white font-bold py-2 px-4 rounded-tr-xl"} onClick={() => setTable('disease')}>
             Diseases
           </button>
         </div>

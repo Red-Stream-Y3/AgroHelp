@@ -12,7 +12,7 @@ const UpdateCrop = () => {
     cropFamily: '',
     cropType: '',
     cropIntro: '',
-    // cropImage: [],
+    cropImage: '',
     cropInfo: {
       climate: '',
       season: '',
@@ -68,7 +68,7 @@ const UpdateCrop = () => {
       cropFamily: '',
       cropType: '',
       cropIntro: '',
-      // cropImage: [],
+      cropImage: '',
       cropInfo: {
         climate: '',
         season: '',
@@ -87,6 +87,26 @@ const UpdateCrop = () => {
     })
   }
 
+  const handleOpenWidget = () => {
+    var myWidget = window.cloudinary.createUploadWidget(
+      {
+        cloudName: 'dqyue23nj',
+        uploadPreset: 'agrohelp',
+        upload_single: true,
+      },
+      (error, result) => {
+        if (!error && result && result.event === 'success') {
+          console.log('Done! Here is the image info: ', result.info);
+          setCrop({
+            ...crop,
+            cropImage: result.info.url
+          })
+        }
+      }
+    );
+    myWidget.open();
+  };
+
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center h-screen">
@@ -99,7 +119,7 @@ const UpdateCrop = () => {
     <div>
     <div className="bg-darkbg text-white overflow-hidden shadow-xl mx-auto px-10 md:my-20 md:mx-20 lg:mx-60 rounded-xl ">
       <div className="py-4 px-6">
-        <h1 className="text-3xl font-semibold mb-3">Create Crop</h1>
+        <h1 className="text-3xl font-semibold mb-3">Update Crop</h1>
         <hr className="border-gray-500 border-1 w-full mb-5" />
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
@@ -172,19 +192,22 @@ const UpdateCrop = () => {
             />
           </div>
 
-          {/* <div className="mb-3">
+          <div className="mb-3">
             <label htmlFor="cropImage" className="block mb-1">Crop Image</label>
-            <input
-              type="file"
-              name="cropImage"
-              id="cropImage"
-              className="w-full p-2 border border-gray-300 rounded outline-none focus:ring-1 focus:ring-primarylight bg-lightbg text-white"
-              value={crop.cropImage}
-              onChange={handleChange}
-              pattern='[A-Za-z0-9]+'
-              required
+            <button
+              type="button"
+              className="bg-primary hover:bg-secondary text-white px-3 py-1 rounded"
+              onClick={handleOpenWidget}
+            >
+              Upload Image
+            </button>
+            <br />
+            <img
+              src={crop.cropImage}
+              alt="crop"
+              className="w-44 h-36 bg-lightbg rounded-xl m-5"
             />
-          </div> */}
+          </div>
 
           <div className="mb-3">
             <label htmlFor="climate" className="block mb-1">Climate</label>

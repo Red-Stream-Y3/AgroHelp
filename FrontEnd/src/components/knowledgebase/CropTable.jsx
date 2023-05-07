@@ -12,7 +12,7 @@ const CropTable = ({crops}) => {
         const confirm = window.confirm('Are you sure you want to delete this crop?')
         if (confirm) {
             await deleteCrop(id)
-            getCrops()
+            window.location.reload()
         }
     }
 
@@ -30,7 +30,7 @@ const CropTable = ({crops}) => {
     }
 
     return (
-        <div className="overflow-x-auto px-8 py-8">
+        <div className="overflow-x-auto px-8">
             <div className="w-full md:w-5/6 mx-auto bg-darkbg text-white p-5 flex">
                 <div className="flex flex-row w-full justify-between items-center">
                     <h1 className="text-2xl font-bold">Crops</h1>

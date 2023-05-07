@@ -9,6 +9,9 @@ import {
   getRandomCropDiseases,
   updateDiseaseAccept,
   getDiseasesByAuthor,
+  addRemoveDiseaseBookmark,
+  getDiseaseBookmarksByUser,
+
 } from '../controllers/diseaseController.js';
 
 const diseaseRoutes = express.Router();
@@ -20,8 +23,20 @@ diseaseRoutes
   .get(getCropDiseaseById)
   .delete(deleteCropDisease)
   .put(updateCropDisease);
-diseaseRoutes.route('/:id/accept').put(updateDiseaseAccept);
-diseaseRoutes.route('/search/q=:q').get(searchCropDisease);
-diseaseRoutes.route('/author/:id').get(getDiseasesByAuthor);
+diseaseRoutes
+  .route('/:id/accept')
+  .put(updateDiseaseAccept);
+diseaseRoutes
+  .route('/search/:cropDiseaseName')
+  .get(searchCropDisease);
+diseaseRoutes
+  .route('/author/:id')
+  .get(getDiseasesByAuthor);
+diseaseRoutes
+  .route('/bookmark/:id')
+  .put(addRemoveDiseaseBookmark);
+diseaseRoutes
+  .route('/bookmark')
+  .get(getDiseaseBookmarksByUser);
 
 export default diseaseRoutes;

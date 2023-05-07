@@ -12,7 +12,7 @@ const CreateCrop = () => {
     cropFamily: '',
     cropType: '',
     cropIntro: '',
-    // cropImage: [],
+    cropImage: '',
     cropInfo: {
       climate: '',
       season: '',
@@ -40,18 +40,16 @@ const CreateCrop = () => {
         [e.target.name]: e.target.value
       }
     })
-
-    console.log('crop', crop)
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
       const newCrop = await createCrop(crop)
-      console.log('newCrop', newCrop)
+      alert('Crop Created Successfully')
     } catch (error) {
       console.log('error', error)
-      setError(error.response.data.msg)
+      alert('Crop Creation Failed')
     }
   }
 
@@ -62,7 +60,7 @@ const CreateCrop = () => {
       cropFamily: '',
       cropType: '',
       cropIntro: '',
-      // cropImage: [],
+      cropImage: '',
       cropInfo: {
         climate: '',
         season: '',
@@ -81,6 +79,25 @@ const CreateCrop = () => {
     })
   }
 
+  const handleOpenWidget = () => {
+    var myWidget = window.cloudinary.createUploadWidget(
+      {
+        cloudName: 'dqyue23nj',
+        uploadPreset: 'agrohelp',
+        upload_single: true,
+      },
+      (error, result) => {
+        if (!error && result && result.event === 'success') {
+          console.log('Done! Here is the image info: ', result.info);
+          setCrop({
+            ...crop,
+            cropImage: result.info.url
+          })
+        }
+      }
+    );
+    myWidget.open();
+  };
 
 
   return (
@@ -160,19 +177,22 @@ const CreateCrop = () => {
               />
             </div>
 
-            {/* <div className="mb-3">
+            <div className="mb-3">
               <label htmlFor="cropImage" className="block mb-1">Crop Image</label>
-              <input
-                type="file"
-                name="cropImage"
-                id="cropImage"
-                className="w-full p-2 border border-gray-300 rounded outline-none focus:ring-1 focus:ring-primarylight bg-lightbg text-white"
-                value={crop.cropImage}
-                onChange={handleChange}
-                pattern='[A-Za-z0-9]+'
-                required
+              <button
+                type="button"
+                className="bg-primary hover:bg-secondary text-white px-3 py-1 rounded"
+                onClick={handleOpenWidget}
+              >
+                Upload Image
+              </button>
+              <br />
+              <img
+                src={crop.cropImage}
+                alt="crop"
+                className="w-44 h-36 bg-lightbg rounded-xl m-5"
               />
-            </div> */}
+            </div>
 
             <div className="mb-3">
               <label htmlFor="climate" className="block mb-1">Climate</label>
