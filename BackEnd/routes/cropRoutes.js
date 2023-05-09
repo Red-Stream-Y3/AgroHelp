@@ -22,7 +22,7 @@ cropRouter.route('/:id').get(getCropById).delete(protect, adminContributor, dele
 cropRouter.route('/:id/accept').put(protect, admin , updateCropAccept);
 cropRouter.route('/search/q=:q').get(searchCrops);
 cropRouter.route('/author/:id').get(getCropsByAuthor);
-cropRouter.route('/bookmark/:id').put(protect, addRemoveCropBookmark);
-cropRouter.route('/bookmark').get(getCropBookmarksByUser);
+cropRouter.route('/bookmark/:id').put(addRemoveCropBookmark);
+cropRouter.route('/bookmarks/:id').get(getCropBookmarksByUser);
 
 export default cropRouter;

@@ -37,7 +37,7 @@ diseaseRoutes
   .route('/bookmark/:id')
   .put(addRemoveDiseaseBookmark);
 diseaseRoutes
-  .route('/bookmark')
+  .route('/bookmarks/:id')
   .get(getDiseaseBookmarksByUser);
 
 export default diseaseRoutes;

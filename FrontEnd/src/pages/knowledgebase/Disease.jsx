@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import { getDiseaseById, addRemoveCropBookmarks } from '../../api/knowlegdebase'
+import { getDiseaseById, addRemoveDiseaseBookmarks } from '../../api/knowlegdebase'
 import { getAuthorInfo } from '../../api/user'
 import { Loader } from '../../components'
 import { FaBookmark, FaFlag } from 'react-icons/fa'
@@ -11,6 +11,12 @@ const Disease = () => {
   const [isLoading, setIsLoading ] = useState(true)
   const [authorId, setAuthorId] = useState('')
   const [author, setAuthor] = useState({})
+
+  const userId = JSON.parse(localStorage.getItem('userInfo'))._id
+  const diseaseId = disease._id
+
+  console.log('diseaseid', diseaseId)
+  console.log('userid', userId)
 
   useEffect(() => { 
     const fetchDisease = async () => {
@@ -34,8 +40,8 @@ const Disease = () => {
     }
   }, [authorId])
 
-    const handleBookmark = async (diseaseId) => {
-        const response = await addRemoveCropBookmarks(diseaseId, userId)
+    const handleBookmark = async () => {
+        const response = await addRemoveDiseaseBookmarks(diseaseId, userId)
         if (response) {
             alert('Disease bookmarked')
         }
@@ -98,7 +104,7 @@ const Disease = () => {
                 <div className="flex ml-auto">
                     <button 
                         className="flex items-center justify-center bg-slate-500 text-white rounded-full h-10 w-10 mr-2"
-                        onClick={() => handleBookmark(crop._id)}
+                        onClick={() => handleBookmark()}
                     >
                         <FaBookmark className="h-6 w-6" />
                     </button>
@@ -156,7 +162,7 @@ const Disease = () => {
                             <div className="flex ml-auto">
                                 <button 
                                     className="flex items-center justify-center bg-slate-500 text-white rounded-full h-10 w-10 mr-2"
-                                    onClick={() => handleBookmark(crop._id)}
+                                    onClick={() => handleBookmark()}
                                 >
                                     <FaBookmark className="h-6 w-6" />
                                 </button>

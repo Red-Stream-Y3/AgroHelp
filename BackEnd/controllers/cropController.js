@@ -214,12 +214,15 @@ const addRemoveCropBookmark = asyncHandler(async (req, res) => {
   try {
     const crop = await Crop.findById(req.params.id);
     if (crop) {
-      if (crop.bookmarkedBy.includes(req.body.userId)) {
-        crop.bookmarkedBy.pull(req.body.userId);
-        console.log('unbookmarked');
+      if (crop.bookmarkedBy.filter(
+        (bookmark) => bookmark.toString() === req.body.userId.toString()
+      ).length > 0
+      ) {
+        crop.bookmarkedBy = crop.bookmarkedBy.filter(
+          (bookmark) => bookmark.toString() !== req.body.userId.toString()
+        );
       } else {
         crop.bookmarkedBy.push(req.body.userId);
-        console.log('bookmarked');
       }
       const updatedCrop = await crop.save();
       res.json(updatedCrop);
@@ -232,6 +235,7 @@ const addRemoveCropBookmark = asyncHandler(async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 });
+
 
 
 const getCropBookmarksByUser = asyncHandler(async (req, res) => {
