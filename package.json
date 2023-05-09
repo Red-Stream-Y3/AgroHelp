@@ -5,8 +5,11 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "start": "node BackEnd/index",
     "test": "jest --watchAll --verbose",
-    "start": "nodemon src/index.js"
+    "server": "nodemon BackEnd/index.js",
+    "client": "npm start --prefix FrontEnd",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "author": "RedStream",
   "license": "ISC",
@@ -16,6 +19,7 @@
     "babel-jest": "^29.5.0",
     "bcryptjs": "^2.4.3",
     "colors": "^1.4.0",
+    "concurrently": "^8.0.1",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
