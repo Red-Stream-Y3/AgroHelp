@@ -298,8 +298,8 @@ export const getDiseasesByAuthor = async (id) => {
 export const addRemoveCropBookmarks = async (id, userId) => {
   try {
     const response = await axios.put(
-      `http://localhost:9120/api/crops/${id}/bookmark`,
-      userId
+      `http://localhost:9120/api/crops/bookmark/${id}`,
+      { userId }
     );
     return response;
   } catch (error) {
@@ -310,8 +310,8 @@ export const addRemoveCropBookmarks = async (id, userId) => {
 export const addRemoveDiseaseBookmarks = async (id, userId) => {
   try {
     const response = await axios.put(
-      `http://localhost:9120/api/diseases/${id}/bookmark`,
-      userId
+      `http://localhost:9120/api/diseases/bookmark/${id}`,
+      { userId }
     );
     return response;
   } catch (error) {
@@ -321,7 +321,7 @@ export const addRemoveDiseaseBookmarks = async (id, userId) => {
 
 export const getCropBookmarksByUser = async (id) => {
   try {
-    const response = await axios.get('http://localhost:9120/api/crops/bookmarks/' + id);
+    const response = await axios.get(`http://localhost:9120/api/crops/bookmarks/${id}`);
     console.log('crop', response.data);
     return response.data;
   } catch (error) {

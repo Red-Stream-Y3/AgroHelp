@@ -7,51 +7,30 @@ import { CropCard, DiseaseCard, ForumCard } from "../../components"
 const Profile = () => {
   
   const [isLoading, setIsLoading ] = useState(true)
-  const [crops, setCrops] = useState([{}])
-  const [diseases, setDiseases] = useState([{}])
-  const [subscriptions, setSubscriptions] = useState([{}])
+  const [crops, setCrops] = useState([])
+  const [diseases, setDiseases] = useState([])
+  const [subscriptions, setSubscriptions] = useState([])
 
-  console.log('crops', crops)
-
+  console.log('crops state', crops)
+  console.log('diseases state', diseases)
 
   const user = JSON.parse(localStorage.getItem('userInfo'))
-  console.log('user', user)
+  const userId = JSON.parse(localStorage.getItem('userInfo'))._id
 
   useEffect(() => {
+    const fetchCrops = async () => {
+      const { data } = await getCropBookmarksByUser(userId)
+      setCrops(data)
+    }
+    const fetchDiseases = async () => {
+      const { data } = await getDiseaseBookmarksByUser(userId)
+      setDiseases(data)
+    }
+    fetchCrops()
+    fetchDiseases()
     setIsLoading(false)
-  }, [])
+  }, [userId])
 
-  // useEffect(() => {
-  //   const fetchCrops = async () => {
-  //     const crops = await getCropBookmarksByUser(user._id);
-  //     setCrops(crops);
-  //     setIsLoading(false);
-  //   };
-  //   fetchCrops();
-  // }, [user._id]);
-
-  // useEffect(() => {
-  //   const fetchDiseases = async () => {
-  //     const diseases = await getDiseaseBookmarksByUser(user._id);
-  //     setDiseases(diseases);
-  //     setIsLoading(false);
-  //   };
-  //   fetchDiseases();
-  // }, [user._id]);
-
-  // useEffect(() => {
-  //   const fetchSubscriptions = async () => {
-  //     const subscriptions = await getSubscribedForumsByUser(
-	// 			user,
-	// 		);
-  //     setSubscriptions(subscriptions);
-  //     setIsLoading(false);
-  //   };
-  //   fetchSubscriptions();
-  // }, [user._id]);
-
-
-  // console.log('subscriptions', subscriptions)
 
 
   if (isLoading) {
@@ -117,7 +96,7 @@ const Profile = () => {
         <div className="py-4 px-6">
           <h1 className="text-3xl font-semibold mb-3"> Bookmarked Crops </h1>
           <hr className="border-gray-500 border-1 w-full mb-5" />
-          {crops.length > 1 ? (
+          {crops ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {crops.map((crop) => (
                 <CropCard key={crop._id} crop={crop} />
@@ -128,13 +107,14 @@ const Profile = () => {
               <h1 className="text-lg font-semibold mb-3">No Bookmarks</h1>
             </div>
           )}
+
           
         </div>
         
         <div className="py-4 px-6">
           <h1 className="text-3xl font-semibold mb-3"> Bookmarked Diseases </h1>
           <hr className="border-gray-500 border-1 w-full mb-5" />
-          {diseases.length > 1 ? (
+          {crops ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {diseases.map((crop) => (
                 <CropCard key={crop._id} crop={crop} />
@@ -149,7 +129,7 @@ const Profile = () => {
         <div className="py-4 px-6">
           <h1 className="text-3xl font-semibold mb-3"> Subscriped Forums </h1>
           <hr className="border-gray-500 border-1 w-full mb-5" />
-          {subscriptions.length > 1 ? (
+          {/* {subscriptions ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {subscriptions.map((crop) => (
                 <CropCard key={crop._id} crop={crop} />
@@ -159,7 +139,7 @@ const Profile = () => {
             <div className="flex flex-col items-center justify-center h-36">
               <h1 className="text-lg font-semibold mb-3">No Bookmarks</h1>
             </div>
-          )}
+          )} */}
         </div>
       </div>
     </div>
