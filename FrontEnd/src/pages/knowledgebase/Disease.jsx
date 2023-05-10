@@ -12,7 +12,13 @@ const Disease = () => {
   const [authorId, setAuthorId] = useState('')
   const [author, setAuthor] = useState({})
 
-  const userId = JSON.parse(localStorage.getItem('userInfo'))._id
+  const user = JSON.parse(localStorage.getItem('userInfo'))
+  
+  let userId = null;
+  if(user) {
+    userId = user._id
+  }
+
   const diseaseId = disease._id
 
   console.log('diseaseid', diseaseId)
