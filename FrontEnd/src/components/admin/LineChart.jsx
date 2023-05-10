@@ -1,16 +1,24 @@
 import Chart from 'chart.js/auto';
 import { Line } from 'react-chartjs-2';
-import { Loader } from '..';
+import { Loader } from '../../components';
 import PropTypes from 'prop-types';
 
 const LineChart = ({ siteVisits, loading }) => {
-  const labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  // format date function
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, '0');
+
+    return `${day}`;
+  };
+
+  const labels = siteVisits.map((visit) => formatDate(visit.date)).slice(-8);
   const data = {
-    labels: labels.slice(-7),
+    labels: labels.slice(-8),
     datasets: [
       {
         label: 'Traffic',
-        data: siteVisits.map((visit) => visit.count).slice(-7),
+        data: siteVisits.map((visit) => visit.count).slice(-8),
         fill: false,
         backgroundColor: 'rgb(81, 171, 240)',
         borderColor: 'rgb(54, 100, 227)',
