@@ -3,17 +3,18 @@
 import React from "react";
 import { useParams, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { getBookmarkedBlogs } from "../../api/blog";
+import { getBookmarkedBlogs, handleBlogBookamrk } from "../../api/blog";
 import { BlogContainer, PublicBlogCard } from "../../components";
 import { toast } from "react-toastify";
 
 export default function BookmarkedBlogs() {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [id, setId] = useState("");
 
   const user = JSON.parse(localStorage.getItem("userInfo"));
 
-  let userID;
+  let userID = '';
   if (user && blogs) {
     userID = user._id;
   }
@@ -23,7 +24,8 @@ export default function BookmarkedBlogs() {
     const fetchBoookmarkedBlogs = async () => {
       const blogs = await getBookmarkedBlogs(userID);
       setBlogs(blogs);
-      console.log(blogs);
+      setId(blogs._id)
+      //console.log(blogs);
     };
     fetchBoookmarkedBlogs();
   }, [userID]);
@@ -59,6 +61,8 @@ export default function BookmarkedBlogs() {
                       likes={blog.likes.length}
                       dislikes={blog.dislikes.length}
                       comments={blog.comments.length}
+                      bookmarked={blog.bookmarked}
+                      user={userID}
                     />
               </Link>
             </div>

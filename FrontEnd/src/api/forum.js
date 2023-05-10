@@ -10,9 +10,7 @@ const getconfig = (user) => {
 };
 
 //server API url
-const BASE_URL = `${
-  localStorage.getItem('agroServer') || 'http://localhost:9120'
-}/api/forums`;
+const BASE_URL = `/api/forums`;
 
 //get forums
 export const getForums = async (checkStatus) => {
