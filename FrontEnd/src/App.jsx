@@ -1,6 +1,8 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import './App.css';
-import { Navbar, Footer } from './components';
+/** @format */
+
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import "./App.css";
+import { Navbar, Footer } from "./components";
 import {
   Home,
   AdminHome,
@@ -24,7 +26,7 @@ import {
   UpdateDisease,
   MyArticles,
   Search,
-} from './pages';
+} from "./pages";
 import {
   BlogDashboard,
   BlogCreate,
@@ -33,10 +35,11 @@ import {
   BlogsbyAuthor,
   MyBlogPosts,
   BookmarkedBlogs,
-} from './pages';
-import './App.css';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+  BlogSearch,
+} from "./pages";
+import "./App.css";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (
@@ -45,9 +48,9 @@ function App() {
       <BrowserRouter>
         <div
           style={{
-            minHeight: '100vh',
-            display: 'flex',
-            flexDirection: 'column',
+            minHeight: "100vh",
+            display: "flex",
+            flexDirection: "column",
           }}
         >
           <Navbar />
@@ -85,7 +88,7 @@ function App() {
             <Route path="/editblog/:id" element={<BlogUpdate />} />
             <Route path="/blogAuthor/:id" element={<BlogsbyAuthor />} />
             <Route path="/myblogs/:id" element={<MyBlogPosts />} />
-            {/* <Route path="/blogsearch/:searchTerm" element={<BlogSearch />} /> */}
+            <Route path="/blogsearch/:searchTerm" element={<BlogSearch />} />
             <Route path="/savedBlogs/:id" element={<BookmarkedBlogs />} />
           </Routes>
 
