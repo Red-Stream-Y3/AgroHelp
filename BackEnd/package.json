@@ -6,8 +6,7 @@
     "type": "module",
     "scripts": {
         "test": "jest --watchAll --verbose",
-        "start": "nodemon src/index.js",
-        "dev": "nodemon src/index.js"
+        "start": "nodemon src/index.js"
     },
     "author": "RedStream",
     "license": "ISC",
