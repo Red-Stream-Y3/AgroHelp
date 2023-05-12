@@ -341,7 +341,7 @@ const ForumCard = ({
         <div className="rounded-md bg-darkbg p-3 mt-2 w-full sm:max-w-4xl text-sm sm:text-base">
             {!loading ? (
                 <div>
-                    <div className="flex justify-between">
+                    <div className="sm:flex sm:justify-between mb-1 sm:mb-0">
                         {/* username and date */}
                         <div className="inline-flex">
                             <div className="mr-2">
