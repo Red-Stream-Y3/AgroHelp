@@ -338,7 +338,7 @@ const Navbar = () => {
       )}
 
       {isProfilePopupOpen && (
-        <div className="lg w-56 absolute right-0 rounded-xl z-10">
+        <div className="lg w-56 absolute right-0 rounded-xl z-20">
           <div className="px-2 pt-2 pb-3 space-y-1 bg-primarydark rounded-b-xl">
             <Link
               to="/profile"
