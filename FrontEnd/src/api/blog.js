@@ -73,9 +73,7 @@ export const deleteBlog = async (id) => {
 //search blog
 export const searchBlog = async (keyword) => {
   try {
-    const response = await axios.get(
-      `http://localhost:9120/api/blog/search/q=${keyword}`
-    );
+    const response = await axios.get(`/api/blog/search/q=${keyword}`);
     console.log('blog', response);
     return response;
   } catch (error) {
