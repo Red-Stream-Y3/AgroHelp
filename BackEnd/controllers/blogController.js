@@ -139,7 +139,7 @@ const searchBlogs = asyncHandler(async (req, res) => {
     const searchTerm = req.params.q;
     const blog = await Blog.find({
       title: { $regex: new RegExp(`^${searchTerm}`, 'i') },
-    });
+    }).populate('author', 'username firstName lastName');
     res.json(blog);
   } catch (error) {
     console.log(error);
@@ -315,5 +315,5 @@ export {
   getBlogsByAuthor,
   blogCommentAccept,
   bookmarkBlog,
-  getBookmarkedBlogs
+  getBookmarkedBlogs,
 };
