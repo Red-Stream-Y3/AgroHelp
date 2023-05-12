@@ -1,0 +1,33 @@
+{
+    "name": "backend",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "type": "module",
+    "scripts": {
+        "test": "jest --watchAll --verbose",
+        "start": "nodemon src/index.js"
+    },
+    "author": "RedStream",
+    "license": "ISC",
+    "dependencies": {
+        "@babel/core": "^7.21.8",
+        "@babel/preset-env": "^7.21.5",
+        "babel-jest": "^29.5.0",
+        "bcryptjs": "^2.4.3",
+        "colors": "^1.4.0",
+        "cors": "^2.8.5",
+        "dotenv": "^16.0.3",
+        "express": "^4.18.2",
+        "express-async-handler": "^1.2.0",
+        "express-session": "^1.17.3",
+        "find-config": "^1.0.0",
+        "jsonwebtoken": "^9.0.0",
+        "mongoose": "^7.1.1",
+        "nodemon": "^2.0.22"
+    },
+    "devDependencies": {
+        "jest": "^29.5.0",
+        "supertest": "^6.3.3"
+    }
+}

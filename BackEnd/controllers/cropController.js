@@ -157,14 +157,21 @@ const searchCrops = asyncHandler(async (req, res) => {
   }
 });
 
-//@desc     Get random 4 crops with id, cropName, cropImage, scientificName, cropFamily, cropType
+//@desc     Get latest 4 crops 
 //@route    GET /api/crops/short
 //@access   Public
 const getShortCrops = asyncHandler(async (req, res) => {
   try {
-    const crops = await Crop.aggregate([{ $sample: { size: 4 } }]);
-    res.json(crops);
-  } catch (error) {
+    const crops = await Crop.find({}).limit(4);
+    if (crops) {
+      res.json(crops);
+    }
+    else {
+      res.status(404);
+      throw new Error('Crops not found');
+    }
+  }
+  catch (error) {
     console.log(error);
     res.status(400).json({ message: error.message });
   }

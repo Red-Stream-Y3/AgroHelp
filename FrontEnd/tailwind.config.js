@@ -28,6 +28,7 @@ export default {
         120: '30rem',
       },
       height: {
+        18: '4.5rem',
         25: '6.25rem',
         30: '8.5rem',
       },

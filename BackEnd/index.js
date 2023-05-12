@@ -1,4 +1,3 @@
-import path from 'path';
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
@@ -18,13 +17,14 @@ import blogRoutes from './routes/blogRoutes.js';
 import cropRoutes from './routes/cropRoutes.js';
 import diseaseRoutes from './routes/diseaseRoutes.js';
 
-// dotenv.config({ path: findConfig('.env.dev') });
+dotenv.config({ path: findConfig('.env.dev') });
 
 connectDB();
 
 const app = express();
 
-app.use(express.json());
+app.use(cors());
+app.use(bodyParser.json());
 
 // Use middleware to increment visitor count
 app.use(visitMiddleware);
@@ -37,27 +37,15 @@ app.use('/api/blog', blogRoutes);
 app.use('/api/crops', cropRoutes);
 app.use('/api/diseases', diseaseRoutes);
 
-const __dirname = path.resolve();
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, '/FrontEnd/dist')));
-
-  app.get('*', (req, res) =>
-    res.sendFile(path.resolve(__dirname, 'FrontEnd', 'dist', 'index.html'))
-  );
-} else {
-  app.get('/', (req, res) => {
-    res.send('API is running....');
-  });
-}
-
 app.use(notFound);
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
-if (process.env.NODE_ENV !== 'test') {
-  app.listen(PORT, () => {
-    console.log(`Server is running on port: ${PORT}`.yellow.bold);
-  });
+if (process.env.NODE_ENV !== "test") {
+    app.listen(PORT, () => {
+        console.log(`Server is running on port: ${PORT}`.yellow.bold);
+    });
 }
+
 
 export default app;

@@ -3,6 +3,7 @@ import { Outlet } from 'react-router-dom';
 import { AdminSideBar, Loader } from '../../components';
 import { useGlobalContext } from '../../context/ContextProvider';
 import { logout } from '../../api/user';
+import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
 
 const AdminHome = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -33,39 +34,15 @@ const AdminHome = () => {
           {/* Main content */}
           <main className="flex-1 flex flex-col">
             {/* Button to open sidebar */}
-            <div className="md:hidden absolute top-0 right-0 p-4">
+            <div className="md:hidden flex justify-start h-18 w-8 bg-darkbg rounded-r-md">
               <button
-                className="text-white rounded-md p-1"
+                className="text-white rounded-md"
                 onClick={toggleSidebar}
               >
                 {isSidebarOpen ? (
-                  <svg
-                    className="h-6 w-6 bg-gray-900 rounded-md"
-                    stroke="currentColor"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  </svg>
+                  <FaAngleLeft className="text-3xl" />
                 ) : (
-                  <svg
-                    className="h-6 w-6 bg-gray-900 rounded-md"
-                    stroke="currentColor"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M4 6h16M4 12h16M4 18h16"
-                    />
-                  </svg>
+                  <FaAngleRight className="text-3xl" />
                 )}
               </button>
             </div>

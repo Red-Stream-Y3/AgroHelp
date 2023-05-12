@@ -166,21 +166,20 @@ const searchCropDisease = asyncHandler(async (req, res) => {
   }
 });
 
-//@desc    get 4 random crop diseases
+//@desc    get latest 4 crop diseases
 //@route   GET /api/cropDiseases/random
 //@access  Public
 const getRandomCropDiseases = asyncHandler(async (req, res) => {
   try {
-    const cropDiseases = await CropDisease.aggregate([
-      { $sample: { size: 4 } },
-    ]);
+    const cropDiseases = await CropDisease.find({}).limit(4);
     if (cropDiseases) {
       res.json(cropDiseases);
     } else {
       res.status(404);
       throw new Error('Crop disease not found');
     }
-  } catch (error) {
+  }
+  catch (error) {
     console.log(error);
     res.status(400).json({ message: error.message });
   }
