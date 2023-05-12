@@ -132,6 +132,7 @@ export default function BlogDashboard() {
                       comments={blog.comments.length}
                       bookmarked={blog.bookmarked}
                       user={userID}
+                      logged={isLogged}
                     />
                   </Link>
                 </div>
