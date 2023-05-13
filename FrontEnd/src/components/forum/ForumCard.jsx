@@ -404,8 +404,12 @@ const ForumCard = ({
                     {/* title */}
                     <div
                         onClick={() => {
-                            setSelectedForum(forumObj);
-                            setShowSelectedForum(true);
+                            try {
+                                setSelectedForum(forumObj);
+                                setShowSelectedForum(true);
+                            } catch (error) {
+                                // no need to do anything
+                            }
                         }}
                         className="font-bold cursor-pointer hover:underline">
                         {forumObj.title +

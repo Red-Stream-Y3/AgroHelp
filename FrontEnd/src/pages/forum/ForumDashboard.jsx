@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Forum } from "../../api/forum.js";
 import { FaSpinner } from "react-icons/fa";
 import { useGlobalContext } from "../../context/ContextProvider";
-import { ForumCard, ForumCardContainer, ForumSearch, ForumSearchResults } from "../../components";
+import { ForumCard, ForumCardContainer, ForumSearch, ForumSearchResults, Loader } from "../../components";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { MdOutlineAdd } from "react-icons/md";
@@ -13,58 +13,28 @@ const ForumDashboard = (props) => {
 
     //current user and toast methods
     const { user, notify } = useGlobalContext();
-
+    
     //forums
     const [recentForums, setRecentForums] = useState([]);
     const [myForums, setMyForums] = useState([]);
     const [subscribedForums, setSubscribedForums] = useState([]);
-    const [selectedForum, setSelectedForum] = useState({}); //forum to be displayed in popup
 
     //inputs
     const [search, setSearch] = useState("");
     const [searchResults, setSearchResults] = useState([]);
-	const [title, setTitle] = useState("");
-	const [content, setContent] = useState("");
+	const [title, setTitle] = useState(""); //create form title
+	const [content, setContent] = useState(""); //create form content
 
     //status
     const [searched, setSearched] = useState(false);
     const [loading, setLoading] = useState(false);
     const [searching, setSearching] = useState(false); //searching forums
-    const [showSelectedForum, setShowSelectedForum] = useState(false); //popup
 	const [showCreateForum, setShowCreateForum] = useState(false);
 	const [createForumLoading, setCreateForumLoading] = useState(false);
 	const [dashLoaded, setDashLoaded] = useState(false);
 	const [myLoaded, setMyLoaded] = useState(false);
 	const [subLoaded, setSubLoaded] = useState(false);
     const [tab, setTab] = useState("dashboard"); //dashboard, myForums, subscribed
-
-    //function to check status and create a toast notification
-    const checkStatus = (res) => {
-        switch (res.status) {
-            case 255:
-                notify("success", res.data.message);
-                break;
-            case 256:
-                notify("success", "Forum created successfully");
-                break;
-            case 404:
-                if (res.data.message) {
-                    notify("error", res.data.message);
-                } else {
-                    notify("error", "Error! Forum not found");
-                }
-                break;
-            case 401:
-                notify("error", "Unauthorized");
-                break;
-            case 500:
-                notify("error", "Server error");
-                break;
-            default:
-                notify("error", "Error getting forum");
-                break;
-        }
-    };
 
     const selectTab = (tab) => {
         setTab(tab);
@@ -92,7 +62,11 @@ const ForumDashboard = (props) => {
 
         setLoading(true);
 
-        const recent = await Forum.getForums(checkStatus);
+        const recent = await Forum.getForums((res) => {
+            res.status >= 400
+                ? notify("error", "Error getting recent forums")
+                : null;
+        });
 
         if (recent !== null && recent !== undefined) {
             setRecentForums(recent);
@@ -108,7 +82,11 @@ const ForumDashboard = (props) => {
 
         setLoading(true);
 
-        const my = await Forum.getForumsByUser(user, checkStatus);
+        const my = await Forum.getForumsByUser(user, (res)=>{
+            res.status >= 400
+                ? notify("error", "Error getting your forums")
+                : null;
+        });
 
         if (my !== null && my !== undefined) {
             setMyForums(my);
@@ -124,10 +102,11 @@ const ForumDashboard = (props) => {
 
         setLoading(true);
 
-			const sub = await Forum.getSubscribedForumsByUser(
-				user,
-				checkStatus
-			);
+			const sub = await Forum.getSubscribedForumsByUser(user, (res) => {
+                res.status >= 400
+                    ? notify("error", "Error getting subscribed forums")
+                    : null;
+            });
 
             if (sub !== null && sub !== undefined) {
                 setSubscribedForums(sub);
@@ -142,7 +121,7 @@ const ForumDashboard = (props) => {
         refreshDashboardForums();
         refreshMyForums();
         refreshSubscribedForums();
-    }, []);
+    }, [user]);
 
     //refresh all forums
     const refreshAllForums = async (keepCurrent) => {
@@ -313,14 +292,10 @@ const ForumDashboard = (props) => {
                                 {recentForums.length > 0 ? (
                                     <ForumCardContainer
                                         forums={recentForums}
-                                        checkStatus={checkStatus}
-                                        notify={notify}
                                         tab={tab}
                                         loaded={dashLoaded}
                                         refresh={refreshDashboardForums}
                                         refreshAll={refreshAllForums}
-                                        setSelectedForum={setSelectedForum}
-                                        setShowSelectedForum={setShowSelectedForum}
                                     />
                                 ) : (
                                     <div className="m-auto w-fit mt-5 text-gray-500">
@@ -350,14 +325,10 @@ const ForumDashboard = (props) => {
                                         {myForums.length > 0 ? (
                                             <ForumCardContainer
                                                 forums={myForums}
-                                                checkStatus={checkStatus}
-                                                notify={notify}
                                                 tab={tab}
                                                 loaded={myLoaded}
                                                 refresh={refreshMyForums}
                                                 refreshAll={refreshAllForums}
-                                                setSelectedForum={setSelectedForum}
-                                                setShowSelectedForum={setShowSelectedForum}
                                             />
                                         ) : (
                                             <div className="m-auto w-fit mt-5 text-gray-500">
@@ -381,14 +352,10 @@ const ForumDashboard = (props) => {
                                         {subscribedForums.length > 0 ? (
                                             <ForumCardContainer
                                                 forums={subscribedForums}
-                                                checkStatus={checkStatus}
-                                                notify={notify}
                                                 tab={tab}
                                                 loaded={subLoaded}
                                                 refresh={refreshSubscribedForums}
                                                 refreshAll={refreshAllForums}
-                                                setSelectedForum={setSelectedForum}
-                                                setShowSelectedForum={setShowSelectedForum}
                                             />
                                         ) : (
                                             <div className="m-auto w-fit mt-5 text-gray-500">
@@ -435,21 +402,6 @@ const ForumDashboard = (props) => {
                             )}
                         </button>
                     </div>
-                </div>
-            </Popup>
-
-            {/* Selected forum popup */}
-            <Popup
-                show={showSelectedForum}
-                setShow={setShowSelectedForum}
-                ring={true}>
-                <div className="text-left w-screen max-w-sm sm:max-w-lg max-h-96 overflow-y-auto">
-                    <ForumCard
-                        forum={selectedForum}
-                        checkRes={checkStatus}
-                        notify={notify}
-                        refreshAll={refreshAllForums}
-                    />
                 </div>
             </Popup>
 
