@@ -1,145 +1,111 @@
 import { useState, useEffect } from "react"
-import { Loader } from "../../components"
+import { Link } from "react-router-dom"
 import { getCropBookmarksByUser, getDiseaseBookmarksByUser } from "../../api/knowlegdebase"
-import { getSubscribedForumsByUser } from "../../api/forum"
-import { CropCard, DiseaseCard, ForumCard } from "../../components"
+import { getBookmarkedBlogs } from "../../api/blog"
+import { CropCard, DiseaseCard, Loader } from "../../components"
 
 const Profile = () => {
-  
-  const [isLoading, setIsLoading ] = useState(true)
-  const [crops, setCrops] = useState([])
-  const [diseases, setDiseases] = useState([])
-  const [subscriptions, setSubscriptions] = useState([])
+  const user = JSON.parse(localStorage.getItem("userInfo"))
+  const userId = user._id
 
-  console.log('crops state', crops)
-  console.log('diseases state', diseases)
-
-  const user = JSON.parse(localStorage.getItem('userInfo'))
-  const userId = JSON.parse(localStorage.getItem('userInfo'))._id
+  const [cropBookmarks, setCropBookmarks] = useState([])
+  const [diseaseBookmarks, setDiseaseBookmarks] = useState([])
+  const [blogBookmarks, setBlogBookmarks] = useState([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const fetchCrops = async () => {
-      const { data } = await getCropBookmarksByUser(userId)
-      setCrops(data)
+    async function fetchData() {
+      const cropBookmarks = await getCropBookmarksByUser(userId)
+      setCropBookmarks(cropBookmarks)
+  
+      const diseaseBookmarks = await getDiseaseBookmarksByUser(userId)
+      setDiseaseBookmarks(diseaseBookmarks)
+  
+      const blogBookmarks = await getBookmarkedBlogs(userId)
+      setBlogBookmarks(blogBookmarks)
+  
+      setLoading(false)
     }
-    const fetchDiseases = async () => {
-      const { data } = await getDiseaseBookmarksByUser(userId)
-      setDiseases(data)
-    }
-    fetchCrops()
-    fetchDiseases()
-    setIsLoading(false)
-  }, [userId])
+  
+    fetchData()
+  }, [userId, user.token])
+  
 
-
-
-  if (isLoading) {
+  if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center h-screen">
+      <div className="flex flex-col items-center">
         <Loader />
       </div>
     )
   }
 
-
   return (
     <div>
-      {/* mobile view */}
-      <div className=" md:hidden bg-darkbg text-white overflow-hidden w-full mx-auto">
-        <img
-          className="w-64 h-64 object-cover object-center rounded-full mx-auto p-5"
-          src={user.profilePic}
-          alt={user.firstName}
-        />
-        <div className="py-4 px-6 text-center">
-          <h1 className="text-3xl font-semibold mb-3">{user.firstName} {user.lastName}</h1>
-          <p className="text-gray-300 mb-2 font-bold">Username:
-            <span className="text-gray-400 font-normal"> {user.username}</span>
-          </p>
-          <p className="text-gray-300 mb-2 font-bold">Email:
-            <span className="text-gray-400 font-normal"> {user.email}</span>
-          </p>
-          <p className="text-gray-300 mb-2 font-bold">Role:
-            <span className="text-gray-400 font-normal"> {user.role}</span>
-          </p>
+      <div className="flex flex-col items-center justify-center">
+        <div className="flex flex-col items-start place-items-start py-5 px-8 ml-0 mr-auto w-full">
+          <h1 className="text-3xl text-white font-bold md:text-4xl">Profile</h1>
+          <p className="text-gray-300 text-md md:text-lg">View your profile details</p>
+          <hr className="border-primary border-2 w-full mt-4" />
+        </div>
+      </div>
+      <div className="flex flex-col">
+        <div className="flex flex-col items-start place-items-start py-5 px-8 ml-0 mr-auto w-full">
+          <h1 className="text-2xl text-white font-bold md:text-3xl">Bookmarked Crops</h1>
+          <p className="text-gray-300 text-md md:text-lg">Learn about different crops and their growing conditions</p>
+          <hr className="border-gray-500 border-1 w-full mt-4" />
+        </div>
+
+        <div className="flex flex-wrap justify-center md:justify-start md:pl-3">
+          {cropBookmarks.map((crop) => (
+            <div className="m-4" key={crop._id}>
+              <CropCard crop={crop} />
+            </div>
+          ))}
         </div>
       </div>
 
-      {/* desktop view */}
-      <div className="hidden md:block bg-darkbg text-white overflow-hidden mx-auto md:rounded-xl md:mx-36 md:my-10">
-        <div className="grid grid-cols-2 lg:grid-cols-[1fr,2fr]" >
-          <div className="col-span-1">
-            <img
-              className="w-64 h-64 object-cover object-center rounded-full mx-auto p-5"
-              src={user.profilePic}
-              alt={user.firstName}
-            />
-          </div>
-          <div className="col-span-1 my-auto">
-            <div className="py-4 px-6">
-              <h1 className="text-3xl font-semibold mb-3">{user.firstName} {user.lastName}</h1>
-              <p className="text-gray-300 mb-2 font-bold">Username:
-                <span className="text-gray-400 font-normal"> {user.username}</span>
-              </p>
-              <p className="text-gray-300 mb-2 font-bold">Email:
-                <span className="text-gray-400 font-normal"> {user.email}</span>
-              </p>
-              <p className="text-gray-300 mb-2 font-bold">Role:
-                <span className="text-gray-400 font-normal"> {user.role}</span>
-              </p>
+      <div className="flex flex-col">
+        <div className="flex flex-col items-start place-items-start py-5 px-8 ml-0 mr-auto w-full">
+          <h1 className="text-2xl text-white font-bold md:text-3xl">Bookmarked Diseases</h1>
+          <p className="text-gray-300 text-md md:text-lg">Learn about different diseases and their symptoms</p>
+          <hr className="border-gray-500 border-1 w-full mt-4" />
+        </div>
+
+        <div className="flex flex-wrap justify-center md:justify-start md:pl-3">
+          {diseaseBookmarks.map((disease) => (
+            <div className="m-4" key={disease._id}>
+              <DiseaseCard disease={disease} />
             </div>
-          </div>
+          ))}
         </div>
       </div>
 
-      <div className="bg-lightbg text-white overflow-hidden mx-auto md:rounded-xl md:mx-36 md:my-10 md:bg-darkbg">
-        <div className="py-4 px-6">
-          <h1 className="text-3xl font-semibold mb-3"> Bookmarked Crops </h1>
-          <hr className="border-gray-500 border-1 w-full mb-5" />
-          {crops ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {crops.map((crop) => (
-                <CropCard key={crop._id} crop={crop} />
-              ))}
-            </div>
-          ) : (
-            <div className="flex flex-col items-center justify-center h-36">
-              <h1 className="text-lg font-semibold mb-3">No Bookmarks</h1>
-            </div>
-          )}
+      <div className="flex flex-col">
+        <div className="flex flex-col items-start place-items-start py-5 px-8 ml-0 mr-auto w-full">
+          <h1 className="text-2xl text-white font-bold md:text-3xl">Bookmarked Blogs</h1>
+          <p className="text-gray-300 text-md md:text-lg">View blogs you have bookmarked</p>
+          <hr className="border-gray-500 border-1 w-full mt-4" />
+        </div>
 
-          
-        </div>
-        
-        <div className="py-4 px-6">
-          <h1 className="text-3xl font-semibold mb-3"> Bookmarked Diseases </h1>
-          <hr className="border-gray-500 border-1 w-full mb-5" />
-          {crops ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {diseases.map((crop) => (
-                <CropCard key={crop._id} crop={crop} />
-              ))}
+        <div className="flex flex-wrap justify-center md:justify-start md:pl-3">
+          {blogBookmarks.map((blog) => (
+            <div className="m-4" key={blog._id}>
+              <Link to={`/viewblog/${blog._id}`}>
+                <div className="flex flex-col items-center justify-center w-88 bg-darkbg rounded-lg shadow-lg p-5">
+                  <div className="flex flex-col">
+                    <h1 className="text-xl text-white font-bold">{blog.title}</h1>
+                    <p className="text-gray-300 text-md md:text-lg mt-2">{blog.createdAt.substring(0, 10)}</p>
+                    <hr className="border-gray-500 border-1 w-full mt-4" />
+                    <p className="text-gray-300 text-md md:text-lg mt-4">
+                      {blog.tags.map((tag) => (
+                        <span key={tag} className="text-primarylight text-md md:text-lg">{tag}</span>
+                      ))}
+                    </p>
+                  </div>
+                </div>
+              </Link>
             </div>
-          ) : (
-            <div className="flex flex-col items-center justify-center h-36">
-              <h1 className="text-lg font-semibold mb-3">No Bookmarks</h1>
-            </div>
-          )}
-        </div>
-        <div className="py-4 px-6">
-          <h1 className="text-3xl font-semibold mb-3"> Subscriped Forums </h1>
-          <hr className="border-gray-500 border-1 w-full mb-5" />
-          {/* {subscriptions ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {subscriptions.map((crop) => (
-                <CropCard key={crop._id} crop={crop} />
-              ))}
-            </div>
-          ) : (
-            <div className="flex flex-col items-center justify-center h-36">
-              <h1 className="text-lg font-semibold mb-3">No Bookmarks</h1>
-            </div>
-          )} */}
+          ))}
         </div>
       </div>
     </div>
