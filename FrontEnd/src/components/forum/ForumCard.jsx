@@ -93,7 +93,7 @@ const ForumCard = ({
         } else {
             setDisliked(false);
         }
-    }, [forumObj]);
+    }, [forumObj, user]);
 
     //check if content is too long
     useEffect(() => {
@@ -120,7 +120,7 @@ const ForumCard = ({
             setDisliked(false);
         }
         await refreshForum();
-        refreshAll(true);
+        await refreshAll(true);
     };
 
     const handleDislike = async () => {
@@ -341,7 +341,7 @@ const ForumCard = ({
         <div className="rounded-md bg-darkbg p-3 mt-2 w-full sm:max-w-4xl text-sm sm:text-base">
             {!loading ? (
                 <div>
-                    <div className="flex justify-between">
+                    <div className="sm:flex sm:justify-between mb-1 sm:mb-0">
                         {/* username and date */}
                         <div className="inline-flex">
                             <div className="mr-2">
@@ -379,6 +379,7 @@ const ForumCard = ({
                         {/* forum delete and edit buttons */}
                         {user !== null &&
                         user !== undefined &&
+                        !forumObj.resolved && // if forum is resolved, no need to show edit and delete buttons
                         forum.userID === user._id ? (
                             <div className="w-fit">
                                 <button
@@ -403,8 +404,12 @@ const ForumCard = ({
                     {/* title */}
                     <div
                         onClick={() => {
-                            setSelectedForum(forumObj);
-                            setShowSelectedForum(true);
+                            try {
+                                setSelectedForum(forumObj);
+                                setShowSelectedForum(true);
+                            } catch (error) {
+                                // no need to do anything
+                            }
                         }}
                         className="font-bold cursor-pointer hover:underline">
                         {forumObj.title +
