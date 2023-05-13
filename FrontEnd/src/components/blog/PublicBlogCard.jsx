@@ -1,8 +1,10 @@
 /** @format */
 
 import React, { useState, useEffect } from "react";
-import { AiFillLike, AiFillDislike, AiFillEdit } from "react-icons/ai";
+import { AiFillLike, AiFillDislike } from "react-icons/ai";
 import { MdComment } from "react-icons/md";
+import { BsBookmarkCheckFill } from "react-icons/bs";
+import { FiBookmark } from "react-icons/fi";
 import { Link } from "react-router-dom";
 
 const PublicBlogCrad = ({
@@ -14,7 +16,26 @@ const PublicBlogCrad = ({
   likes,
   dislikes,
   comments,
+  bookmarked,
+  user,
+  handleBookmark,
+  logged,
 }) => {
+  const [isBookmarked, setIsBookmarked] = useState(false);
+  const [isLogged, setIsLogged] = useState(false);
+
+  useEffect(() => {
+    if (user && user == bookmarked) {
+      setIsBookmarked(true);
+    }
+  }, [bookmarked, user]);
+
+  useEffect(() => {
+    if (logged) {
+      setIsLogged(true);
+    }
+  });
+
   //date formatter
   function formatDate(dateString) {
     const date = new Date(dateString);
@@ -22,7 +43,7 @@ const PublicBlogCrad = ({
   }
 
   return (
-    <div className="bg-lightbg shadow rounded-lg px-4 py-6 sm:flex sm:flex-col sm:justify-between sm:items-start sm:px-6 sm:py-8 transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-20 hover:bg-gray-800 cursor-pointer">
+    <div className="bg-gray-700 shadow rounded-lg px-4 py-6 sm:flex sm:flex-col sm:justify-between sm:items-start sm:px-6 sm:py-8 transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-20 hover:bg-gray-800 cursor-pointer">
       <div className="text-2xl font-bold mb-2 text-white">{title}</div>
       <hr className="my-2" />
       <div className="text-gray-400 text-sm mb-2 flex items-center">
@@ -32,12 +53,26 @@ const PublicBlogCrad = ({
           </span>
         </Link>
         <span>|</span>
-        <span className="ml-2 mr-2">{formatDate(date)}</span>
-        <span>|</span>
         <span className="ml-2">{tags}</span>
+        <span>|</span>
+        <span className="ml-2 mr-2">{formatDate(date)}</span>
       </div>
 
       <div className="fixed bottom-0 right-0 flex items-center justify-end mr-2 mb-2 text-gray-300">
+        <div className="flex items-center mx-2">
+          <div className="">
+            {isLogged && (
+              <button onClick={handleBookmark}>
+                {isBookmarked ? (
+                  <BsBookmarkCheckFill className=" text-yellow-300" />
+                ) : (
+                  <FiBookmark className="text-gray-100 text-xl" />
+                )}
+              </button>
+            )}
+          </div>
+        </div>
+
         <div className="flex items-center mx-2">
           <div className="text-xl text-blue-600">
             <AiFillLike />

@@ -106,7 +106,7 @@ const ManageBlogs = () => {
             {blog.title.split(' ').slice(0, 5).join(' ')} ...
           </h2>
         </td>
-        <td className="py-4 text-sm whitespace-nowrap">
+        {/* <td className="py-4 text-sm whitespace-nowrap">
           <h2 className="font-medium text-gray-800 dark:text-white capitalize">
             <div
               dangerouslySetInnerHTML={{
@@ -114,7 +114,7 @@ const ManageBlogs = () => {
               }}
             />
           </h2>
-        </td>
+        </td> */}
         <td className="py-4 text-sm whitespace-nowrap">
           <h2 className="font-medium text-gray-800 dark:text-white capitalize">
             {blog.author.firstName}
@@ -211,7 +211,7 @@ const ManageBlogs = () => {
                         <thead className="bg-gray-50 dark:bg-gray-800">
                           <tr>
                             <th className={`px-4 ${theadClass}`}>TITLE</th>
-                            <th className={theadClass}>CONTENT</th>
+                            {/* <th className={theadClass}>CONTENT</th> */}
                             <th className={theadClass}>AUTHOR</th>
                             <th className={`text-center ${theadClass}`}>
                               DATE

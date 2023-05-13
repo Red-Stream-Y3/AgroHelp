@@ -111,17 +111,17 @@ const ManageUsers = () => {
             </h2>
           </div>
         </td>
-        <td className="py-4 text-sm font-medium whitespace-nowrap">
+        <td className="px-2 py-4 text-sm font-medium whitespace-nowrap">
           <h2 className="font-medium text-gray-800 dark:text-white">
             {user.email}
           </h2>
         </td>
-        <td className="py-4 text-sm whitespace-nowrap">
+        <td className="px-2 py-4 text-sm whitespace-nowrap">
           <h2 className="font-medium text-gray-800 dark:text-white capitalize">
             {user.role}
           </h2>
         </td>
-        <td className="py-4 text-sm whitespace-nowrap">
+        <td className="px-2 py-4 text-sm whitespace-nowrap">
           <div className="flex items-center mt-4 gap-x-4 sm:mt-0 justify-center">
             {isAdmin && (
               <button
@@ -274,8 +274,8 @@ const ManageUsers = () => {
                       <thead className="bg-gray-50 dark:bg-gray-800">
                         <tr>
                           <th className={`px-4 ${theadClass}`}>NAME</th>
-                          <th className={theadClass}>EMAIL</th>
-                          <th className={theadClass}>ROLE</th>
+                          <th className={`px-2 ${theadClass}`}>EMAIL</th>
+                          <th className={`px-2 ${theadClass}`}>ROLE</th>
                           <th className={`text-center ${theadClass}`}>
                             PRIVILEGES
                           </th>

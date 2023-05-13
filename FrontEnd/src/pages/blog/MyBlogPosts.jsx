@@ -57,7 +57,7 @@ export default function MyBlogPosts() {
     <div className="my-8">
       <BlogContainer>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-4 mt-4">
-          <h1 className="flex flex-row items-center justify-center ml-4 text-2xl font-bold text-white md:text-3xl">
+          <h1 className="flex flex-row items-start justify-start ml-4 text-2xl font-bold text-white md:text-3xl">
             My Blog Posts
           </h1>
           <hr className="border-green-200 border-1 w-full mt-4 mb-8" />

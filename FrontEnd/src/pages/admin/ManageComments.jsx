@@ -209,7 +209,7 @@ const ManageComments = () => {
               <div className="mt-6 md:flex md:items-center md:justify-between">
                 <div>
                   <h2 className="text-lg font-semibold text-gray-800 dark:text-white">
-                    BLOGS
+                    COMMENTS
                   </h2>
                 </div>
                 <div className="flex items-center mt-4 md:mt-0">
@@ -262,8 +262,12 @@ const ManageComments = () => {
                         </thead>
                         <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
                           {value.length > 0
-                            ? tableFilter.map((blog) => blogRow(blog))
-                            : blogs.map((blog) => blogRow(blog))}
+                            ? tableFilter.map((blog) =>
+                                blog.comments.length > 0 ? blogRow(blog) : null
+                              )
+                            : blogs.map((blog) =>
+                                blog.comments.length > 0 ? blogRow(blog) : null
+                              )}
                         </tbody>
                       </table>
                     </div>

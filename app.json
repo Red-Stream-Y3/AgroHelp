@@ -1,0 +1,28 @@
+{
+  "name": "AgroHelp",
+  "description": "Deploy agrohelp to heroku",
+  "keywords": ["agrohelp"],
+  "website": "https://github.com/Red-Stream-Y3/AF-assignment",
+  "repository": "https://github.com/Red-Stream-Y3/AF-assignment",
+  "env": {
+    "PORT": {
+      "description": "PORT",
+      "value": "9120"
+    },
+    "MONGO_URI": {
+      "description": "MONGODB URL",
+      "value": "mongodb+srv://"
+    },
+    "JWT_SECRET": {
+      "description": "JWT SECRET",
+      "value": "redstream"
+    },
+    "NODE_ENV": {
+      "description": "production or development",
+      "value": "production"
+    }
+  },
+  "buildpacks": {
+    "url": "heroku/nodejs"
+  }
+}

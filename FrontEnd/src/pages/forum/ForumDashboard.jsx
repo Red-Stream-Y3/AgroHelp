@@ -303,10 +303,9 @@ const ForumDashboard = (props) => {
                 id="forumContainer"
                 className="sm:px-20 sm:py-2 max-w-md sm:max-w-full m-auto">
                 {loading ? (
-                    <FaSpinner
-                        className={"animate-spin mt-5 sm:mt-10 mx-auto"}
-                        size={40}
-                    />
+                    <div>
+                        <Loader />
+                    </div>
                 ) : (
                     <>
                         {tab === "dashboard" && (

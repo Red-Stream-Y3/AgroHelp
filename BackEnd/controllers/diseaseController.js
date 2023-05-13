@@ -166,21 +166,20 @@ const searchCropDisease = asyncHandler(async (req, res) => {
   }
 });
 
-//@desc    get 4 random crop diseases
+//@desc    get latest 4 crop diseases
 //@route   GET /api/cropDiseases/random
 //@access  Public
 const getRandomCropDiseases = asyncHandler(async (req, res) => {
   try {
-    const cropDiseases = await CropDisease.aggregate([
-      { $sample: { size: 4 } },
-    ]);
+    const cropDiseases = await CropDisease.find({}).limit(4);
     if (cropDiseases) {
       res.json(cropDiseases);
     } else {
       res.status(404);
       throw new Error('Crop disease not found');
     }
-  } catch (error) {
+  }
+  catch (error) {
     console.log(error);
     res.status(400).json({ message: error.message });
   }
@@ -223,14 +222,24 @@ const getDiseasesByAuthor = asyncHandler(async (req, res) => {
   }
 });
 
+//@desc    add or remove disease bookmark
+//@route   PUT /api/diseases/bookmark/:id
+//@access  Private
+
 const addRemoveDiseaseBookmark = asyncHandler(async (req, res) => {
   try {
     const disease = await CropDisease.findById(req.params.id);
     if (disease) {
-      if(disease.bookmarkedBy.includes(req.user._id)){
-        disease.bookmarkedBy.pull(req.user._id);
-      }else{
-        disease.bookmarkedBy.push(req.user._id);
+      if (
+        disease.bookmarkedBy.filter(
+          (bookmark) => bookmark.toString() === req.body.userId.toString()
+        ).length > 0
+      ) {
+        disease.bookmarkedBy = disease.bookmarkedBy.filter(
+          (bookmark) => bookmark.toString() !== req.body.userId.toString()
+        );
+      } else {
+        disease.bookmarkedBy.push(req.body.userId);
       }
       const updatedDisease = await disease.save();
       res.json(updatedDisease);
@@ -246,7 +255,7 @@ const addRemoveDiseaseBookmark = asyncHandler(async (req, res) => {
 
 const getDiseaseBookmarksByUser = asyncHandler(async (req, res) => {
   try {
-    const diseases = await CropDisease.find({ bookmarkedBy: req.user._id });
+    const diseases = await CropDisease.find({ bookmarkedBy: req.params.id });
     if (diseases) {
       res.json(diseases);
     } else {

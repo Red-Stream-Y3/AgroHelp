@@ -1,11 +1,9 @@
 import axios from 'axios';
 
-// full route
-
 // get all crops
 export const getAllCrops = async () => {
   try {
-    const response = await axios.get('http://localhost:9120/api/crops');
+    const response = await axios.get('/api/crops');
     console.log('crop', response.data);
     return response.data;
   } catch (error) {
@@ -17,7 +15,7 @@ export const getAllCrops = async () => {
 // get all crops in short form
 export const getAllCropsShort = async () => {
   try {
-    const response = await axios.get('http://localhost:9120/api/crops/short');
+    const response = await axios.get('/api/crops/short');
     console.log('crop', response.data);
     return response.data;
   } catch (error) {
@@ -29,7 +27,7 @@ export const getAllCropsShort = async () => {
 // get crop by id
 export const getCropById = async (id) => {
   try {
-    const response = await axios.get(`http://localhost:9120/api/crops/${id}`);
+    const response = await axios.get(`/api/crops/${id}`);
     console.log('crop', response.data);
     return response.data;
   } catch (error) {
@@ -39,24 +37,31 @@ export const getCropById = async (id) => {
 };
 
 // create crop
-export const createCrop = async (crop) => {
+export const createCrop = async (crop, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
   try {
-    const response = await axios.post('http://localhost:9120/api/crops', crop);
-    console.log('crop', response.data);
-    return response.data;
+    const response = await axios.post('/api/crops', crop, config);
+    return response;
   } catch (error) {
     console.log(error);
-    return [];
   }
 };
 
 // update crop
-export const updateCrop = async (id, crop) => {
+export const updateCrop = async (id, crop, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
   try {
-    const response = await axios.put(
-      `http://localhost:9120/api/crops/${id}`,
-      crop
-    );
+    const response = await axios.put(`/api/crops/${id}`, crop, config);
     console.log('crop', response.data);
     return response.data;
   } catch (error) {
@@ -66,11 +71,15 @@ export const updateCrop = async (id, crop) => {
 };
 
 // delete crop
-export const deleteCrop = async (id) => {
+export const deleteCrop = async (id, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
   try {
-    const response = await axios.delete(
-      `http://localhost:9120/api/crops/${id}`
-    );
+    const response = await axios.delete(`/api/crops/${id}`, config);
     console.log('crop', response.data);
     return response.data;
   } catch (error) {
@@ -82,9 +91,7 @@ export const deleteCrop = async (id) => {
 // search crop
 export const searchCrop = async (name) => {
   try {
-    const response = await axios.get(
-      `http://localhost:9120/api/crops/search/q=${name}`
-    );
+    const response = await axios.get(`/api/crops/search/q=${name}`);
 
     return response;
   } catch (error) {
@@ -94,12 +101,15 @@ export const searchCrop = async (name) => {
 };
 
 // update crop as accept
-export const updateCropAccept = async (id, crop) => {
+export const updateCropAccept = async (id, crop, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
   try {
-    const response = await axios.put(
-      `http://localhost:9120/api/crops/${id}/accept`,
-      crop
-    );
+    const response = await axios.put(`/api/crops/${id}/accept`, crop, config);
     return response;
   } catch (error) {
     console.log(error);
@@ -109,9 +119,7 @@ export const updateCropAccept = async (id, crop) => {
 // get crops by author
 export const getCropsByAuthor = async (id) => {
   try {
-    const response = await axios.get(
-      'http://localhost:9120/api/crops/author/' + id
-    );
+    const response = await axios.get('/api/crops/author/' + id);
     console.log('crop', response.data);
     return response.data;
   } catch (error) {
@@ -123,7 +131,7 @@ export const getCropsByAuthor = async (id) => {
 // get all diseases
 export const getAllDiseases = async () => {
   try {
-    const response = await axios.get('http://localhost:9120/api/diseases');
+    const response = await axios.get('/api/diseases');
     console.log('disease', response.data);
     return response.data;
   } catch (error) {
@@ -135,9 +143,7 @@ export const getAllDiseases = async () => {
 // get random diseases
 export const getRandomDiseases = async () => {
   try {
-    const response = await axios.get(
-      'http://localhost:9120/api/diseases/random'
-    );
+    const response = await axios.get('/api/diseases/random');
     console.log('disease', response.data);
     return response.data;
   } catch (error) {
@@ -149,9 +155,7 @@ export const getRandomDiseases = async () => {
 // get disease by id
 export const getDiseaseById = async (id) => {
   try {
-    const response = await axios.get(
-      `http://localhost:9120/api/diseases/${id}`
-    );
+    const response = await axios.get(`/api/diseases/${id}`);
     console.log('disease', response.data);
     return response.data;
   } catch (error) {
@@ -161,12 +165,15 @@ export const getDiseaseById = async (id) => {
 };
 
 // create disease
-export const createDisease = async (disease) => {
+export const createDisease = async (disease, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
   try {
-    const response = await axios.post(
-      'http://localhost:9120/api/diseases',
-      disease
-    );
+    const response = await axios.post('/api/diseases', disease, config);
     console.log('disease', response.data);
     return response.data;
   } catch (error) {
@@ -176,12 +183,15 @@ export const createDisease = async (disease) => {
 };
 
 // update disease
-export const updateDisease = async (id, disease) => {
+export const updateDisease = async (id, disease, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
   try {
-    const response = await axios.put(
-      `http://localhost:9120/api/diseases/${id}`,
-      disease
-    );
+    const response = await axios.put(`/api/diseases/${id}`, disease, config);
     console.log('disease', response.data);
     return response.data;
   } catch (error) {
@@ -191,11 +201,15 @@ export const updateDisease = async (id, disease) => {
 };
 
 // delete disease
-export const deleteDisease = async (id) => {
+export const deleteDisease = async (id, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
   try {
-    const response = await axios.delete(
-      `http://localhost:9120/api/diseases/${id}`
-    );
+    const response = await axios.delete(`/api/diseases/${id}`, config);
     console.log('disease', response.data);
     return response.data;
   } catch (error) {
@@ -207,9 +221,7 @@ export const deleteDisease = async (id) => {
 // search disease
 export const searchDisease = async (name) => {
   try {
-    const response = await axios.get(
-      `http://localhost:9120/api/diseases/search/q=${name}`
-    );
+    const response = await axios.get(`/api/diseases/search/q=${name}`);
     return response;
   } catch (error) {
     console.log(error);
@@ -218,11 +230,18 @@ export const searchDisease = async (name) => {
 };
 
 // update disease as accept
-export const updateDiseaseAccept = async (id, crop) => {
+export const updateDiseaseAccept = async (id, crop, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
   try {
     const response = await axios.put(
-      `http://localhost:9120/api/diseases/${id}/accept`,
-      crop
+      `/api/diseases/${id}/accept`,
+      crop,
+      config
     );
     return response;
   } catch (error) {
@@ -233,9 +252,7 @@ export const updateDiseaseAccept = async (id, crop) => {
 // get diseases by author
 export const getDiseasesByAuthor = async (id) => {
   try {
-    const response = await axios.get(
-      'http://localhost:9120/api/diseases/author/' + id
-    );
+    const response = await axios.get('/api/diseases/author/' + id);
     console.log('disease', response.data);
     return response.data;
   } catch (error) {
@@ -247,8 +264,8 @@ export const getDiseasesByAuthor = async (id) => {
 export const addRemoveCropBookmarks = async (id, userId) => {
   try {
     const response = await axios.put(
-      `http://localhost:9120/api/crops/${id}/bookmark`,
-      userId
+      `http://localhost:9120/api/crops/bookmark/${id}`,
+      { userId }
     );
     return response;
   } catch (error) {
@@ -259,8 +276,8 @@ export const addRemoveCropBookmarks = async (id, userId) => {
 export const addRemoveDiseaseBookmarks = async (id, userId) => {
   try {
     const response = await axios.put(
-      `http://localhost:9120/api/diseases/${id}/bookmark`,
-      userId
+      `http://localhost:9120/api/diseases/bookmark/${id}`,
+      { userId }
     );
     return response;
   } catch (error) {
@@ -270,8 +287,7 @@ export const addRemoveDiseaseBookmarks = async (id, userId) => {
 
 export const getCropBookmarksByUser = async (id) => {
   try {
-    const response = await axios.get('http://localhost:9120/api/crops/bookmarks/' + id);
-    console.log('crop', response.data);
+    const response = await axios.get(`http://localhost:9120/api/crops/bookmarks/${id}`);
     return response.data;
   } catch (error) {
     console.log(error);
@@ -282,7 +298,6 @@ export const getCropBookmarksByUser = async (id) => {
 export const getDiseaseBookmarksByUser = async (id) => {
   try {
     const response = await axios.get('http://localhost:9120/api/diseases/bookmarks/' + id);
-    console.log('disease', response.data);
     return response.data;
   } catch (error) {
     console.log(error);
