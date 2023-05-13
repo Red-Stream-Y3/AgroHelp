@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Forum } from "../../api/forum.js";
 import { FaSpinner } from "react-icons/fa";
 import { useGlobalContext } from "../../context/ContextProvider";
-import { ForumCard, ForumCardContainer, ForumSearch, ForumSearchResults } from "../../components";
+import { ForumCard, ForumCardContainer, ForumSearch, ForumSearchResults, Loader } from "../../components";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { MdOutlineAdd } from "react-icons/md";
@@ -311,10 +311,9 @@ const ForumDashboard = (props) => {
                 id="forumContainer"
                 className="sm:px-20 sm:py-2 max-w-md sm:max-w-full m-auto">
                 {loading ? (
-                    <FaSpinner
-                        className={"animate-spin mt-5 sm:mt-10 mx-auto"}
-                        size={40}
-                    />
+                    <div>
+                        <Loader />
+                    </div>
                 ) : (
                     <>
                         {tab === "dashboard" && (
