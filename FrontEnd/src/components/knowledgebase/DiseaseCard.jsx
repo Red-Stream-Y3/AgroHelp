@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 
 const DiseaseCard = ({ disease }) => {
   return (
-    <div className="max-w-sm rounded-lg bg-darkbg overflow-hidden shadow-lg text-white">
+    <div className="max-w-sm rounded-lg bg-darkbg overflow-hidden shadow-lg text-white transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-20 cursor-pointer">
       {disease && (
         <Link to={`/disease/${disease._id}`}>
         <img className="h-48 w-96 object-cover"

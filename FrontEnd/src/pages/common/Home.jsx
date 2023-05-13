@@ -192,8 +192,8 @@ const Home = () => {
           </div>
 
           {/* latest forums */}
-          <div className="text-white p-5 sm:p-10">
-              <div>
+          <div className="flex flex-col items-center justify-center text-white mb-10">
+              <div className="flex flex-col items-start place-items-start py-5 px-8 ml-0 mr-auto w-full">
                   <h1 className="text-2xl text-white font-bold md:text-3xl">
                       Latest Forums
                   </h1>
@@ -202,7 +202,7 @@ const Home = () => {
                   </p>
                   <hr className="border-gray-500 border-1 w-full mt-4" />
               </div>
-              <div>
+              <div className="flex flex-wrap justify-center mx-4 md:mx-0">
                   {forumsLoading ? (
                       <Skeleton count={6} />
                   ) : (
