@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom'
 import { getDiseaseById, addRemoveDiseaseBookmarks } from '../../api/knowlegdebase'
 import { getAuthorInfo } from '../../api/user'
 import { Loader } from '../../components'
-import { FaBookmark, FaFlag } from 'react-icons/fa'
+import { BsBookmarkCheckFill, BsBookmarkDashFill } from 'react-icons/bs'
 
 const Disease = () => {
   const { id } = useParams()
@@ -19,11 +19,6 @@ const Disease = () => {
     userId = user._id
   }
 
-  const diseaseId = disease._id
-
-  console.log('diseaseid', diseaseId)
-  console.log('userid', userId)
-
   useEffect(() => { 
     const fetchDisease = async () => {
         const disease = await getDiseaseById(id)
@@ -33,8 +28,6 @@ const Disease = () => {
     }
     fetchDisease()
   }, [id])
-
-  console.log('authorId', authorId)
 
   useEffect(() => {
     if (authorId) {
@@ -46,17 +39,34 @@ const Disease = () => {
     }
   }, [authorId])
 
-    const handleBookmark = async () => {
-        const response = await addRemoveDiseaseBookmarks(diseaseId, userId)
-        if (response) {
-            alert('Disease bookmarked')
+    const checkBookmark = async () => {
+        console.log('calling check bookmark')
+        if (disease.bookmarkedBy.includes(userId)) {
+            console.log('true')
+            return true
+        } else {
+            console.log('false')
+            return false
         }
     }
-    
-    // const handleReport = async (cropId) => {
-    //   const response = await reportCrop(cropId, userId)
-    //   console.log(response)
-    // }
+
+    const handleBookmark = async (diseaseId) => {
+        const response = await addRemoveDiseaseBookmarks(diseaseId, userId)
+        console.log('calling handle bookmark')
+        if (response) {
+            if (response.data.bookmarkedBy.includes(userId)) {
+                alert('Disease bookmarked')
+            }
+            else {
+                alert('Disease removed from bookmarks')
+            }
+        }
+        setDisease(response.data)
+        console.log('set data')
+        console.log('response', response.data.bookmarkedBy)
+    }
+
+
 
   if (isLoading) {
     return (
@@ -108,15 +118,24 @@ const Disease = () => {
 
                 {/* bookmark and report */}
                 <div className="flex ml-auto">
-                    <button 
-                        className="flex items-center justify-center bg-slate-500 text-white rounded-full h-10 w-10 mr-2"
-                        onClick={() => handleBookmark()}
+                {disease && !(disease.bookmarkedBy.includes(userId)) ? (
+                    <button
+                        className="flex items-center justify-center bg-green-500 text-white rounded-full h-10 w-10 mr-2"
+                        onClick={() => handleBookmark(disease._id)}
                     >
-                        <FaBookmark className="h-6 w-6" />
+                        <BsBookmarkCheckFill className="h-6 w-6" />
                     </button>
+                    ) : (
+                    <button
+                        className="flex items-center justify-center bg-red-500 text-white rounded-full h-10 w-10 mr-2"
+                        onClick={() => handleBookmark(disease._id)}
+                    >
+                        <BsBookmarkDashFill className="h-6 w-6" />
+                    </button>
+                )}
                     {/* <button 
                         className="flex items-center justify-center bg-red-500 text-white rounded-full h-10 w-10"
-                        onClick={() => handleReport(crop._id)}
+                        onClick={() => handleReport(disease._id)}
                     >
                         <FaFlag className="h-6 w-6" />
                     </button> */}
@@ -166,15 +185,26 @@ const Disease = () => {
                             </p>
                             {/* bookmark and report */}
                             <div className="flex ml-auto">
-                                <button 
-                                    className="flex items-center justify-center bg-slate-500 text-white rounded-full h-10 w-10 mr-2"
-                                    onClick={() => handleBookmark()}
+                            {disease && !(disease.bookmarkedBy.includes(userId)) ? (
+                                <button
+                                    className="flex items-center justify-center bg-green-500 text-white rounded-full h-10 w-10 mr-2"
+                                    onClick={() => handleBookmark(disease._id)}
                                 >
-                                    <FaBookmark className="h-6 w-6" />
+                                    <BsBookmarkCheckFill className="h-6 w-6" />
                                 </button>
+                                ) : (
+                                <button
+                                    className="flex items-center justify-center bg-red-500 text-white rounded-full h-10 w-10 mr-2"
+                                    onClick={() => handleBookmark(disease._id)}
+                                >
+                                    <BsBookmarkDashFill className="h-6 w-6" />
+                                </button>
+                            )}
+
+                            
                                 {/* <button 
                                     className="flex items-center justify-center bg-red-500 text-white rounded-full h-10 w-10"
-                                    onClick={() => handleReport(crop._id)}
+                                    onClick={() => handleReport(disease._id)}
                                 >
                                     <FaFlag className="h-6 w-6" />
                                 </button> */}
