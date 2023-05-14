@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom'
 const DiseaseCard = ({ disease }) => {
   return (
     <div className="max-w-sm rounded-lg bg-darkbg overflow-hidden shadow-lg text-white">
-      <Link to={`/disease/${disease._id}`}>
+      {disease && (
+        <Link to={`/disease/${disease._id}`}>
         <img className="h-48 w-96 object-cover"
              src={disease.diseaseImage[0]}
              alt={disease.diseaseName} 
@@ -25,6 +26,7 @@ const DiseaseCard = ({ disease }) => {
           </p>
         </div>
       </Link>
+      )}
     </div>
   )
 }
