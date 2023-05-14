@@ -306,7 +306,9 @@ const blogCommentAccept = asyncHandler(async (req, res) => {
 
 const getLatestBlogs = asyncHandler(async (req, res) => {
   try {
-    const latestBlogPosts = await Blog.find().sort({createdAt: -1}).limit(4);
+    const latestBlogPosts = await Blog.find({isAccepted: true}).sort({createdAt: -1}).limit(4).populate( 'author',
+    'username firstName lastName'
+    );
     if (latestBlogPosts) {
       res.status(200).json(latestBlogPosts);
     } else {
