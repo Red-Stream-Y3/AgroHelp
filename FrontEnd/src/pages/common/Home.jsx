@@ -250,32 +250,30 @@ const Home = () => {
           </p>
           <hr className="border-gray-500 border-1 w-full mt-4" />
         </div>
-        <div className="">
-          <BlogContainer>
-            <div>
-              {blogs.map((blog) => (
-                <div key={blog._id}>
-                  <Link to={`/viewblog/${blog._id}`}>
-                    <div className="my-4">
-                      <PublicBlogCard
-                        title={blog.title}
-                        author={
-                          blog.author.firstName + " " + blog.author.lastName
-                        }
-                        authorID={blog.author._id}
-                        date={blog.createdAt}
-                        tags={blog.tags}
-                        likes={blog.likes.length}
-                        dislikes={blog.dislikes.length}
-                        comments={blog.comments.length}
-                        bookmarked={blog.bookmarked}
-                      />
-                    </div>
-                  </Link>
-                </div>
-              ))}
-            </div>
-          </BlogContainer>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 bg-gray-900 mb-4 mt-4 rounded-lg">
+          <div>
+            {blogs.map((blog) => (
+              <div key={blog._id}>
+                <Link to={`/viewblog/${blog._id}`}>
+                  <div className="my-4">
+                    <PublicBlogCard
+                      title={blog.title}
+                      author={
+                        blog.author.firstName + " " + blog.author.lastName
+                      }
+                      authorID={blog.author._id}
+                      date={blog.createdAt}
+                      tags={blog.tags}
+                      likes={blog.likes.length}
+                      dislikes={blog.dislikes.length}
+                      comments={blog.comments.length}
+                      bookmarked={blog.bookmarked}
+                    />
+                  </div>
+                </Link>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
