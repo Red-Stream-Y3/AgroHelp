@@ -14,12 +14,14 @@ import {
   blogCommentAccept,
   getBlogsByAuthor,
   bookmarkBlog,
-  getBookmarkedBlogs
+  getBookmarkedBlogs,
+  getLatestBlogs
 } from '../controllers/blogController.js';
 
 const router = express.Router();
 
 router.route('/').get(getBlogs).post(createBlog);
+router.route('/new').get(getLatestBlogs);
 router.route('/:id').get(getBlogById).put(updateBlog).delete(deleteBlog);
 router.route('/:id/accept').put(updateBlogAccept);
 router.route('/:id/comment').put(blogCommentAccept);
