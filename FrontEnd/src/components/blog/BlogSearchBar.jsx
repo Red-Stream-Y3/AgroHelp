@@ -32,7 +32,7 @@ const SearchBar = () => {
             type="text"
             name="search"
             id="search"
-            className="w-88 px-4 py-2 bg-lightbg text-white shadow-lg rounded-lg focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-transparent"
+            className="w-88 px-4 py-2 bg-darkbg text-white shadow-lg rounded-lg ring-1 focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-transparent"
             placeholder="Search"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
