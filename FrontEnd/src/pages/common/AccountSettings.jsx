@@ -3,9 +3,19 @@ import { useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useGlobalContext } from '../../context/ContextProvider';
 import { updateProfile, requestRole } from '../../api/user';
+import { Loader } from '../../components';
 
 function AccountSettings() {
   const { user, setUser } = useGlobalContext();
+  
+  if (!user) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Loader />
+      </div>
+    )
+  }
+
   const isAdmin = user && user.role === 'admin';
   const [username, setUserName] = useState(user.username);
   const [email, setEmail] = useState(user.email);
@@ -94,7 +104,7 @@ function AccountSettings() {
   };
 
   return (
-    <div className="bg-darkbg w-3/4 rounded-lg mx-auto my-10 px-10 py-10">
+    <div className="bg-lightbg w-3/4 rounded-lg mx-auto my-10 md:bg-darkbg md:p-10">
       <div>
         <form>
           <div className="space-y-12">

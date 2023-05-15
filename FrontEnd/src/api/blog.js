@@ -184,3 +184,15 @@ export const getBookmarkedBlogs = async (userId) => {
     return [];
   }
 };
+
+
+//get latest four blogPosts
+export const getLatestBlogPosts = async () => {
+  try {
+    const response = await axios.get('/api/blog/new');
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+};

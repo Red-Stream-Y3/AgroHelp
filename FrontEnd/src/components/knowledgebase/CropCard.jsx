@@ -2,8 +2,9 @@ import { Link } from 'react-router-dom'
 
 const CropCard = ({ crop }) => {
   return (
-    <div className="max-w-sm rounded-lg bg-darkbg overflow-hidden shadow-lg text-white">
-      <Link to={`/crop/${crop._id}`}>
+    <div className="max-w-sm rounded-lg bg-darkbg overflow-hidden shadow-lg text-white transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-20 cursor-pointer">
+      {crop && (
+        <Link to={`/crop/${crop._id}`}>
         <img className="h-48 w-96 object-cover"
              src={crop.cropImage} 
              alt={crop.cropName} 
@@ -21,6 +22,7 @@ const CropCard = ({ crop }) => {
           </p>
         </div>
       </Link>
+      )}
     </div>
   )
 }

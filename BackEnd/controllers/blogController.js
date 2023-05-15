@@ -300,6 +300,27 @@ const blogCommentAccept = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc    GEt random 4 blogs
+// @route   GET /api/blog/random
+// @access  Public
+
+const getLatestBlogs = asyncHandler(async (req, res) => {
+  try {
+    const latestBlogPosts = await Blog.find({isAccepted: true}).sort({createdAt: -1}).limit(4).populate( 'author',
+    'username firstName lastName'
+    );
+    if (latestBlogPosts) {
+      res.status(200).json(latestBlogPosts);
+    } else {
+      throw new Error('No blogs found');
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(404).json({ message: 'No blogs found' });
+  }
+});
+
+
 export {
   getBlogs,
   getBlogById,
@@ -316,4 +337,5 @@ export {
   blogCommentAccept,
   bookmarkBlog,
   getBookmarkedBlogs,
+  getLatestBlogs
 };

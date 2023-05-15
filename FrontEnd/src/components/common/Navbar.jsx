@@ -257,6 +257,7 @@ const Navbar = () => {
             <Link
               to="/"
               className="flex px-3 py-2 text-base font-medium text-white hover:bg-secondary rounded-md items-center"
+              onClick={toggleMenu}
             >
               <FaHome className="h-6 w-6" />
               <span className="ml-2">Home</span>
@@ -264,6 +265,7 @@ const Navbar = () => {
             <Link
               to="/knowledge-base"
               className="flex px-3 py-2 text-base font-medium text-white hover:bg-secondary rounded-md items-center"
+              onClick={toggleMenu}
             >
               <FaBookOpen className="h-6 w-6" />
               <span className="ml-2">Knowledge Base</span>
@@ -271,6 +273,7 @@ const Navbar = () => {
             <Link
               to="/forum"
               className="flex px-3 py-2 text-base font-medium text-white hover:bg-secondary rounded-md items-center"
+              onClick={toggleMenu}
             >
               <FaQuestion className="h-6 w-6" />
               <span className="ml-2">Forum</span>
@@ -278,6 +281,7 @@ const Navbar = () => {
             <Link
               to="/blog"
               className="flex px-3 py-2 text-base font-medium text-white hover:bg-secondary rounded-md items-center"
+              onClick={toggleMenu}
             >
               <FaPenNib className="h-6 w-6" />
               <span className="ml-2">Blog</span>
@@ -287,6 +291,7 @@ const Navbar = () => {
               <Link
                 to="/login"
                 className="flex bg-secondary px-3 py-2 text-base font-medium text-white hover:bg-primary rounded-md items-center"
+                onClick={toggleMenu}
               >
                 <FaSignInAlt className="h-6 w-6" />
                 <span className="ml-2">Login</span>
@@ -296,6 +301,7 @@ const Navbar = () => {
               <Link
                 to="/register"
                 className="flex bg-secondary px-3 py-2 text-base font-medium text-white hover:bg-primary rounded-md items-center"
+                onClick={toggleMenu}
               >
                 <FaUserPlus className="h-6 w-6" />
                 <span className="ml-2">Register</span>
@@ -315,20 +321,24 @@ const Navbar = () => {
                   aria-hidden="true"
                 />
               </div>
-              <input
-                type="text"
-                name="search"
-                id="search"
-                className="bg-secondary rounded-full w-full px-4 pl-10 py-2 focus:outline-none focus:shadow-outline focus:bg-primarydark focus:ring-2 focus:ring-primary placeholder:text-gray-200 focus:text-white"
-                placeholder="Search"
-              />
+              <form onChange={handleSearch}>
+                <input
+                  type="text"
+                  name="search"
+                  id="search"
+                  className="bg-secondary rounded-full w-full px-4 pl-10 py-2 focus:outline-none focus:shadow-outline focus:bg-primarydark focus:ring-2 focus:ring-primary placeholder:text-gray-200 focus:text-white"
+                  placeholder="Search"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                />
+              </form>
             </div>
           </div>
         </div>
       )}
 
       {isProfilePopupOpen && (
-        <div className="lg w-56 absolute right-0 rounded-xl">
+        <div className="lg w-56 absolute right-0 rounded-xl z-20">
           <div className="px-2 pt-2 pb-3 space-y-1 bg-primarydark rounded-b-xl">
             <Link
               to="/profile"

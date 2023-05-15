@@ -19,7 +19,11 @@ export const getForums = async (checkStatus) => {
   if (res.data) {
     return res.data;
   } else {
-    checkStatus(res);
+    try {
+      checkStatus(res);
+    } catch (error) {
+      //checkstatus not provided
+    }
     return null;
   }
 };
@@ -31,7 +35,11 @@ export const getForumById = async (id, checkStatus) => {
   if (res.data) {
     return res.data;
   } else {
-    checkStatus(res);
+    try {
+      checkStatus(res);
+    } catch (error) {
+      //checkstatus not provided
+    }
     return null;
   }
 };
@@ -56,7 +64,11 @@ export const createForum = async (user, forum, checkStatus) => {
   if (res.data) {
     return res.data;
   } else {
-    checkStatus(res);
+    try {
+      checkStatus(res);
+    } catch (error) {
+      //checkstatus not provided
+    }
     return null;
   }
 };
@@ -81,7 +93,11 @@ export const updateForum = async (user, forum, checkStatus) => {
   if (res.data) {
     return res.data;
   } else {
-    checkStatus(res);
+    try {
+      checkStatus(res);
+    } catch (error) {
+      //checkstatus not provided
+    }
     return null;
   }
 };
@@ -93,7 +109,11 @@ export const deleteForum = async (user, id, checkStatus) => {
   if (res.data) {
     return res.data;
   } else {
-    checkStatus(res);
+    try {
+      checkStatus(res);
+    } catch (error) {
+      //checkstatus not provided
+    }
     return null;
   }
 };
@@ -105,7 +125,11 @@ export const searchForums = async (query, checkStatus) => {
   if (res.data) {
     return res.data;
   } else {
-    checkStatus(res);
+    try {
+      checkStatus(res);
+    } catch (error) {
+      //checkstatus not provided
+    }
     return null;
   }
 };
@@ -127,7 +151,11 @@ export const subscribeToForum = async (user, id, checkStatus) => {
   if (res.data) {
     return res.data;
   } else {
-    checkStatus(res);
+    try {
+      checkStatus(res);
+    } catch (error) {
+      //checkstatus not provided
+    }
     return null;
   }
 };
@@ -149,7 +177,11 @@ export const unsubscribeFromForum = async (user, id, checkStatus) => {
   if (res.data) {
     return res.data;
   } else {
-    checkStatus(res);
+    try {
+      checkStatus(res);
+    } catch (error) {
+      //checkstatus not provided
+    }
     return null;
   }
 };
@@ -165,7 +197,11 @@ export const getSubscribedForumsByUser = async (user, checkStatus) => {
     if (res.data) {
       return res.data;
     } else {
-      checkStatus(res);
+      try {
+        checkStatus(res);
+      } catch (error) {
+        //checkstatus not provided
+      }
       return null;
     }
   } catch (error) {
@@ -190,7 +226,11 @@ export const likeForum = async (user, id, checkStatus) => {
   if (res.data) {
     return res.data;
   } else {
-    checkStatus(res);
+    try {
+      checkStatus(res);
+    } catch (error) {
+      //checkstatus not provided
+    }
     return null;
   }
 };
@@ -202,7 +242,11 @@ export const getLikedForumsByUser = async (user, checkStatus) => {
   if (res.data) {
     return res.data;
   } else {
-    checkStatus(res);
+    try {
+      checkStatus(res);
+    } catch (error) {
+      //checkstatus not provided
+    }
     return null;
   }
 };
@@ -224,7 +268,11 @@ export const dislikeForum = async (user, id, checkStatus) => {
   if (res.data) {
     return res.data;
   } else {
-    checkStatus(res);
+    try {
+      checkStatus(res);
+    } catch (error) {
+      //checkstatus not provided
+    }
     return null;
   }
 };
@@ -239,7 +287,11 @@ export const getDislikedForumsByUser = async (user, checkStatus) => {
   if (res.data) {
     return res.data;
   } else {
-    checkStatus(res);
+    try {
+      checkStatus(res);
+    } catch (error) {
+      //checkstatus not provided
+    }
     return null;
   }
 };
@@ -261,7 +313,11 @@ export const replyToForum = async (user, id, reply, checkStatus) => {
   if (res.data) {
     return res.data;
   } else {
-    checkStatus(res);
+    try {
+      checkStatus(res);
+    } catch (error) {
+      //checkstatus not provided
+    }
     return null;
   }
 };
@@ -276,7 +332,11 @@ export const deleteReply = async (user, id, replyID, checkStatus) => {
   if (res.data) {
     return res.data;
   } else {
-    checkStatus(res);
+    try {
+      checkStatus(res);
+    } catch (error) {
+      //checkstatus not provided
+    }
     return null;
   }
 };
@@ -298,7 +358,11 @@ export const editReply = async (user, id, replyID, reply, checkStatus) => {
   if (res.data) {
     return res.data;
   } else {
-    checkStatus(res);
+    try {
+      checkStatus(res);
+    } catch (error) {
+      //checkstatus not provided
+    }
     return null;
   }
 };
@@ -320,7 +384,11 @@ export const likeReply = async (user, id, replyID, checkStatus) => {
   if (res.data) {
     return res.data;
   } else {
-    checkStatus(res);
+    try {
+      checkStatus(res);
+    } catch (error) {
+      //checkstatus not provided
+    }
     return null;
   }
 };
@@ -342,7 +410,11 @@ export const dislikeReply = async (user, id, replyID, checkStatus) => {
   if (res.data) {
     return res.data;
   } else {
-    checkStatus(res);
+    try {
+      checkStatus(res);
+    } catch (error) {
+      //checkstatus not provided
+    }
     return null;
   }
 };
@@ -358,7 +430,11 @@ export const acceptReply = async (user, id, replyID, checkStatus) => {
   if (res.data) {
     return res.data;
   } else {
-    checkStatus(res);
+    try {
+      checkStatus(res);
+    } catch (error) {
+      //checkstatus not provided
+    }
     return null;
   }
 };
@@ -374,7 +450,11 @@ export const markResolved = async (user, id, checkStatus) => {
   if (res.data) {
     return res.data;
   } else {
-    checkStatus(res);
+    try {
+      checkStatus(res);
+    } catch (error) {
+      //checkstatus not provided
+    }
     return null;
   }
 };
@@ -390,7 +470,11 @@ export const getForumsByUser = async (user, checkStatus) => {
     if (res.data) {
       return res.data;
     } else {
-      checkStatus(res);
+      try {
+        checkStatus(res);
+      } catch (error) {
+        //checkstatus not provided
+      }
       return null;
     }
   } catch (error) {
