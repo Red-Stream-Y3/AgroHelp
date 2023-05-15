@@ -43,7 +43,7 @@ const PublicBlogCrad = ({
   }
 
   return (
-    <div className="bg-gray-700 rounded-lg shadow-lg p-4 transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-20 hover:bg-gray-800 cursor-pointer">
+    <div className="bg-darkbg rounded-lg shadow-lg p-4 transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-20 hover:bg-opacity-80 cursor-pointer">
       <div className="text-2xl font-bold mb-2 text-white">{title}</div>
       <hr className="w-full border-primarylight mb-4" />
       <div className="text-gray-400 text-sm mb-2 flex items-center">

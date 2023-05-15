@@ -275,7 +275,7 @@ export default function BlogView() {
               blog.comments.map((comment, index) => (
                 <div
                   key={index}
-                  className="bg-lightbg text-white p-2 rounded mb-2"
+                  className="bg-darkbg bg-opacity-70 text-white p-2 rounded mb-2"
                 >
                   <div className="font-bold mb-1">@{comment.userName}</div>
                   <div>{comment.text}</div>

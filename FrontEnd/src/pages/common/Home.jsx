@@ -249,7 +249,7 @@ const Home = () => {
               </p>
               <hr className="border-gray-500 border-1 w-full mt-4" />
             </div>
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 bg-gray-900 mb-4 mt-4 rounded-lg">
+            <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
               {blogs.map((blog) => (
                 <div key={blog._id}>
                   <Link to={`/viewblog/${blog._id}`}>
