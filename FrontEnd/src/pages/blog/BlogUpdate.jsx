@@ -94,7 +94,9 @@ export default function BlogUpdate() {
 
         <form onSubmit={handleSubmit} className="my-4">
           <div className="flex flex-col">
-            <label className="text-xl text-gray-200 font-bold my-4">Title</label>
+            <label className="text-xl text-gray-200 font-bold my-4">
+              Title
+            </label>
             <input
               className="border-2 border-gray-300 p-2 rounded-lg"
               type="text"
@@ -106,7 +108,9 @@ export default function BlogUpdate() {
           </div>
 
           <div className="flex flex-col my-4">
-            <label className=" text-gray-200 font-bold text-xl my-4">Content</label>
+            <label className=" text-gray-200 font-bold text-xl my-4">
+              Content
+            </label>
             <Editor
               apiKey="in0avjv2q4rxzz3r60yiu4b4m1uej22oxbuc8pohxxbj2npx"
               value={body}
@@ -180,7 +184,7 @@ export default function BlogUpdate() {
             type="submit"
             onClick={handleSubmit}
           >
-            Save Chnages
+            Save Changes
           </button>
         </form>
 
