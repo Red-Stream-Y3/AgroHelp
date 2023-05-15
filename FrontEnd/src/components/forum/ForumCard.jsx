@@ -338,7 +338,7 @@ const ForumCard = ({
     };
 
     return (
-        <div className="rounded-md bg-darkbg p-3 mt-2 w-full sm:max-w-4xl text-sm sm:text-base">
+        <div className="rounded-md bg-darkbg p-3 mt-2 w-full sm:max-w-4xl text-sm sm:text-base transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-20 cursor-pointer">
             {!loading ? (
                 <div>
                     <div className="sm:flex sm:justify-between mb-1 sm:mb-0">

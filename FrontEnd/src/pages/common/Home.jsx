@@ -169,6 +169,7 @@ const Home = () => {
         </div>
       </div>
 
+
       <div className="flex flex-col items-center justify-center">
         <div className="flex flex-col items-start place-items-start py-5 px-8 ml-0 mr-auto w-full">
           <h1 className="text-2xl text-white font-bold md:text-3xl">
@@ -200,6 +201,31 @@ const Home = () => {
                 onClick={handleNextClickDisease}
               />
             </div>
+
+          {/* latest forums */}
+          <div className="flex flex-col items-center justify-center text-white mb-10">
+              <div className="flex flex-col items-start place-items-start py-5 px-8 ml-0 mr-auto w-full">
+                  <h1 className="text-2xl text-white font-bold md:text-3xl">
+                      Latest Forums
+                  </h1>
+                  <p className="text-gray-300 text-md md:text-lg">
+                      Ask questions and get answers from the community
+                  </p>
+                  <hr className="border-gray-500 border-1 w-full mt-4" />
+              </div>
+              <div className="flex flex-wrap justify-center mx-4 md:mx-0">
+                  {forumsLoading ? (
+                      <Skeleton count={6} />
+                  ) : (
+                      <ForumCardContainer
+                          forums={forums}
+                          loaded={forumLoaded}
+                          tab="home"
+                          refresh={refreshForums}
+                          refreshAll={() => setForumLoaded(false)}
+                      />
+                  )}
+              </div>
           </div>
         </div>
 

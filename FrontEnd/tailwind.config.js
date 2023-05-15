@@ -23,6 +23,7 @@ export default {
         30: '8.5rem',
         50: '12.5rem',
         80: '20rem',
+        88: '22rem',
         102: '26rem',
         100: '25rem',
         120: '30rem',

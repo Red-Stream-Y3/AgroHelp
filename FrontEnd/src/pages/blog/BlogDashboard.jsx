@@ -110,7 +110,7 @@ export default function BlogDashboard() {
                   </div>
                 )}
               </div>
-              <div className="ml-4 mt-4 lg:mt-0 justify-end lg:justify-end">
+              <div className="justify-center md:justify-end">
                 <BlogSearchBar />
               </div>
             </div>
