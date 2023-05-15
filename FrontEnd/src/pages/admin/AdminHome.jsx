@@ -35,10 +35,7 @@ const AdminHome = () => {
           <main className="flex-1 flex flex-col">
             {/* Button to open sidebar */}
             <div className="md:hidden flex justify-start h-18 w-8 bg-darkbg rounded-r-md">
-              <button
-                className="text-white rounded-md"
-                onClick={toggleSidebar}
-              >
+              <button className="text-white rounded-md" onClick={toggleSidebar}>
                 {isSidebarOpen ? (
                   <FaAngleLeft className="text-3xl" />
                 ) : (
@@ -46,14 +43,14 @@ const AdminHome = () => {
                 )}
               </button>
             </div>
-
-            {/* Content */}
-            <div className="flex flex-col w-full overflow-x-auto md:overflow-x-hidden">
-              <div className="flex-grow p-6">
-                <Outlet />
-              </div>
-            </div>
           </main>
+
+          {/* Content */}
+          <div className="flex flex-col w-full overflow-x-auto md:overflow-x-hidden">
+            <div className="flex-grow p-6">
+              <Outlet />
+            </div>
+          </div>
         </div>
       )}
     </>

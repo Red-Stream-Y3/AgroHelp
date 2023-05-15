@@ -204,7 +204,7 @@ const ManageComments = () => {
         <Loader />
       ) : (
         <>
-          <div className="grid gap-4 md:gap-8 mt-8 pb-10 md:px-5 bg-gray-900 rounded-xl">
+          <div className="grid gap-4 md:gap-8 mt-8 pb-10 md:px-5 bg-gray-900 rounded-xl overflow-x-auto">
             <section className="container px-4 mx-auto">
               <div className="mt-6 md:flex md:items-center md:justify-between">
                 <div>
