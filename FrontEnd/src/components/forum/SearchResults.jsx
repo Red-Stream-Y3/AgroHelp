@@ -3,6 +3,7 @@ import { AiOutlineInfoCircle } from "react-icons/ai";
 import { FaSpinner } from "react-icons/fa";
 import Popup from "../common/Popup";
 import { useGlobalContext } from "../../context/ContextProvider";
+import ForumCard from "./ForumCard";
 
 const SearchResults = ({ searching, searchResults, setSearched }) => {
     const { notify } = useGlobalContext();
