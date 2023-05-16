@@ -20,7 +20,7 @@ const ManageKnowledge = () => {
   const [loading, setLoading] = useState(true);
   const [cropTable, setCropTable] = useState(false);
 
-  const user = JSON.parse(localStorage.getItem('user'));
+  const user = JSON.parse(localStorage.getItem('userInfo'));
 
   const getCrops = async () => {
     const data = await getAllCrops();
