@@ -26,7 +26,8 @@ connectDB();
 
 const app = express();
 
-app.use(express.json());
+app.use(cors());
+app.use(bodyParser.json());
 
 // Use middleware to increment visitor count
 app.use(visitMiddleware);

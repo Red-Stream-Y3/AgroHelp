@@ -129,6 +129,13 @@ const ForumDashboard = (props) => {
         refreshSubscribedForums();
     }, [user]);
 
+    //get search results
+    useEffect(() => {
+        if (searched && search.length > 0) {
+            handleSearch();
+        }
+    }, [search]);
+
     //refresh all forums
     const refreshAllForums = async (keepCurrent) => {
         const refresh = async () => {
@@ -171,7 +178,12 @@ const ForumDashboard = (props) => {
 
 		setCreateForumLoading(true);
 
-		const res = await Forum.createForum(user, {title:title, content:content}, checkStatus);
+		const res = await Forum.createForum(user, {title:title, content:content}, (res) => {
+            res.status >= 400
+                ? notify("error", "Error getting recent forums")
+                : null;
+        });
+        
 		if (res) {
 			setShowCreateForum(false);
 			setTitle("");
