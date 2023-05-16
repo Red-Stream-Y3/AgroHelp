@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import {
   getAllBlogs,
   deleteBlogComment,
@@ -105,9 +106,11 @@ const ManageComments = () => {
     return (
       <tr key={blog._id}>
         <td className="px-4 py-4 text-sm font-medium whitespace-nowrap">
-          <h2 className="font-medium text-gray-800 dark:text-white capitalize">
-            {blog.title.split(' ').slice(0, 5).join(' ')} ...
-          </h2>
+          <Link to={`/viewblog/${blog._id}`}>
+            <h2 className="font-medium text-gray-800 dark:text-white capitalize">
+              {blog.title.split(' ').slice(0, 5).join(' ')} ...
+            </h2>
+          </Link>
         </td>
         <td className="py-4 text-sm whitespace-nowrap">
           <h2 className="font-medium text-gray-800 dark:text-white capitalize">
