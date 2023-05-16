@@ -171,7 +171,12 @@ const ForumDashboard = (props) => {
 
 		setCreateForumLoading(true);
 
-		const res = await Forum.createForum(user, {title:title, content:content}, checkStatus);
+		const res = await Forum.createForum(user, {title:title, content:content}, (res) => {
+            res.status >= 400
+                ? notify("error", "Error getting recent forums")
+                : null;
+        });
+        
 		if (res) {
 			setShowCreateForum(false);
 			setTitle("");
