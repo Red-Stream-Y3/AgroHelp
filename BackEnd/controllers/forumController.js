@@ -84,7 +84,7 @@ const searchForums = asyncHandler(async (req, res) => {
   const title = req.params.q;
 
   const forums = await Forum.find({
-    title: { $regex: title, $options: '' },
+    title: { $regex: title, $options: 'i' },
   });
 
   if (forums) {
