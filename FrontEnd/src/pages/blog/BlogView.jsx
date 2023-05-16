@@ -1,24 +1,24 @@
 /** @format */
 
-import React, { useEffect, useState } from "react";
-import { BlogContainer, BlogHeader } from "../../components";
-import { useParams } from "react-router-dom";
-import { BsBookmarkCheckFill, BsBookmarkPlus } from "react-icons/bs";
-import { useGlobalContext } from "../../context/ContextProvider";
-import { toast } from "react-toastify";
+import React, { useEffect, useState } from 'react';
+import { BlogContainer, BlogHeader } from '../../components';
+import { useParams } from 'react-router-dom';
+import { BsBookmarkCheckFill, BsBookmarkPlus } from 'react-icons/bs';
+import { useGlobalContext } from '../../context/ContextProvider';
+import { toast } from 'react-toastify';
 import {
   getBlogById,
   commentonBlog,
   likeBlog,
   disLikeBlog,
   handleBlogBookamrk,
-} from "../../api/blog";
+} from '../../api/blog';
 import {
   AiOutlineLike,
   AiOutlineDislike,
   AiFillDislike,
   AiFillLike,
-} from "react-icons/ai";
+} from 'react-icons/ai';
 
 export default function BlogView() {
   const { id } = useParams();
@@ -38,7 +38,7 @@ export default function BlogView() {
   let userId;
   let userName;
 
-  const userDetails = JSON.parse(localStorage.getItem("userInfo"));
+  const userDetails = JSON.parse(localStorage.getItem('userInfo'));
   if (userDetails) {
     userId = userDetails._id;
     userName = userDetails.username;
@@ -62,14 +62,14 @@ export default function BlogView() {
       fetchBlog();
       setLoading(false);
     } catch (error) {
-      console.log("error", error);
+      console.log('error', error);
     }
   }, [id]);
 
   //date formatter
   function formatDate(dateString) {
     const date = new Date(dateString);
-    return date.toLocaleDateString("en-GB");
+    return date.toLocaleDateString('en-GB');
   }
 
   //refresh blog object
@@ -80,17 +80,17 @@ export default function BlogView() {
     setLoading(false);
   };
 
-  const firstName = blog.author ? blog.author.firstName : "";
-  const lastName = blog.author ? blog.author.lastName : "";
-  const authorDP = blog.author ? blog.author.profilePic : "";
-  const authorID = blog.author ? blog.author._id : "";
-  const body = blog.body ? blog.body : "";
+  const firstName = blog.author ? blog.author.firstName : '';
+  const lastName = blog.author ? blog.author.lastName : '';
+  const authorDP = blog.author ? blog.author.profilePic : '';
+  const authorID = blog.author ? blog.author._id : '';
+  const body = blog.body ? blog.body : '';
   const tags = blog.tags ? blog.tags : [];
-  const tagsAsString = tags.join(", ");
+  const tagsAsString = tags.join(', ');
 
   //comments handler
   const [comment, setComment] = useState({
-    text: "",
+    text: '',
     postedBy: userId,
     userName: userName,
   });
@@ -103,7 +103,7 @@ export default function BlogView() {
     e.preventDefault();
     try {
       const newComment = await commentonBlog(id, comment);
-      toast.success("Comment Posted!", {
+      toast.success('Comment Posted!', {
         hideProgressBar: false,
         closeOnClick: true,
         autoClose: 1500,
@@ -142,10 +142,10 @@ export default function BlogView() {
   //like handler
   const handleLike = async () => {
     let res = await likeBlog(id, userId);
-    if (res.message === "Unliked Blog") {
+    if (res.message === 'Unliked Blog') {
       setLiked(false);
       setDisliked(false);
-    } else if (res.message === "Liked Blog") {
+    } else if (res.message === 'Liked Blog') {
       setLiked(true);
       setDisliked(false);
     }
@@ -155,10 +155,10 @@ export default function BlogView() {
   //dislike handler
   const handleDisLike = async () => {
     let res = await disLikeBlog(id, userId);
-    if (res.message === "Removed Dislike") {
+    if (res.message === 'Removed Dislike') {
       setDisliked(false);
       setLiked(false);
-    } else if (res.message === "Disliked Blog") {
+    } else if (res.message === 'Disliked Blog') {
       setDisliked(true);
       setLiked(false);
     }
@@ -180,9 +180,9 @@ export default function BlogView() {
 
   const handleBookmark = async () => {
     let res = await handleBlogBookamrk(id, userId);
-    if (res.msg === "Removed Bookmark") {
+    if (res.msg === 'Removed Bookmark') {
       setBookmarked(false);
-    } else if (res.msg === "Bookmarked Blog") {
+    } else if (res.msg === 'Bookmarked Blog') {
       setBookmarked(true);
     }
     await refreshBlog();
@@ -193,7 +193,7 @@ export default function BlogView() {
       <BlogContainer>
         <BlogHeader
           title={blog.title}
-          author={firstName + " " + lastName}
+          author={firstName + ' ' + lastName}
           authorDP={authorDP}
           date={formatDate(blog.createdAt)}
           tags={tagsAsString}
@@ -272,15 +272,18 @@ export default function BlogView() {
 
           <div className="mt-4">
             {blog.comments &&
-              blog.comments.map((comment, index) => (
-                <div
-                  key={index}
-                  className="bg-darkbg bg-opacity-70 text-white p-2 rounded mb-2"
-                >
-                  <div className="font-bold mb-1">@{comment.userName}</div>
-                  <div>{comment.text}</div>
-                </div>
-              ))}
+              blog.comments.map(
+                (comment, index) =>
+                  comment.isPosted && (
+                    <div
+                      key={index}
+                      className="bg-darkbg bg-opacity-70 text-white p-2 rounded mb-2"
+                    >
+                      <div className="font-bold mb-1">@{comment.userName}</div>
+                      <div>{comment.text}</div>
+                    </div>
+                  )
+              )}
           </div>
         </div>
       </BlogContainer>

@@ -7,7 +7,8 @@ import asyncHandler from 'express-async-handler';
 const getForums = asyncHandler(async (req, res) => {
   const forums = await Forum.find({})
     .sort({ createdAt: -1 })
-    .limit(10);
+    .limit(10)
+    .populate('userID', 'firstName lastName username');
 
   if (!forums) {
     res.status(404).send({ message: 'Forums not found' });
