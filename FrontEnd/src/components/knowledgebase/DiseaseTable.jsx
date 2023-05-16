@@ -1,7 +1,7 @@
 import { useState} from 'react'
 import { Link } from 'react-router-dom'
 import { MdDelete } from 'react-icons/md'
-import { FaEdit } from 'react-icons/fa'
+import { FaDisease, FaEdit } from 'react-icons/fa'
 import { deleteDisease } from '../../api/knowlegdebase'
 
 const DiseaseTable = ({diseases}) => {
@@ -35,7 +35,10 @@ const DiseaseTable = ({diseases}) => {
         <div className="overflow-x-auto px-8">
             <div className="w-full md:w-5/6 mx-auto bg-darkbg text-white p-5 flex">
                 <div className="flex flex-row w-full justify-between items-center">
-                    <h1 className="text-2xl font-bold">Diseases</h1>
+                    <h1 className="text-2xl font-bold">
+                        <FaDisease className="inline-block mr-5 text-4xl" />
+                        Diseases
+                    </h1>
                 </div>
                 <div className="flex flex-row">
                     <input
@@ -62,11 +65,9 @@ const DiseaseTable = ({diseases}) => {
                 {diseaseFilter.map((disease) => (
                     <tr key={disease._id} className="hover:bg-gray-700 border-b border-gray-600">
                         <td className="px-4 py-3 justify-center">
-                           {disease.diseaseImage ? (
-                                <img src={disease.diseaseImage} alt="disease" className="w-20 h-20 rounded-full" />
-                            ) : (
-                                <img src="https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png" alt="disease" className="w-20 h-20 rounded-full" />
-                            )}
+                           {disease.diseaseImage && 
+                                <img src={disease.diseaseImage[0]} alt="disease" className="mx-auto w-20 h-20 object-cover rounded-full md:w-24 md:h-24 lg:w-28 lg:h-28" />
+                            }
                         </td>
                         <td className="px-4 py-3 text-center w-10">{disease._id}</td>
                         <td className="px-4 py-3 text-center">{disease.diseaseName}</td>

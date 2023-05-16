@@ -2,6 +2,7 @@ import express from 'express';
 import {
   getCropDiseases,
   getCropDiseaseById,
+  getAllAcceptedCropDiseases,
   deleteCropDisease,
   createCropDisease,
   updateCropDisease,
@@ -39,5 +40,8 @@ diseaseRoutes
 diseaseRoutes
   .route('/bookmarks/:id')
   .get(getDiseaseBookmarksByUser);
+diseaseRoutes
+  .route('/accepted')
+  .get(getAllAcceptedCropDiseases);
 
 export default diseaseRoutes;

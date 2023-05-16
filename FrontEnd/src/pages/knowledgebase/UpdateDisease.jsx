@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { useParams } from "react-router-dom"
+import { Navigate, useParams } from "react-router-dom"
 import { updateDisease, getDiseaseById } from "../../api/knowlegdebase"
 import { AiFillCloseCircle } from "react-icons/ai"
 
@@ -41,6 +41,7 @@ const UpdateDisease = () => {
     const updated = await updateDisease(id, disease, user.token)
     if (updated) {
       alert('Disease updated successfully')
+      return <Navigate to="/contributor/dashboard" />
     }
     else {
       alert('Disease update failed')

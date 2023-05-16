@@ -32,6 +32,26 @@ const getCropById = asyncHandler(async (req, res) => {
   }
 });
 
+
+// @desc    Fetch all accepted crops
+// @route   GET /api/crops/accepted
+// @access  Public
+const getAllAcceptedCrops = asyncHandler(async (req, res) => {
+  try {
+    const crops = await Crop.find({ isAccepted: true });
+    if (crops) {
+      res.json(crops);
+      console.log('crops', crops);
+    } else {
+      res.status(404);
+      throw new Error('Crops not found');
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ message: error.message });
+  }
+});
+
 // @desc    Delete a crop
 // @route   DELETE /api/crops/:id
 // @access  Private/Admin
@@ -263,6 +283,7 @@ const getCropBookmarksByUser = asyncHandler(async (req, res) => {
 export {
   getCrops,
   getCropById,
+  getAllAcceptedCrops,
   deleteCrop,
   createCrop,
   updateCrop,
