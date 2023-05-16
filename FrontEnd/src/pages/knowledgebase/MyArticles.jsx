@@ -2,13 +2,13 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { getCropsByAuthor, getDiseasesByAuthor } from '../../api/knowlegdebase'
 import { CropTable, DiseaseTable, Loader } from '../../components'
+import { FaDisease, FaLeaf } from 'react-icons/fa';
 
 
 const MyArticles = () => {
 
   const user = JSON.parse(localStorage.getItem('userInfo'))
   const userId = user._id
-  console.log("id", userId)
 
   const [crops, setCrops] = useState([])
   const [diseases, setDiseases] = useState([])
@@ -31,7 +31,7 @@ const MyArticles = () => {
     getCrops();
     getDiseases();
     setLoading(false);
-  }, []);
+  }, [userId]);
 
 
 
@@ -71,23 +71,24 @@ const MyArticles = () => {
         <hr className="border-gray-500 border-1 w-full mt-4" />
       </div>
 
-      {/* table selection tab */}
-      <div className="overflow-x-auto px-8 md:w-5/6 mx-auto">
-        <div className="grid grid-cols-2">
-          <button className= {table === 'crop' ? "bg-darkbg text-white font-bold py-2 px-4 rounded-tl-xl" : "bg-slate-600 hover:bg-slate-700 text-white font-bold py-2 px-4 rounded-tl-xl"} onClick={() => setTable('crop')}>
-            Crops
-          </button>
-          <button className= {table === 'disease' ? "bg-darkbg text-white font-bold py-2 px-4 rounded-tr-xl" : "bg-slate-600 hover:bg-slate-700 text-white font-bold py-2 px-4 rounded-tr-xl"} onClick={() => setTable('disease')}>
-            Diseases
-          </button>
-        </div>
+      {/* table buttons */}
+      <div className="flex pb-5 px-8 ml-0 mr-auto w-full">
+        <button className="bg-primary hover:bg-secondary text-white font-bold py-2 px-4 rounded mx-1" onClick={() => setTable('crop')}>
+          <FaLeaf className="inline-block mr-4 text-2xl" />
+          Crops
+        </button>
+        <button className="bg-primary hover:bg-secondary text-white font-bold py-2 px-4 rounded mx-1" onClick={() => setTable('disease')}>
+          <FaDisease className="inline-block mr-4 text-2xl" />
+          Diseases
+        </button>
       </div>
+      
 
       {/* table */}
       <div>
-        {table === 'crop' ? <CropTable crops={crops} /> : <DiseaseTable diseases={diseases} />}
+        {crops && table === 'crop' ? <CropTable crops={crops} /> : <DiseaseTable diseases={diseases} />}
       </div>
-
+      <br />
     </div>
 
   );
