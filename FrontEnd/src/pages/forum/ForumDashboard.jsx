@@ -22,11 +22,13 @@ const ForumDashboard = (props) => {
     //inputs
     const [search, setSearch] = useState("");
     const [searchResults, setSearchResults] = useState([]);
+    const [searchSelected, setSearchSelected] = useState({}); //forum selected from search results
 	const [title, setTitle] = useState(""); //create form title
 	const [content, setContent] = useState(""); //create form content
 
     //status
     const [searched, setSearched] = useState(false);
+    const [showSearchSelected, setShowSearchSelected] = useState(false); //popup
     const [loading, setLoading] = useState(false);
     const [searching, setSearching] = useState(false); //searching forums
 	const [showCreateForum, setShowCreateForum] = useState(false);
@@ -50,7 +52,11 @@ const ForumDashboard = (props) => {
         setSearched(true);
         setSearching(true);
 
-        const res = await Forum.searchForums(search, checkStatus);
+        const res = await Forum.searchForums(search, (res) => {
+            res.status >= 400
+                ? notify("error", "Error getting recent forums")
+                : null;
+        });
         setSearchResults(res);
 
         setSearching(false);
@@ -165,7 +171,12 @@ const ForumDashboard = (props) => {
 
 		setCreateForumLoading(true);
 
-		const res = await Forum.createForum(user, {title:title, content:content}, checkStatus);
+		const res = await Forum.createForum(user, {title:title, content:content}, (res) => {
+            res.status >= 400
+                ? notify("error", "Error getting recent forums")
+                : null;
+        });
+        
 		if (res) {
 			setShowCreateForum(false);
 			setTitle("");
@@ -206,8 +217,8 @@ const ForumDashboard = (props) => {
                             searching={searching}
                             searchResults={searchResults}
                             setSearched={setSearched}
-                            setSelectedForum={setSelectedForum}
-                            setShowSelectedForum={setShowSelectedForum}
+                            setSelected={setSearchSelected}
+                            setShowSelected={setShowSearchSelected}
                         />
                     </div>
                 )}
@@ -267,8 +278,8 @@ const ForumDashboard = (props) => {
                                 searching={searching}
                                 searchResults={searchResults}
                                 setSearched={setSearched}
-                                setSelectedForum={setSelectedForum}
-                                setShowSelectedForum={setShowSelectedForum}
+                                setSelected={setSearchSelected}
+                                setShowSelected={setShowSearchSelected}
                             />
                         </div>
                     )}
@@ -402,6 +413,22 @@ const ForumDashboard = (props) => {
                             )}
                         </button>
                     </div>
+                </div>
+            </Popup>
+
+            {/* Selected forum popup for search */}
+            <Popup show={showSearchSelected} setShow={setShowSearchSelected} ring={true}>
+                <div className="text-left w-screen max-w-sm sm:max-w-lg max-h-96 overflow-y-auto">
+                    <ForumCard
+                        forum={searchSelected}
+                        checkRes={(res) =>
+                            res >= 400
+                                ? notify("error", "Error getting forum")
+                                : null
+                        }
+                        notify={notify}
+                        refreshAll={refreshAllForums}
+                    />
                 </div>
             </Popup>
 

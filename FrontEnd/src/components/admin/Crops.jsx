@@ -27,8 +27,8 @@ const Crops = ({
             </h2>
           </div>
         </td>
-        <td className="px-2 py-4 text-sm whitespace-nowrap">
-          <h2 className="font-medium text-gray-800 dark:text-white capitalize">
+        <td className="py-4 text-sm whitespace-nowrap">
+          <h2 className="font-medium text-gray-800 dark:text-white capitalize px-5">
             {crop.cropType}
           </h2>
         </td>
@@ -38,12 +38,12 @@ const Crops = ({
           </h2>
         </td>
         <td className="py-4 text-sm whitespace-nowrap">
-          <h2 className="font-medium text-gray-800 dark:text-white capitalize">
+          <h2 className="font-medium text-gray-800 dark:text-white capitalize px-5">
             {crop.author.firstName}
           </h2>
         </td>
         <td className="py-4 text-sm whitespace-nowrap">
-          <h2 className="font-medium text-gray-800 dark:text-white capitalize">
+          <h2 className="font-medium text-gray-800 dark:text-white capitalize px-5">
             {crop.isAccepted === true ? (
               <span>✅ {formatDate(crop.createdAt)}</span>
             ) : (
@@ -122,10 +122,10 @@ const Crops = ({
                 <thead className="bg-gray-50 dark:bg-gray-800">
                   <tr>
                     <th className={`px-4 ${theadClass}`}>NAME</th>
-                    <th className={`px-2 ${theadClass}`}>TYPE</th>
+                    <th className={`px-5 ${theadClass}`}>TYPE</th>
                     <th className={`px-2 ${theadClass}`}>DETAILS</th>
-                    <th className={theadClass}>AUTHOR</th>
-                    <th className={`text-center ${theadClass}`}>DATE</th>
+                    <th className={`px-5 ${theadClass}`}>AUTHOR</th>
+                    <th className={`text-center px-5 ${theadClass}`}>DATE</th>
                     <th className={`text-center ${theadClass}`}>ACTIONS</th>
                   </tr>
                 </thead>
@@ -139,11 +139,11 @@ const Crops = ({
           </div>
         </div>
       </div>
-      <div className="mt-6 sm:flex sm:items-center sm:justify-between ">
+      <div className="mt-6 sm:flex sm:items-center sm:justify-between">
         <div className="text-sm text-gray-500 dark:text-gray-400"></div>
         <div className="flex items-center mt-4 gap-x-4 sm:mt-0">
           <button
-            className="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md sm:w-auto gap-x-2 hover:bg-gray-100 dark:bg-gray-900 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-800"
+            className="flex items-center justify-center px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md sm:w-auto gap-x-2 hover:bg-gray-100 dark:bg-gray-900 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-800"
             onClick={() => setCropTable(false)}
           >
             Diseases

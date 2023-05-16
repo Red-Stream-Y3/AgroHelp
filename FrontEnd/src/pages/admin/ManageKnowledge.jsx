@@ -20,7 +20,7 @@ const ManageKnowledge = () => {
   const [loading, setLoading] = useState(true);
   const [cropTable, setCropTable] = useState(false);
 
-  const user = JSON.parse(localStorage.getItem('user'));
+  const user = JSON.parse(localStorage.getItem('userInfo'));
 
   const getCrops = async () => {
     const data = await getAllCrops();
@@ -146,7 +146,7 @@ const ManageKnowledge = () => {
         <Loader />
       ) : (
         <>
-          <div className="grid gap-4 md:gap-8 mt-8 pb-10 md:px-5 bg-gray-900 rounded-xl">
+          <div className="grid gap-4 md:gap-8 mt-8 pb-10 md:px-5 bg-gray-900 rounded-xl overflow-x-auto">
             <section className="container px-4 mx-auto">
               {cropTable ? (
                 <Crops

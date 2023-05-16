@@ -54,7 +54,7 @@ const AdminDashboard = () => {
       <div className="flex justify-center items-center h-screen">
         <Loader />
       </div>
-    )
+    );
   }
   return (
     <>
@@ -63,28 +63,28 @@ const AdminDashboard = () => {
       ) : (
         <>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-8 mt-8 px-4 md:px-10">
-            <div className="w-2/3 md:w-full">
+            <div className="w-full">
               <BoxWidget
                 heading={'Traffic'}
                 value={formatVisits}
                 icon={'fa-solid fa-arrow-trend-up'}
               />
             </div>
-            <div className="w-2/3 md:w-full">
+            <div className="w-full">
               <BoxWidget
                 heading={'Articles'}
                 value={crops.length + diseases.length}
                 icon={'fa-solid fa-book-open'}
               />
             </div>
-            <div className="w-2/3 md:w-full">
+            <div className="w-full">
               <BoxWidget
                 heading={'Blogs'}
                 value={blogs.length}
                 icon={'fa-solid fa-newspaper'}
               />
             </div>
-            <div className="w-2/3 md:w-full">
+            <div className="w-full">
               <BoxWidget
                 heading={'Users'}
                 value={users.length}
