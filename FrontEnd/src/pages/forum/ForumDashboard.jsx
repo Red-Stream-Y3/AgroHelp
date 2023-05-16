@@ -129,6 +129,13 @@ const ForumDashboard = (props) => {
         refreshSubscribedForums();
     }, [user]);
 
+    //get search results
+    useEffect(() => {
+        if (searched && search.length > 0) {
+            handleSearch();
+        }
+    }, [search]);
+
     //refresh all forums
     const refreshAllForums = async (keepCurrent) => {
         const refresh = async () => {
