@@ -18,7 +18,9 @@ import blogRoutes from './routes/blogRoutes.js';
 import cropRoutes from './routes/cropRoutes.js';
 import diseaseRoutes from './routes/diseaseRoutes.js';
 
-// dotenv.config({ path: findConfig('.env.dev') });
+if (process.env.NODE_ENV !== 'production') {
+  dotenv.config({ path: findConfig('.env.dev') });
+}
 
 connectDB();
 
