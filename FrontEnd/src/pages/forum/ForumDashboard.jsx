@@ -206,8 +206,7 @@ const ForumDashboard = (props) => {
                             searching={searching}
                             searchResults={searchResults}
                             setSearched={setSearched}
-                            setSelectedForum={setSelectedForum}
-                            setShowSelectedForum={setShowSelectedForum}
+                            refreshAll={refreshAllForums}
                         />
                     </div>
                 )}
@@ -267,8 +266,7 @@ const ForumDashboard = (props) => {
                                 searching={searching}
                                 searchResults={searchResults}
                                 setSearched={setSearched}
-                                setSelectedForum={setSelectedForum}
-                                setShowSelectedForum={setShowSelectedForum}
+                                refreshAll={refreshAllForums}
                             />
                         </div>
                     )}
