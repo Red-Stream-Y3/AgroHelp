@@ -67,7 +67,7 @@ const LineChart = ({ siteVisits, loading }) => {
       {loading ? (
         <Loader />
       ) : (
-        <div className="px-10 py-5 md:px-5 bg-darkbg rounded-xl m-10">
+        <div className="px-10 py-5 md:px-5 bg-darkbg rounded-xl md:m-10 m-5">
           <div>
             <h2 className="text-lg font-semibold text-gray-800 dark:text-white">
               TRAFFIC

@@ -6,19 +6,19 @@
   "repository": "https://github.com/Red-Stream-Y3/AF-assignment",
   "env": {
     "PORT": {
-      "description": "PORT",
+      "description": "Port to run the server",
       "value": "9120"
     },
     "MONGO_URI": {
-      "description": "MONGODB URL",
+      "description": "MongoDB URI to connect the database",
       "value": "mongodb+srv://"
     },
     "JWT_SECRET": {
-      "description": "JWT SECRET",
+      "description": "JWT SECRET to sign the tokens",
       "value": "redstream"
     },
     "NODE_ENV": {
-      "description": "production or development",
+      "description": "Mode to run the server in production or development mode",
       "value": "production"
     }
   },
