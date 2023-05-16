@@ -2,6 +2,7 @@ import express from 'express';
 import {
   getCrops,
   getCropById,
+  getAllAcceptedCrops,
   deleteCrop,
   createCrop,
   updateCrop,
@@ -24,5 +25,7 @@ cropRouter.route('/search/q=:q').get(searchCrops);
 cropRouter.route('/author/:id').get(getCropsByAuthor);
 cropRouter.route('/bookmark/:id').put(addRemoveCropBookmark);
 cropRouter.route('/bookmarks/:id').get(getCropBookmarksByUser);
+cropRouter.route('/accepted').get(getAllAcceptedCrops);
+
 
 export default cropRouter;

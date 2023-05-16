@@ -107,7 +107,7 @@ const Profile = () => {
           {blogBookmarks.map((blog) => (
             <div className="m-4" key={blog._id}>
               <Link to={`/viewblog/${blog._id}`}>
-                <div className="flex flex-col items-center justify-center w-88 bg-darkbg rounded-lg shadow-lg p-5">
+                <div className="flex flex-col items-center justify-center w-88 bg-darkbg rounded-lg shadow-lg p-5 h-64">
                   <div className="flex flex-col">
                     <h1 className="text-xl text-white font-bold">
                       {blog.title}
