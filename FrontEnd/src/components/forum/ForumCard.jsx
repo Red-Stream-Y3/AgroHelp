@@ -147,6 +147,11 @@ const ForumCard = ({
             return;
         }
 
+        if(forumObj.resolved){
+            notify("info", "This forum is resolved. You cannot reply to it.");
+            return
+        }
+
         setLoading(true);
 
         if (replyInput === "") {
@@ -284,8 +289,8 @@ const ForumCard = ({
             notify("success", "Forum removed");
         }
 
-        setLoading(false);
         await refreshAll();
+        setLoading(false);
     };
 
     const handleEditForum = async () => {
@@ -304,11 +309,13 @@ const ForumCard = ({
         if (res) {
             setForumEditInput("");
             setShowEditForumPopup(false);
+            
             notify("success", "Forum edited");
         }
 
-        setLoading(false);
+        await refreshForum();
         await refreshAll(true);
+        setLoading(false);
     };
 
     const handleAcceptReply = async () => {
@@ -333,8 +340,9 @@ const ForumCard = ({
             }
         }
 
-        setLoading(false);
+        await refreshForum();
         await refreshAll(true);
+        setLoading(false);
     };
 
     return (
@@ -379,11 +387,14 @@ const ForumCard = ({
                         {/* forum delete and edit buttons */}
                         {user !== null &&
                         user !== undefined &&
-                        !forumObj.resolved && // if forum is resolved, no need to show edit and delete buttons
-                        forum.userID === user._id ? (
+                        forumObj.userID === user._id ? (
                             <div className="w-fit">
                                 <button
                                     onClick={() => {
+                                        if(forumObj.resolved) {
+                                            notify("info", "Cannot edit resolved forum");
+                                            return;
+                                        };
                                         setForumEditInput(forumObj.content);
                                         setShowEditForumPopup(true);
                                     }}
@@ -552,6 +563,7 @@ const ForumCard = ({
                                                         ) : null}
                                                         {user !== null &&
                                                         user !== undefined &&
+                                                        !forumObj.resolved &&
                                                         reply.userID ===
                                                             user._id ? (
                                                             <div className="w-fit">
@@ -654,6 +666,11 @@ const ForumCard = ({
                             value={replyInput}
                             autoCapitalize="on"
                             spellCheck={true}
+                            onFocus={() => {
+                                if(forumObj.resolved){
+                                    notify("info", "This forum is resolved. You cannot reply to it.");
+                                }
+                            }}
                             onChange={({ target }) =>
                                 setReplyInput(target.value)
                             }
