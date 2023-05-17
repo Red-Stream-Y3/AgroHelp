@@ -1,12 +1,12 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { MdDelete } from 'react-icons/md'
-import { FaEdit } from 'react-icons/fa'
+import { FaEdit, FaLeaf } from 'react-icons/fa'
 import { deleteCrop } from '../../api/knowlegdebase'
 
 const CropTable = ({crops}) => {
 
-    const [cropFilter , setCropFilter] = useState([...crops])
+    const [cropFilter , setCropFilter] = useState(crops)
     const user = JSON.parse(localStorage.getItem('userInfo'))
 
     const handleDeleteCrop = async (id) => {
@@ -30,11 +30,18 @@ const CropTable = ({crops}) => {
         }
     }
 
+    useEffect(() => {
+        setCropFilter(crops)
+    }, [crops])
+
     return (
         <div className="overflow-x-auto px-8">
             <div className="w-full md:w-5/6 mx-auto bg-darkbg text-white p-5 flex">
                 <div className="flex flex-row w-full justify-between items-center">
-                    <h1 className="text-2xl font-bold">Crops</h1>
+                    <h1 className="text-2xl font-bold">
+                        <FaLeaf className="inline-block mr-5 text-4xl" />
+                        Crops
+                    </h1>
                 </div>
                 <div className="flex flex-row">
                     <input

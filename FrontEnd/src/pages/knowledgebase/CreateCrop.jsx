@@ -1,7 +1,10 @@
 import { useState, useEffect } from 'react'
 import { createCrop } from '../../api/knowlegdebase'
+import { useNavigate } from 'react-router-dom'
 
 const CreateCrop = () => {
+
+  const navigate = useNavigate()
 
   const user = JSON.parse(localStorage.getItem('userInfo'))
   const userId = user._id
@@ -47,6 +50,7 @@ const CreateCrop = () => {
     try {
       const newCrop = await createCrop(crop, user.token)
       alert('Crop Created Successfully')
+      navigate('/contributor/dashboard')
     } catch (error) {
       console.log('error', error)
       alert('Crop Creation Failed')
@@ -81,31 +85,30 @@ const CreateCrop = () => {
 
   const handleMock = () => {
     setCrop({
-      cropName: 'Beetroot',
-      scientificName: 'Beta vulgaris',
-      cropFamily: 'Amaranthaceae',
-      cropType: 'Vegetable',
-      cropIntro: 'Beetroot is a root vegetable that grows primarily in the ground with a leafy top that grows aboveground. It is a cool-season crop that is grown in many countries around the world. It is a popular vegetable that is consumed in many ways. The root is eaten raw or cooked and the leaves are eaten as a salad or cooked. The root is also used to make sugar. The leaves are also used to make medicine.',
+      cropName: "Beetroot",
+      scientificName: "Beta vulgaris",
+      cropFamily: "Amaranthaceae",
+      cropType: "Root vegetable",
+      cropIntro: "Beetroot is a nutritious root vegetable known for its vibrant color and sweet taste.",
       cropInfo: {
-        climate: 'Beetroot is a cool-season crop that grows best in temperatures between 15°C and 20°C. It can tolerate temperatures as low as 5°C and as high as 25°C. It grows best in areas with a long growing season of 150 to 180 days. It can be grown in areas with a short growing season of 100 to 120 days. It can be grown in areas with a short growing season of 100 to 120 days. It can be grown in areas with a short growing season of 100 to 120 days. It can be grown in areas with a short growing season of 100 to 120 days. It can be grown in areas with a short growing season of 100 to 120 days. It can be grown in areas with a short growing season of 100 to 120 days. It can be grown in areas with a short growing season of 100 to 120 days. It can be grown in areas with a short growing season of 100 to 120 days. It can be grown in areas with a short growing season of 100 to 120 days.',
-        season: 'Beetroot is a cool-season crop that grows best in temperatures between 15°C and 20°C. It can tolerate temperatures as low as 5°C and as high as 25°C. It grows best in areas with a long growing season of 150 to 180 days. It can be grown in areas with a short growing season of 100 to 120 days. It can be grown in areas with a short growing season of 100 to 120 days.',
-        seedType: 'Beetroot is a cool-season crop that grows best in temperatures between 15°C and 20°C. It can tolerate temperatures as low as 5°C and as high as 25°C. It grows best in areas with a long growing season of 150 to 180 days. It can be grown in areas with a short growing season of 100 to 120 days.',
-        soil: 'Beetroot is a cool-season crop that grows best in temperatures between 15°C and 20°C. It can tolerate temperatures as low as 5°C and as high as 25°C. It grows best in areas with a long growing season of 150 to 180 days. It can be grown in areas with a short growing season of 100 to 120 days.',
-        fieldPreparation: 'Beetroot is a cool-season crop that grows best in temperatures between 15°C and 20°C. It can tolerate temperatures as low as 5°C and as high as 25°C. It grows best in areas with a long growing season of 150 to 180 days. It can be grown in areas with a short growing season of 100 to 120 days.',
-        fertilizer: 'Beetroot is a cool-season crop that grows best in temperatures between 15°C and 20°C. It can tolerate temperatures as low as 5°C and as high as 25°C. It grows best in areas with a long growing season of 150 to 180 days. It can be grown in areas with a short growing season of 100 to 120 days.',
-        irrigation: 'Beetroot is a cool-season crop that grows best in temperatures between 15°C and 20°C. It can tolerate temperatures as low as 5°C and as high as 25°C. It grows best in areas with a long growing season of 150 to 180 days. It can be grown in areas with a short growing season of 100 to 120 days.',
-        weedControl: 'Beetroot is a cool-season crop that grows best in temperatures between 15°C and 20°C. It can tolerate temperatures as low as 5°C and as high as 25°C. It grows best in areas with a long growing season of 150 to 180 days.',
-        pestControl: 'Beetroot is a cool-season crop that grows best in temperatures between 15°C and 20°C. It can tolerate temperatures as low as 5°C and as high as 25°C.',
-        harvesting: 'Beetroot is a cool-season crop that grows best in temperatures between 15°C and 20°C.',
-        yield: 'Beetroot is a cool-season crop that grows best in temperatures between 15°C and 20°C.',
-        storage: 'Beetroot is a cool-season crop that grows best in temperatures between 15°C and 20°C.',
+        climate: "Temperate to cool",
+        season: "Spring or autumn",
+        seedType: "Seed",
+        soil: "Well-drained, fertile soil",
+        fieldPreparation: "Clear and till the soil before planting",
+        fertilizer: "Apply organic compost or well-balanced fertilizer before planting",
+        irrigation: "Keep the soil consistently moist",
+        weedControl: "Regular weeding is necessary to prevent competition",
+        pestControl: "Control pests with organic methods or pesticides if necessary",
+        harvesting: "Harvest when the roots are 1.5-3 inches in diameter",
+        yield: "4-8 tons per acre",
+        storage: "Remove leaves, store in a cool, dark place or refrigerate for short-term storage"
       },
-      otherInfo: 'Beetroot is a cool-season crop that grows best in temperatures between 15°C and 20°C. It can tolerate temperatures as low as 5°C and as high as 25°C.',
+      otherInfo: "Beetroot is rich in antioxidants and is used in various culinary preparations such as salads, juices, and pickles.",
       author: userId,
     })
   }
-
-
+  
   const handleOpenWidget = () => {
     var myWidget = window.cloudinary.createUploadWidget(
       {

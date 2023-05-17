@@ -232,7 +232,10 @@ const bookmarkBlog = asyncHandler(async (req, res) => {
 // @route   GET /api/blog/bookmark/:id
 // @access  Private
 const getBookmarkedBlogs = asyncHandler(async (req, res) => {
-  const blogs = await Blog.find({ bookmarked: req.params.id });
+  const blogs = await Blog.find({ bookmarked: req.params.id }).populate(
+    'author',
+    'username firstName lastName'
+  );
   res.json(blogs);
 });
 
@@ -306,9 +309,10 @@ const blogCommentAccept = asyncHandler(async (req, res) => {
 
 const getLatestBlogs = asyncHandler(async (req, res) => {
   try {
-    const latestBlogPosts = await Blog.find({isAccepted: true}).sort({createdAt: -1}).limit(4).populate( 'author',
-    'username firstName lastName'
-    );
+    const latestBlogPosts = await Blog.find({ isAccepted: true })
+      .sort({ createdAt: -1 })
+      .limit(4)
+      .populate('author', 'username firstName lastName');
     if (latestBlogPosts) {
       res.status(200).json(latestBlogPosts);
     } else {
@@ -319,7 +323,6 @@ const getLatestBlogs = asyncHandler(async (req, res) => {
     res.status(404).json({ message: 'No blogs found' });
   }
 });
-
 
 export {
   getBlogs,
@@ -337,5 +340,5 @@ export {
   blogCommentAccept,
   bookmarkBlog,
   getBookmarkedBlogs,
-  getLatestBlogs
+  getLatestBlogs,
 };

@@ -300,3 +300,23 @@ export const getDiseaseBookmarksByUser = async (id) => {
     return [];
   }
 };
+
+export const getAllAcceptedCrops = async () => {
+  try {
+    const response = await axios.get('/api/crops/accepted');
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+}
+
+export const getAllAcceptedDiseases = async () => {
+  try {
+    const response = await axios.get('/api/diseases/accepted');
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+}

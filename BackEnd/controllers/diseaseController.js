@@ -35,6 +35,25 @@ const getCropDiseaseById = asyncHandler(async (req, res) => {
   }
 });
 
+//@desc     Get all accepted crop diseases
+//@route    GET /api/cropDiseases/accepted
+//@access   Public
+const getAllAcceptedCropDiseases = asyncHandler(async (req, res) => {
+  try {
+    const cropDiseases = await CropDisease.find({ isAccepted: true });
+    if (cropDiseases) {
+      res.json(cropDiseases);
+      console.log('cropDiseases', cropDiseases);
+    } else {
+      res.status(404);
+      throw new Error('Crop diseases not found');
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ message: error.message });
+  }
+});
+
 //@desc     Delete a crop disease
 //@route    DELETE /api/cropDiseases/:id
 //@access   Private/Admin
@@ -271,6 +290,7 @@ const getDiseaseBookmarksByUser = asyncHandler(async (req, res) => {
 export {
   getCropDiseases,
   getCropDiseaseById,
+  getAllAcceptedCropDiseases,
   deleteCropDisease,
   createCropDisease,
   updateCropDisease,

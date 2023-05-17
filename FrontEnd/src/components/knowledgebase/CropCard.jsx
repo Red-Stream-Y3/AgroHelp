@@ -15,18 +15,23 @@ const CropCard = ({ crop }) => {
             <p className="text-gray-300 mb-2 font-bold">
               Scientific Name:
               <span className="text-gray-400 font-normal">
+                {' '}
                 {crop.scientificName}
               </span>
             </p>
             <p className="text-gray-300 mb-2 font-bold">
               Crop Family:
               <span className="text-gray-400 font-normal">
+                {' '}
                 {crop.cropFamily}
               </span>
             </p>
             <p className="text-gray-300 mb-2 font-bold">
               Crop Type:
-              <span className="text-gray-400 font-normal">{crop.cropType}</span>
+              <span className="text-gray-400 font-normal">
+                {' '}
+                {crop.cropType}
+              </span>
             </p>
           </div>
         </Link>

@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { updateCrop, getCropById } from "../../api/knowlegdebase"
 import { Loader } from "../../components"
 
 const UpdateCrop = () => {
+  const navigate = useNavigate()
   const { id } = useParams()
   const user = JSON.parse(localStorage.getItem('userInfo'))
   const [crop, setCrop] = useState({
@@ -56,6 +57,7 @@ const UpdateCrop = () => {
     const updated = await updateCrop(id, crop, user.token)
     if (updated) {
       alert('Crop updated successfully')
+      navigate('/contributor/dashboard')
     } else {
       alert('Crop update failed')
     }

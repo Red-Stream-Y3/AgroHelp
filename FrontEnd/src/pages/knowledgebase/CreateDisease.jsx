@@ -1,8 +1,11 @@
 import { useState, useEffect } from 'react'
 import { createDisease } from '../../api/knowlegdebase'
-import { FaCross } from 'react-icons/fa'
+import { AiFillCloseCircle } from 'react-icons/ai'
+import { useNavigate } from 'react-router-dom'
 
 const CreateDisease = () => {
+
+  const navigate = useNavigate()
 
   const user = JSON.parse(localStorage.getItem('userInfo'))
   const userId = user._id
@@ -31,8 +34,11 @@ const CreateDisease = () => {
     e.preventDefault()
     try {
       const data = await createDisease(disease, user.token)
+      alert('Disease created successfully')
+      navigate('/contributor/dashboard')
     } catch (error) {
       console.log(error)
+      alert('Disease creation failed')
     }
   }
 
@@ -78,7 +84,21 @@ const CreateDisease = () => {
       diseaseImage: newImages
     })
   }
-    
+
+  const handleMock = () => {
+    setDisease({
+      diseaseName: 'Cottony Rot',
+      diseaseSymptoms: 'The disease is characterized by the appearance of a white, cottony growth on the surface of the infected plant parts. The growth is composed of the mycelium of the fungus and the spores. The disease is most common on the fruit, but it may also occur on the leaves, stems, and flowers. The fungus may also infect the fruit through the stem.',
+      diseaseCause: 'The fungus survives in the soil and on infected plant debris. The spores are spread by wind and splashing water. The disease is favored by warm, wet weather. The fungus can infect the fruit through the stem.',
+      diseasePrevention: 'The disease can be controlled by planting resistant varieties and by using a 3- to 4-year crop rotation. The fungus can survive in the soil for several years, so it is important to rotate with non-host crops. The disease can also be controlled by applying a fungicide to the fruit.',
+      diseaseTreatment: 'The disease can be controlled by planting resistant varieties and by using a 3- to 4-year crop rotation. The fungus can survive in the soil for several years, so it is important to rotate with non-host crops. The disease can also be controlled by applying a fungicide to the fruit.',
+      diseaseCrops: ['Apple', 'Grape', 'Peach', 'Pear', 'Plum'],
+      diseaseType: 'Fungal',
+      diseaseStatus: 'Active',
+      author: userId,
+      diseaseImage: [],
+    })
+  }
 
   return (
     <div>
@@ -86,6 +106,12 @@ const CreateDisease = () => {
         <div className="py-4 px-6">
           <h1 className="text-3xl font-semibold mb-3">Create Disease</h1>
           <hr className="border-gray-500 border-1 w-full mb-5" />
+          <button
+            className="bg-primarylight text-white px-4 py-2 rounded-md mb-5"
+            onClick={handleMock}
+          >
+            Mock Data
+          </button>
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
               <label htmlFor="diseaseName" className="form-label">Disease Name</label>
@@ -112,15 +138,15 @@ const CreateDisease = () => {
               </button>
               <br />
               <div className="flex flex-wrap">
-                {disease.diseaseImage.map((image, index) => (
-                  <div key={index} className="relative">
+                {disease.diseaseImage && disease.diseaseImage.map((image, index) => (
+                  <div key={index} className="relative m-2">
                     <img src={image} alt="crop" className="w-44 h-36 object-cover rounded-xl" />
                     <button
                       type="button"
                       className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-6 h-6 flex justify-center items-center"
                       onClick={() => handleDeleteImage(index)}
                     >
-                      <FaCross />
+                      <AiFillCloseCircle />
                     </button>
                   </div>
                 ))}
