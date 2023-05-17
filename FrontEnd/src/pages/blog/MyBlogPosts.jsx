@@ -3,7 +3,7 @@
 import React from "react";
 import { useParams, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { getBlogsByAuthor, deleteBlog } from "../../api/blog";
+import { getAuthorAllBlogs, deleteBlog } from "../../api/blog";
 import { BlogContainer, BlogCard } from "../../components";
 import { toast } from "react-toastify";
 
@@ -20,7 +20,7 @@ export default function MyBlogPosts() {
 
   useEffect(() => {
     const fetchBlogsByAuthor = async () => {
-      const blogs = await getBlogsByAuthor(userID);
+      const blogs = await getAuthorAllBlogs(userID);
       setBlogs(blogs);
     };
     fetchBlogsByAuthor();
@@ -29,7 +29,7 @@ export default function MyBlogPosts() {
   //refresh blog object
   const refreshFunc = async () => {
     setLoading(true);
-    let res = await getBlogsByAuthor(userID);
+    let res = await getAuthorAllBlogs(userID);
     setBlogs(res);
     setLoading(false);
   };
