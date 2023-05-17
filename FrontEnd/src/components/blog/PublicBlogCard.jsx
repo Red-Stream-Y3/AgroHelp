@@ -21,20 +21,20 @@ const PublicBlogCrad = ({
   handleBookmark,
   logged,
 }) => {
-  // const [isBookmarked, setIsBookmarked] = useState(false);
-  // const [isLogged, setIsLogged] = useState(false);
+  const [isBookmarked, setIsBookmarked] = useState(false);
+  const [isLogged, setIsLogged] = useState(false);
 
-  // useEffect(() => {
-  //   if (user && user == bookmarked) {
-  //     setIsBookmarked(true);
-  //   }
-  // }, [bookmarked, user]);
+  useEffect(() => {
+    if (user && user == bookmarked) {
+      setIsBookmarked(true);
+    }
+  }, [bookmarked, user]);
 
-  // useEffect(() => {
-  //   if (logged) {
-  //     setIsLogged(true);
-  //   }
-  // });
+  useEffect(() => {
+    if (logged) {
+      setIsLogged(true);
+    }
+  });
 
   //date formatter
   function formatDate(dateString) {
@@ -59,7 +59,7 @@ const PublicBlogCrad = ({
       </div>
 
       <div className="flex justify-end text-white w-full">
-        {/* <div className="flex items-center mx-2">
+        <div className="flex items-center mx-2">
           <div className="">
             {isLogged && (
               <button onClick={handleBookmark}>
@@ -71,7 +71,7 @@ const PublicBlogCrad = ({
               </button>
             )}
           </div>
-        </div> */}
+        </div>
 
         <div className="flex items-center mx-2">
           <div className="text-xl text-blue-600">
