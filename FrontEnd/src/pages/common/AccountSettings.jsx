@@ -7,13 +7,13 @@ import { Loader } from '../../components';
 
 function AccountSettings() {
   const { user, setUser } = useGlobalContext();
-  
+
   if (!user) {
     return (
       <div className="flex justify-center items-center h-screen">
         <Loader />
       </div>
-    )
+    );
   }
 
   const isAdmin = user && user.role === 'admin';
@@ -104,7 +104,10 @@ function AccountSettings() {
   };
 
   return (
-    <div className="bg-lightbg w-3/4 rounded-lg mx-auto my-10 md:bg-darkbg md:p-10">
+    <div
+      className="bg-lightbg w-3/4 rounded-lg mx-auto my-10 md:bg-darkbg md:p-10"
+      data-testid="accountSettings"
+    >
       <div>
         <form>
           <div className="space-y-12">

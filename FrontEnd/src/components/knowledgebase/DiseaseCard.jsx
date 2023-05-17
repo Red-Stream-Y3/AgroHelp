@@ -23,12 +23,14 @@ const DiseaseCard = ({ disease }) => {
             <p className="text-gray-300 mb-2 font-bold">
               Disease Type:
               <span className="text-gray-400 font-normal">
+                {' '}
                 {disease.diseaseType}
               </span>
             </p>
             <p className="text-gray-300 mb-2 font-bold">
               Disease Status:
               <span className="text-gray-400 font-normal">
+                {' '}
                 {disease.diseaseStatus}
               </span>
             </p>

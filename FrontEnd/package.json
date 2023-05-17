@@ -7,7 +7,8 @@
     "start": "vite",
     "build": "vite build",
     "lint": "eslint src --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "react-scripts test --transformIgnorePatterns \"node_modules/(?!axios)/\""
   },
   "dependencies": {
     "@popperjs/core": "^2.11.7",
@@ -19,10 +20,12 @@
     "react-dom": "^18.2.0",
     "react-icons": "^4.8.0",
     "react-router-dom": "^6.11.0",
+    "react-scripts": "^5.0.1",
     "react-toastify": "^9.1.2",
     "sweetalert2": "^11.4.8"
   },
   "devDependencies": {
+    "@testing-library/react": "^14.0.0",
     "@types/react": "^18.0.28",
     "@types/react-dom": "^18.0.11",
     "@vitejs/plugin-react": "^4.0.0",

@@ -35,7 +35,10 @@ const Login = () => {
   };
 
   return (
-    <div className="h-screen overflow-hidden flex items-center justify-center bg-lightbg">
+    <div
+      className="h-screen overflow-hidden flex items-center justify-center bg-lightbg"
+      data-testid="login"
+    >
       <script
         src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.js"
         defer

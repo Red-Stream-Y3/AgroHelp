@@ -30,7 +30,7 @@ const Search = () => {
   }
 
   return (
-    <div>
+    <div data-testid="search">
       <div className="flex flex-col items-center justify-center">
         <div className="flex flex-col items-start place-items-start py-5 px-8 ml-0 mr-auto w-full">
           <h1 className="text-3xl text-left text-white font-bold pt-5 pl-5">
