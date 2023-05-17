@@ -196,3 +196,14 @@ export const getLatestBlogPosts = async () => {
     return [];
   }
 };
+
+// get authors all blogs
+export const getAuthorAllBlogs = async (authorId) => {
+  try {
+    const response = await axios.get(`/api/blog/author/${authorId}`);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+};
