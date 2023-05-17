@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react"
-import { Navigate, useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { updateDisease, getDiseaseById } from "../../api/knowlegdebase"
 import { AiFillCloseCircle } from "react-icons/ai"
 
 
 const UpdateDisease = () => {
+
+  const navigate = useNavigate()
 
   const { id } = useParams()
   const user = JSON.parse(localStorage.getItem('userInfo'))
@@ -41,7 +43,7 @@ const UpdateDisease = () => {
     const updated = await updateDisease(id, disease, user.token)
     if (updated) {
       alert('Disease updated successfully')
-      return <Navigate to="/contributor/dashboard" />
+      navigate('/contributor/dashboard')
     }
     else {
       alert('Disease update failed')

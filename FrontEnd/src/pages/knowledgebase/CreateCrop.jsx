@@ -1,7 +1,10 @@
 import { useState, useEffect } from 'react'
 import { createCrop } from '../../api/knowlegdebase'
+import { useNavigate } from 'react-router-dom'
 
 const CreateCrop = () => {
+
+  const navigate = useNavigate()
 
   const user = JSON.parse(localStorage.getItem('userInfo'))
   const userId = user._id
@@ -47,6 +50,7 @@ const CreateCrop = () => {
     try {
       const newCrop = await createCrop(crop, user.token)
       alert('Crop Created Successfully')
+      navigate('/contributor/dashboard')
     } catch (error) {
       console.log('error', error)
       alert('Crop Creation Failed')

@@ -1,8 +1,11 @@
 import { useState, useEffect } from 'react'
 import { createDisease } from '../../api/knowlegdebase'
 import { AiFillCloseCircle } from 'react-icons/ai'
+import { useNavigate } from 'react-router-dom'
 
 const CreateDisease = () => {
+
+  const navigate = useNavigate()
 
   const user = JSON.parse(localStorage.getItem('userInfo'))
   const userId = user._id
@@ -31,8 +34,11 @@ const CreateDisease = () => {
     e.preventDefault()
     try {
       const data = await createDisease(disease, user.token)
+      alert('Disease created successfully')
+      navigate('/contributor/dashboard')
     } catch (error) {
       console.log(error)
+      alert('Disease creation failed')
     }
   }
 
@@ -93,7 +99,6 @@ const CreateDisease = () => {
       diseaseImage: [],
     })
   }
-    
 
   return (
     <div>
