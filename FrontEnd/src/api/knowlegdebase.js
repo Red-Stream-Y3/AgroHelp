@@ -4,7 +4,6 @@ import axios from 'axios';
 export const getAllCrops = async () => {
   try {
     const response = await axios.get('/api/crops');
-    console.log('crop', response.data);
     return response.data;
   } catch (error) {
     console.log(error);
@@ -28,7 +27,6 @@ export const getAllCropsShort = async () => {
 export const getCropById = async (id) => {
   try {
     const response = await axios.get(`/api/crops/${id}`);
-    console.log('crop', response.data);
     return response.data;
   } catch (error) {
     console.log(error);
@@ -120,7 +118,6 @@ export const updateCropAccept = async (id, crop, token) => {
 export const getCropsByAuthor = async (id) => {
   try {
     const response = await axios.get('/api/crops/author/' + id);
-    console.log('crop', response.data);
     return response.data;
   } catch (error) {
     console.log(error);
@@ -132,7 +129,6 @@ export const getCropsByAuthor = async (id) => {
 export const getAllDiseases = async () => {
   try {
     const response = await axios.get('/api/diseases');
-    console.log('disease', response.data);
     return response.data;
   } catch (error) {
     console.log(error);
@@ -144,7 +140,6 @@ export const getAllDiseases = async () => {
 export const getRandomDiseases = async () => {
   try {
     const response = await axios.get('/api/diseases/random');
-    console.log('disease', response.data);
     return response.data;
   } catch (error) {
     console.log(error);
@@ -156,7 +151,6 @@ export const getRandomDiseases = async () => {
 export const getDiseaseById = async (id) => {
   try {
     const response = await axios.get(`/api/diseases/${id}`);
-    console.log('disease', response.data);
     return response.data;
   } catch (error) {
     console.log(error);
@@ -174,7 +168,6 @@ export const createDisease = async (disease, token) => {
 
   try {
     const response = await axios.post('/api/diseases', disease, config);
-    console.log('disease', response.data);
     return response.data;
   } catch (error) {
     console.log(error);
@@ -192,7 +185,6 @@ export const updateDisease = async (id, disease, token) => {
 
   try {
     const response = await axios.put(`/api/diseases/${id}`, disease, config);
-    console.log('disease', response.data);
     return response.data;
   } catch (error) {
     console.log(error);
@@ -210,7 +202,6 @@ export const deleteDisease = async (id, token) => {
 
   try {
     const response = await axios.delete(`/api/diseases/${id}`, config);
-    console.log('disease', response.data);
     return response.data;
   } catch (error) {
     console.log(error);
@@ -253,7 +244,6 @@ export const updateDiseaseAccept = async (id, crop, token) => {
 export const getDiseasesByAuthor = async (id) => {
   try {
     const response = await axios.get('/api/diseases/author/' + id);
-    console.log('disease', response.data);
     return response.data;
   } catch (error) {
     console.log(error);
@@ -309,7 +299,7 @@ export const getAllAcceptedCrops = async () => {
     console.log(error);
     return [];
   }
-}
+};
 
 export const getAllAcceptedDiseases = async () => {
   try {
@@ -319,4 +309,4 @@ export const getAllAcceptedDiseases = async () => {
     console.log(error);
     return [];
   }
-}
+};
