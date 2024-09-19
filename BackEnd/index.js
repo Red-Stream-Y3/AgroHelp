@@ -8,6 +8,7 @@ import findConfig from 'find-config';
 import rateLimit from 'express-rate-limit';
 import csurf from 'csurf';
 import cookieParser from 'cookie-parser';
+import helmet from 'helmet';
 import connectDB from './config/db.js';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 import {
@@ -28,6 +29,12 @@ if (process.env.NODE_ENV !== 'production') {
 connectDB();
 
 const app = express();
+
+// Use Helmet to secure HTTP headers
+app.use(helmet());
+
+// Disable X-Powered-By header
+app.disable('x-powered-by');
 
 // Enable CORS
 app.use(cors());
