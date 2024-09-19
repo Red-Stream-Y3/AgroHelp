@@ -55,7 +55,8 @@ app.use(visitMiddleware);
 app.use(incrementCountMiddleware);
 
 app.use('/api/visits', visitRoutes);
-app.use('/api/users', csrfProtection, userRoutes); // Apply CSRF protection to user routes
+// app.use('/api/users', csrfProtection, userRoutes); // Apply CSRF protection to user routes when in production
+app.use('/api/users', userRoutes);
 app.use('/api/forums', forumRoutes);
 app.use('/api/blog', blogRoutes);
 app.use('/api/crops', cropRoutes);
