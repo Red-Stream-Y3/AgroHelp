@@ -2,6 +2,7 @@
 
 import Blog from '../models/blogModel.js';
 import asyncHandler from 'express-async-handler';
+import { escapeRegex } from '../utils/utils.js';
 
 // @desc    Fetch all blog blogs
 // @route   GET /api/blog
@@ -136,14 +137,18 @@ const deleteBlogComment = asyncHandler(async (req, res) => {
 // @access  Public
 const searchBlogs = asyncHandler(async (req, res) => {
   try {
-    const searchTerm = req.params.q;
-    const blog = await Blog.find({
+    const searchTerm = escapeRegex(req.params.q);
+    const blogs = await Blog.find({
       title: { $regex: new RegExp(`^${searchTerm}`, 'i') },
     }).populate('author', 'username firstName lastName');
-    res.json(blog);
+    if (blogs.length) {
+      res.json(blogs);
+    } else {
+      res.status(404).json({ message: 'Blog not found' });
+    }
   } catch (error) {
-    console.log(error);
-    res.status(404).json({ message: 'Blog not found' });
+    console.error(error);
+    res.status(400).json({ message: error.message });
   }
 });
 

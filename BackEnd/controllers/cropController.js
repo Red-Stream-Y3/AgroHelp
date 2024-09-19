@@ -1,5 +1,6 @@
 import Crop from '../models/cropModel.js';
 import asyncHandler from 'express-async-handler';
+import { escapeRegex } from '../utils/utils.js';
 
 // @desc    Fetch all crops
 // @route   GET /api/crops
@@ -31,7 +32,6 @@ const getCropById = asyncHandler(async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 });
-
 
 // @desc    Fetch all accepted crops
 // @route   GET /api/crops/accepted
@@ -166,18 +166,23 @@ const updateCrop = asyncHandler(async (req, res) => {
 // @access  Public
 const searchCrops = asyncHandler(async (req, res) => {
   try {
-    const searchTerm = req.params.q;
+    const searchTerm = escapeRegex(req.params.q);
     const crops = await Crop.find({
       cropName: { $regex: new RegExp(`^${searchTerm}`, 'i') },
     });
-    res.json(crops);
+
+    if (crops.length) {
+      res.json(crops);
+    } else {
+      res.status(404).json({ message: 'Crops not found' });
+    }
   } catch (error) {
-    console.log(error);
+    console.error(error);
     res.status(400).json({ message: error.message });
   }
 });
 
-//@desc     Get latest 4 crops 
+//@desc     Get latest 4 crops
 //@route    GET /api/crops/short
 //@access   Public
 const getShortCrops = asyncHandler(async (req, res) => {
@@ -185,13 +190,11 @@ const getShortCrops = asyncHandler(async (req, res) => {
     const crops = await Crop.find({}).limit(4);
     if (crops) {
       res.json(crops);
-    }
-    else {
+    } else {
       res.status(404);
       throw new Error('Crops not found');
     }
-  }
-  catch (error) {
+  } catch (error) {
     console.log(error);
     res.status(400).json({ message: error.message });
   }
@@ -241,9 +244,10 @@ const addRemoveCropBookmark = asyncHandler(async (req, res) => {
   try {
     const crop = await Crop.findById(req.params.id);
     if (crop) {
-      if (crop.bookmarkedBy.filter(
-        (bookmark) => bookmark.toString() === req.body.userId.toString()
-      ).length > 0
+      if (
+        crop.bookmarkedBy.filter(
+          (bookmark) => bookmark.toString() === req.body.userId.toString()
+        ).length > 0
       ) {
         crop.bookmarkedBy = crop.bookmarkedBy.filter(
           (bookmark) => bookmark.toString() !== req.body.userId.toString()
@@ -262,8 +266,6 @@ const addRemoveCropBookmark = asyncHandler(async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 });
-
-
 
 const getCropBookmarksByUser = asyncHandler(async (req, res) => {
   try {
