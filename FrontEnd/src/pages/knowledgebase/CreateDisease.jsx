@@ -1,14 +1,14 @@
-import { useState, useEffect } from 'react'
-import { createDisease } from '../../api/knowlegdebase'
-import { AiFillCloseCircle } from 'react-icons/ai'
-import { useNavigate } from 'react-router-dom'
+import { useState, useEffect } from 'react';
+import { createDisease } from '../../api/knowlegdebase';
+import { AiFillCloseCircle } from 'react-icons/ai';
+import { useNavigate } from 'react-router-dom';
+import DOMPurify from 'dompurify';
 
 const CreateDisease = () => {
+  const navigate = useNavigate();
 
-  const navigate = useNavigate()
-
-  const user = JSON.parse(localStorage.getItem('userInfo'))
-  const userId = user._id
+  const user = JSON.parse(localStorage.getItem('userInfo'));
+  const userId = user._id;
 
   const [disease, setDisease] = useState({
     diseaseName: '',
@@ -21,26 +21,26 @@ const CreateDisease = () => {
     diseaseType: '',
     diseaseStatus: '',
     author: userId,
-  })
+  });
 
   const handleChange = (e) => {
     setDisease({
       ...disease,
-      [e.target.name]: e.target.value
-    })
-  }
+      [e.target.name]: e.target.value,
+    });
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     try {
-      const data = await createDisease(disease, user.token)
-      alert('Disease created successfully')
-      navigate('/contributor/dashboard')
+      const data = await createDisease(disease, user.token);
+      alert('Disease created successfully');
+      navigate('/contributor/dashboard');
     } catch (error) {
-      console.log(error)
-      alert('Disease creation failed')
+      console.log(error);
+      alert('Disease creation failed');
     }
-  }
+  };
 
   const handleCancel = () => {
     setDisease({
@@ -53,9 +53,8 @@ const CreateDisease = () => {
       diseaseCrops: [],
       diseaseType: '',
       diseaseStatus: '',
-
-    })
-  }
+    });
+  };
 
   const handleOpenWidget = () => {
     var myWidget = window.cloudinary.createUploadWidget(
@@ -66,39 +65,43 @@ const CreateDisease = () => {
       },
       (error, result) => {
         if (!error && result && result.event === 'success') {
-          console.log('Done! Here is the image info: ', result.info.url)
+          console.log('Done! Here is the image info: ', result.info.url);
           setDisease({
             ...disease,
-            diseaseImage: [...disease.diseaseImage, result.info.url]
-          })
+            diseaseImage: [...disease.diseaseImage, result.info.url],
+          });
         }
       }
-    )
-    myWidget.open()
-  }
+    );
+    myWidget.open();
+  };
 
   const handleDeleteImage = (index) => {
-    const newImages = disease.diseaseImage.filter((image, i) => i !== index)
+    const newImages = disease.diseaseImage.filter((image, i) => i !== index);
     setDisease({
       ...disease,
-      diseaseImage: newImages
-    })
-  }
+      diseaseImage: newImages,
+    });
+  };
 
   const handleMock = () => {
     setDisease({
       diseaseName: 'Cottony Rot',
-      diseaseSymptoms: 'The disease is characterized by the appearance of a white, cottony growth on the surface of the infected plant parts. The growth is composed of the mycelium of the fungus and the spores. The disease is most common on the fruit, but it may also occur on the leaves, stems, and flowers. The fungus may also infect the fruit through the stem.',
-      diseaseCause: 'The fungus survives in the soil and on infected plant debris. The spores are spread by wind and splashing water. The disease is favored by warm, wet weather. The fungus can infect the fruit through the stem.',
-      diseasePrevention: 'The disease can be controlled by planting resistant varieties and by using a 3- to 4-year crop rotation. The fungus can survive in the soil for several years, so it is important to rotate with non-host crops. The disease can also be controlled by applying a fungicide to the fruit.',
-      diseaseTreatment: 'The disease can be controlled by planting resistant varieties and by using a 3- to 4-year crop rotation. The fungus can survive in the soil for several years, so it is important to rotate with non-host crops. The disease can also be controlled by applying a fungicide to the fruit.',
+      diseaseSymptoms:
+        'The disease is characterized by the appearance of a white, cottony growth on the surface of the infected plant parts. The growth is composed of the mycelium of the fungus and the spores. The disease is most common on the fruit, but it may also occur on the leaves, stems, and flowers. The fungus may also infect the fruit through the stem.',
+      diseaseCause:
+        'The fungus survives in the soil and on infected plant debris. The spores are spread by wind and splashing water. The disease is favored by warm, wet weather. The fungus can infect the fruit through the stem.',
+      diseasePrevention:
+        'The disease can be controlled by planting resistant varieties and by using a 3- to 4-year crop rotation. The fungus can survive in the soil for several years, so it is important to rotate with non-host crops. The disease can also be controlled by applying a fungicide to the fruit.',
+      diseaseTreatment:
+        'The disease can be controlled by planting resistant varieties and by using a 3- to 4-year crop rotation. The fungus can survive in the soil for several years, so it is important to rotate with non-host crops. The disease can also be controlled by applying a fungicide to the fruit.',
       diseaseCrops: ['Apple', 'Grape', 'Peach', 'Pear', 'Plum'],
       diseaseType: 'Fungal',
       diseaseStatus: 'Active',
       author: userId,
       diseaseImage: [],
-    })
-  }
+    });
+  };
 
   return (
     <div>
@@ -114,7 +117,9 @@ const CreateDisease = () => {
           </button>
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
-              <label htmlFor="diseaseName" className="form-label">Disease Name</label>
+              <label htmlFor="diseaseName" className="form-label">
+                Disease Name
+              </label>
               <input
                 type="text"
                 name="diseaseName"
@@ -128,7 +133,9 @@ const CreateDisease = () => {
             </div>
 
             <div className="mb-3">
-              <label htmlFor="cropImage" className="block mb-1">Crop Image</label>
+              <label htmlFor="cropImage" className="block mb-1">
+                Crop Image
+              </label>
               <button
                 type="button"
                 className="bg-primary hover:bg-secondary text-white px-3 py-1 rounded"
@@ -138,24 +145,30 @@ const CreateDisease = () => {
               </button>
               <br />
               <div className="flex flex-wrap">
-                {disease.diseaseImage && disease.diseaseImage.map((image, index) => (
-                  <div key={index} className="relative m-2">
-                    <img src={image} alt="crop" className="w-44 h-36 object-cover rounded-xl" />
-                    <button
-                      type="button"
-                      className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-6 h-6 flex justify-center items-center"
-                      onClick={() => handleDeleteImage(index)}
-                    >
-                      <AiFillCloseCircle />
-                    </button>
-                  </div>
-                ))}
+                {disease.diseaseImage &&
+                  disease.diseaseImage.map((image, index) => (
+                    <div key={index} className="relative m-2">
+                      <img
+                        src={DOMPurify.sanitize(image)}
+                        alt="crop"
+                        className="w-44 h-36 object-cover rounded-xl"
+                      />
+                      <button
+                        type="button"
+                        className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-6 h-6 flex justify-center items-center"
+                        onClick={() => handleDeleteImage(index)}
+                      >
+                        <AiFillCloseCircle />
+                      </button>
+                    </div>
+                  ))}
               </div>
             </div>
 
-
             <div className="mb-3">
-              <label htmlFor="diseaseSymptoms" className="form-label">Disease Symptoms</label>
+              <label htmlFor="diseaseSymptoms" className="form-label">
+                Disease Symptoms
+              </label>
               <textarea
                 type="text"
                 name="diseaseSymptoms"
@@ -169,9 +182,11 @@ const CreateDisease = () => {
             </div>
 
             <div className="mb-3">
-              <label htmlFor="diseaseCause" className="form-label">Disease Cause</label>
+              <label htmlFor="diseaseCause" className="form-label">
+                Disease Cause
+              </label>
               <textarea
-                type="text" 
+                type="text"
                 name="diseaseCause"
                 id="diseaseCause"
                 rows="2"
@@ -184,7 +199,9 @@ const CreateDisease = () => {
             </div>
 
             <div className="mb-3">
-              <label htmlFor="diseasePrevention" className="form-label">Disease Prevention</label>
+              <label htmlFor="diseasePrevention" className="form-label">
+                Disease Prevention
+              </label>
               <textarea
                 type="text"
                 name="diseasePrevention"
@@ -199,7 +216,9 @@ const CreateDisease = () => {
             </div>
 
             <div className="mb-3">
-              <label htmlFor="diseaseTreatment" className="form-label">Disease Treatment</label>
+              <label htmlFor="diseaseTreatment" className="form-label">
+                Disease Treatment
+              </label>
               <textarea
                 type="text"
                 name="diseaseTreatment"
@@ -214,7 +233,9 @@ const CreateDisease = () => {
             </div>
 
             <div className="mb-3">
-              <label htmlFor="diseaseCrops" className="form-label">Disease Crops</label>
+              <label htmlFor="diseaseCrops" className="form-label">
+                Disease Crops
+              </label>
               <input
                 type="text"
                 name="diseaseCrops"
@@ -228,7 +249,9 @@ const CreateDisease = () => {
             </div>
 
             <div className="mb-3">
-              <label htmlFor="diseaseType" className="form-label">Disease Type</label>
+              <label htmlFor="diseaseType" className="form-label">
+                Disease Type
+              </label>
               <input
                 type="text"
                 name="diseaseType"
@@ -242,7 +265,9 @@ const CreateDisease = () => {
             </div>
 
             <div className="mb-3">
-              <label htmlFor="diseaseStatus" className="form-label">Disease Status</label>
+              <label htmlFor="diseaseStatus" className="form-label">
+                Disease Status
+              </label>
               <input
                 type="text"
                 name="diseaseStatus"
@@ -277,7 +302,7 @@ const CreateDisease = () => {
         <hr className="md:hidden mt-3" />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default CreateDisease
+export default CreateDisease;

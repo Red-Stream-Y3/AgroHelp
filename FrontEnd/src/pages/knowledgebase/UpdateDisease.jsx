@@ -1,15 +1,14 @@
-import { useState, useEffect } from "react"
-import { useNavigate, useParams } from "react-router-dom"
-import { updateDisease, getDiseaseById } from "../../api/knowlegdebase"
-import { AiFillCloseCircle } from "react-icons/ai"
-
+import { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { updateDisease, getDiseaseById } from '../../api/knowlegdebase';
+import { AiFillCloseCircle } from 'react-icons/ai';
+import DOMPurify from 'dompurify';
 
 const UpdateDisease = () => {
+  const navigate = useNavigate();
 
-  const navigate = useNavigate()
-
-  const { id } = useParams()
-  const user = JSON.parse(localStorage.getItem('userInfo'))
+  const { id } = useParams();
+  const user = JSON.parse(localStorage.getItem('userInfo'));
 
   const [disease, setDisease] = useState({
     diseaseName: '',
@@ -21,34 +20,33 @@ const UpdateDisease = () => {
     diseaseCrops: [],
     diseaseType: '',
     diseaseStatus: '',
-  })
+  });
 
   useEffect(() => {
     const fetchDisease = async () => {
-      const data = await getDiseaseById(id)
-      setDisease(data)
-    }
-    fetchDisease()
-  }, [id])
-  
+      const data = await getDiseaseById(id);
+      setDisease(data);
+    };
+    fetchDisease();
+  }, [id]);
+
   const handleChange = (e) => {
     setDisease({
       ...disease,
-      [e.target.name]: e.target.value
-    })
-  }
+      [e.target.name]: e.target.value,
+    });
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    const updated = await updateDisease(id, disease, user.token)
+    e.preventDefault();
+    const updated = await updateDisease(id, disease, user.token);
     if (updated) {
-      alert('Disease updated successfully')
-      navigate('/contributor/dashboard')
+      alert('Disease updated successfully');
+      navigate('/contributor/dashboard');
+    } else {
+      alert('Disease update failed');
     }
-    else {
-      alert('Disease update failed')
-    }
-  }
+  };
 
   const handleCancel = () => {
     setDisease({
@@ -61,9 +59,8 @@ const UpdateDisease = () => {
       diseaseCrops: [],
       diseaseType: '',
       diseaseStatus: '',
-
-    })
-  }
+    });
+  };
 
   const handleOpenWidget = () => {
     var myWidget = window.cloudinary.createUploadWidget(
@@ -74,26 +71,25 @@ const UpdateDisease = () => {
       },
       (error, result) => {
         if (!error && result && result.event === 'success') {
-          console.log('Done! Here is the image info: ', result.info.url)
+          console.log('Done! Here is the image info: ', result.info.url);
           setDisease({
             ...disease,
-            diseaseImage: [...disease.diseaseImage, result.info.url]
-          })
+            diseaseImage: [...disease.diseaseImage, result.info.url],
+          });
         }
       }
-    )
-    myWidget.open()
-  }
+    );
+    myWidget.open();
+  };
 
   const handleDeleteImage = (index) => {
-    const newImages = disease.diseaseImage.filter((image, i) => i !== index)
+    const newImages = disease.diseaseImage.filter((image, i) => i !== index);
     setDisease({
       ...disease,
-      diseaseImage: newImages
-    })
-  }
+      diseaseImage: newImages,
+    });
+  };
 
-    
   return (
     <div>
       <div className="bg-darkbg text-white overflow-hidden shadow-xl mx-auto px-10 md:my-20 md:mx-20 lg:mx-60 rounded-xl ">
@@ -102,7 +98,9 @@ const UpdateDisease = () => {
           <hr className="border-gray-500 border-1 w-full mb-5" />
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
-              <label htmlFor="diseaseName" className="form-label">Disease Name</label>
+              <label htmlFor="diseaseName" className="form-label">
+                Disease Name
+              </label>
               <input
                 type="text"
                 name="diseaseName"
@@ -116,7 +114,9 @@ const UpdateDisease = () => {
             </div>
 
             <div className="mb-3">
-              <label htmlFor="cropImage" className="block mb-1">Crop Image</label>
+              <label htmlFor="cropImage" className="block mb-1">
+                Crop Image
+              </label>
               <button
                 type="button"
                 className="bg-primary hover:bg-secondary text-white px-3 py-1 rounded"
@@ -128,7 +128,11 @@ const UpdateDisease = () => {
               <div className="flex flex-wrap">
                 {disease.diseaseImage.map((image, index) => (
                   <div key={index} className="relative m-2">
-                    <img src={image} alt="crop" className="w-44 h-36 object-cover rounded-xl" />
+                    <img
+                      src={DOMPurify.sanitize(image)}
+                      alt="crop"
+                      className="w-44 h-36 object-cover rounded-xl"
+                    />
                     <button
                       type="button"
                       className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-6 h-6 flex justify-center items-center"
@@ -142,7 +146,9 @@ const UpdateDisease = () => {
             </div>
 
             <div className="mb-3">
-              <label htmlFor="diseaseSymptoms" className="form-label">Disease Symptoms</label>
+              <label htmlFor="diseaseSymptoms" className="form-label">
+                Disease Symptoms
+              </label>
               <textarea
                 type="text"
                 name="diseaseSymptoms"
@@ -156,9 +162,11 @@ const UpdateDisease = () => {
             </div>
 
             <div className="mb-3">
-              <label htmlFor="diseaseCause" className="form-label">Disease Cause</label>
+              <label htmlFor="diseaseCause" className="form-label">
+                Disease Cause
+              </label>
               <textarea
-                type="text" 
+                type="text"
                 name="diseaseCause"
                 id="diseaseCause"
                 rows="2"
@@ -171,7 +179,9 @@ const UpdateDisease = () => {
             </div>
 
             <div className="mb-3">
-              <label htmlFor="diseasePrevention" className="form-label">Disease Prevention</label>
+              <label htmlFor="diseasePrevention" className="form-label">
+                Disease Prevention
+              </label>
               <textarea
                 type="text"
                 name="diseasePrevention"
@@ -186,7 +196,9 @@ const UpdateDisease = () => {
             </div>
 
             <div className="mb-3">
-              <label htmlFor="diseaseTreatment" className="form-label">Disease Treatment</label>
+              <label htmlFor="diseaseTreatment" className="form-label">
+                Disease Treatment
+              </label>
               <textarea
                 type="text"
                 name="diseaseTreatment"
@@ -201,7 +213,9 @@ const UpdateDisease = () => {
             </div>
 
             <div className="mb-3">
-              <label htmlFor="diseaseCrops" className="form-label">Disease Crops</label>
+              <label htmlFor="diseaseCrops" className="form-label">
+                Disease Crops
+              </label>
               <input
                 type="text"
                 name="diseaseCrops"
@@ -215,7 +229,9 @@ const UpdateDisease = () => {
             </div>
 
             <div className="mb-3">
-              <label htmlFor="diseaseType" className="form-label">Disease Type</label>
+              <label htmlFor="diseaseType" className="form-label">
+                Disease Type
+              </label>
               <input
                 type="text"
                 name="diseaseType"
@@ -229,7 +245,9 @@ const UpdateDisease = () => {
             </div>
 
             <div className="mb-3">
-              <label htmlFor="diseaseStatus" className="form-label">Disease Status</label>
+              <label htmlFor="diseaseStatus" className="form-label">
+                Disease Status
+              </label>
               <input
                 type="text"
                 name="diseaseStatus"
@@ -264,7 +282,7 @@ const UpdateDisease = () => {
         <hr className="md:hidden mt-3" />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default UpdateDisease
+export default UpdateDisease;
