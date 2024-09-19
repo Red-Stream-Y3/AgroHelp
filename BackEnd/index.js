@@ -6,6 +6,8 @@ import bodyParser from 'body-parser';
 import colors from 'colors';
 import findConfig from 'find-config';
 import rateLimit from 'express-rate-limit';
+import csurf from 'csurf';
+import cookieParser from 'cookie-parser';
 import connectDB from './config/db.js';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 import {
@@ -27,28 +29,39 @@ connectDB();
 
 const app = express();
 
+// Enable CORS
 app.use(cors());
+
+// Parse incoming request bodies
 app.use(bodyParser.json());
+
+// Parse cookies to use with CSRF tokens
+app.use(cookieParser());
+
+// Enable CSRF protection for state-changing routes (POST, PUT, DELETE)
+const csrfProtection = csurf({
+  cookie: true, // Store CSRF token in a cookie
+});
 
 // Use middleware to increment visitor count
 app.use(visitMiddleware);
 app.use(incrementCountMiddleware);
 
 app.use('/api/visits', visitRoutes);
-app.use('/api/users', userRoutes);
+app.use('/api/users', csrfProtection, userRoutes); // Apply CSRF protection to user routes
 app.use('/api/forums', forumRoutes);
 app.use('/api/blog', blogRoutes);
 app.use('/api/crops', cropRoutes);
 app.use('/api/diseases', diseaseRoutes);
 
-// apply rate limiting to all requests
+// Apply rate limiting to all requests
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
+  max: 100, // Limit each IP to 100 requests per windowMs
   message: 'Too many requests from this IP, please try again later.',
 });
 
-app.use(limiter); // apply the rate limiter middleware globally
+app.use(limiter); // Apply the rate limiter middleware globally
 
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '/FrontEnd/dist')));
@@ -62,6 +75,7 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
+// Use error handlers
 app.use(notFound);
 app.use(errorHandler);
 
