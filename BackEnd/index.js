@@ -5,6 +5,7 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import colors from 'colors';
 import findConfig from 'find-config';
+import rateLimit from 'express-rate-limit';
 import connectDB from './config/db.js';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 import {
@@ -40,7 +41,15 @@ app.use('/api/blog', blogRoutes);
 app.use('/api/crops', cropRoutes);
 app.use('/api/diseases', diseaseRoutes);
 
-const __dirname = path.resolve();
+// apply rate limiting to all requests
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+  message: 'Too many requests from this IP, please try again later.',
+});
+
+app.use(limiter); // apply the rate limiter middleware globally
+
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '/FrontEnd/dist')));
 
