@@ -22,7 +22,7 @@
     "react-router-dom": "^6.11.0",
     "react-scripts": "^5.0.1",
     "react-toastify": "^9.1.2",
-    "sweetalert2": "^11.4.8"
+    "sweetalert2": "^11.13.2"
   },
   "devDependencies": {
     "@testing-library/react": "^14.0.0",
